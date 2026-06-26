@@ -14,16 +14,17 @@ This design covers:
 
 - Repo scaffold and tech stack
 - Canonical schema implementation
-- Porting the Galway City source from duffy
+- Porting the Galway City source from duffy, and building Galway County
+  fresh (different acquisition method, no existing code to port)
 - A custom Claude Code skill (`/onboard-council`) for the recurring
-  "add a new council" workflow
+  "add a new council" workflow (used for every council *after* Galway)
 - Two subagents (`source-onboarding`, `parser-dev`) that the skill dispatches to
 - GitHub hosting and collaborator setup
 
 Out of scope for this foundation: the chat/RAG layer (`chat_app.py`,
 `rag_engine.py`, `embedder.py` in duffy), insight/update/detail service UIs,
-and any council beyond Galway City. These are explicitly deferred — see
-section 7.
+and any council beyond Galway (City + County). These are explicitly
+deferred — see section 10.
 
 ## 2. Tech Stack
 
@@ -42,9 +43,15 @@ section 7.
 
 ## 3. Repo Layout
 
-Follows `docs/foundation-development-plan.md` section 7 layout exactly, with
-two additions: `.claude/` for the project-scoped skill and subagents, and
-`docker-compose.yml` for local Postgres+PostGIS.
+Adapts `docs/foundation-development-plan.md` section 7 layout with one
+structural change from the original plan: **county-level grouping** instead
+of a flat `authorities/` list. Ireland's local authorities are themselves
+organized by county, and the dev plan's market entities are already named
+`GALWAY_CITY` / `GALWAY_METRO` / `GALWAY_COUNTY` — grouping by county means
+each new region (Cork, Dublin, ...) gets one top-level folder containing all
+of its city/metro/county variants, instead of files for the same region
+scattered across a flat list. Also adds `.claude/` for the project-scoped
+skill and subagents, and `docker-compose.yml` for local Postgres+PostGIS.
 
 ```text
 planning-intelligence/
@@ -69,21 +76,55 @@ planning-intelligence/
 ├── config/
 │   ├── settings.py
 │   ├── logging.yaml
-│   └── authorities/
-│       └── galway_city.yaml
+│   └── galway/
+│       ├── city.yaml
+│       └── county.yaml
 ├── data/
-│   ├── raw/galway_city/
-│   ├── staged/
-│   └── exports/
+│   └── galway/
+│       ├── city/
+│       │   └── temp/        # raw downloads — purge-safe once loaded into Postgres
+│       └── county/
+│           └── temp/        # raw downloads — purge-safe once loaded into Postgres
 ├── src/
 │   ├── core/{models,db,schemas,normalization,lifecycle,geo}/
 │   ├── parsers/{pdf_lines,pdf_text_fallback,docx_state_machine,pdf_ocr}/
-│   ├── sources/{base,galway_city}/
+│   ├── sources/
+│   │   ├── base/
+│   │   └── galway/
+│   │       ├── city/
+│   │       └── county/
 │   ├── pipelines/{discover,acquire,extract,normalize,resolve,publish}.py
-│   ├── markets/{registry,galway_city,galway_metro,galway_county}.py
+│   ├── markets/
+│   │   ├── registry.py
+│   │   └── galway/
+│   │       ├── city.py
+│   │       ├── metro.py
+│   │       └── county.py
 │   └── services/{search_service,update_service,insight_service}.py
 └── tests/{fixtures,unit,integration,regression}/
 ```
+
+Every future council follows the same pattern: `config/<county>/`,
+`data/<county>/<region>/temp/`, `src/sources/<county>/<region>/`,
+`src/markets/<county>/<region>.py`. The `/onboard-council` skill (section 6)
+scaffolds new counties this way automatically.
+
+### 3.1 Raw data storage: `temp/`, not a permanent archive
+
+Duffy's current convention stores raw downloads under a single external
+root (`DUFFY_ROOT`, defaulting to `E:\Duffy`, overridable via `DATA_DIR`) with
+no expectation of cleanup. This foundation deliberately does **not** carry
+that forward. Raw PDFs/DOCX are an ingestion **buffer**, not the system of
+record — once `pipelines/normalize.py` + `resolve.py` have written an
+application's data into Postgres, the raw file has no further purpose beyond
+re-parsing during parser development.
+
+So each region gets a `data/<county>/<region>/temp/` folder, named `temp` to
+make the intent explicit: contents are disposable. A future cleanup job (or
+manual `rm`) can clear `temp/` once rows are confirmed persisted, without
+losing anything — `source_file` + `raw_payload_json` on the `applications`
+table (section 4) already preserve enough provenance to know what was
+ingested, even after the original file is deleted. `temp/` is `.gitignore`d.
 
 ## 4. Canonical Schema & Lifecycle
 
@@ -99,51 +140,89 @@ Implements dev plan sections 4 and 5 directly:
   validation at the `normalize` pipeline stage, so a parser's raw row output
   must satisfy the canonical schema before it can be persisted.
 
-## 5. Porting Galway City from Duffy
+## 5. Galway City (ported) and Galway County (built fresh)
 
-Duffy's existing working code becomes the first concrete `sources/galway_city`
+### 5.1 Galway City — port from duffy
+
+Confirmed from duffy's actual code: Galway City's "scraper" is not HTML
+scraping at all — it hits the **filegator REST API** behind
+`files.galwaycity.ie` directly with three plain HTTP calls (auth → list dir
+→ download). This becomes the first concrete `sources/galway/city`
 implementation:
 
 | Duffy file | New home | Adaptation needed |
 |---|---|---|
-| `scraper.py` | `src/sources/galway_city/scraper.py` | Same scraping logic; output path goes to `data/raw/galway_city/` instead of duffy's ad-hoc dirs. |
+| `scraper.py` | `src/sources/galway/city/scraper.py` | Same filegator API calls; output path goes to `data/galway/city/temp/` instead of `DUFFY_ROOT`. |
 | `pdf_extractor.py` | `src/parsers/pdf_lines/galway_city.py` | Becomes the first concrete implementation of the `pdf_table_lines` parser family interface. |
-| `data_processor.py` | Split across `src/pipelines/normalize.py` + `src/core/normalization/` | Row-mapping logic (FILE NUMBER → `application_ref`, etc.) becomes the canonical normalization mapping for Galway City. |
+| `data_processor.py` | Split across `src/pipelines/normalize.py` + `src/core/normalization/` | Row-mapping logic (FILE NUMBER → `application_ref`, etc., from duffy's `COLUMN_MAP`) becomes the canonical normalization mapping for Galway City. |
 | `database.py` | `src/core/db/` | Re-targeted from SQLite ad-hoc tables to the canonical Postgres schema. |
-| `folder_walker.py`, `config.py` | Reference only | Logic folded into `config/authorities/galway_city.yaml` + `src/pipelines/discover.py`. |
-| `chat_app.py`, `rag_engine.py`, `embedder.py`, `query_engine.py`, `report_generator.py` | **Not ported** | Out of scope — see section 7. |
+| `folder_walker.py`, `config.py` | Reference only | Logic folded into `config/galway/city.yaml` + `src/pipelines/discover.py`. |
+| `chat_app.py`, `rag_engine.py`, `embedder.py`, `query_engine.py`, `report_generator.py` | **Not ported** | Out of scope — see section 10. |
 
 The original `duffy-main-repo-main` directory is left untouched as a reference;
 nothing is deleted from it.
 
+### 5.2 Galway County — built fresh, no duffy precedent
+
+Galway County uses a **different acquisition method** than City — there is
+no filegator-style API. Per the dev plan (section 3.2), County's sources are:
+
+- A weekly-list webpage with plain PDF download links (requires HTML
+  scraping to find the links — City's API approach doesn't apply).
+- An ePlanning listing endpoint (`SearchListing/RECEIVED`, etc.) with a
+  rolling 7–42 day window — closer to a paginated API.
+- A planning-files document search/viewer.
+- ArcGIS open-data layers for historical/geospatial backfill.
+
+Since duffy never built a County integration, this foundation pass builds
+`src/sources/galway/county/` from scratch:
+
+- An HTML-scraping acquirer for the weekly-list PDF links (new code, no
+  port).
+- A parser under the `pdf_table_lines` family initially (same family as
+  City, per dev plan section 3.2's "rich geospatial context" note implying
+  similar tabular structure) — the `source-onboarding` subagent's first job
+  on County is to fetch real sample PDFs and confirm this assumption before
+  `parser-dev` builds against them. If County's PDFs turn out to lack a text
+  layer or use a different structure, the parser family gets reclassified at
+  that point rather than assumed up front.
+- `config/galway/county.yaml` capturing both the weekly-list URL and the
+  ePlanning endpoint for future use.
+
+County's parser is genuinely new work in this pass, not a stub — both City
+and County should have working ingestion by the end of this foundation.
+
 ## 6. Custom Skill: `/onboard-council`
 
 Project-scoped skill at `.claude/skills/onboard-council/SKILL.md`. Invoked as
-`/onboard-council <council_slug>` (e.g. `/onboard-council galway_county`).
+`/onboard-council <county_slug> <region_slug>` (e.g. `/onboard-council cork
+city`). Galway City and County are built directly in this foundation pass
+(section 5) rather than through the skill — the skill exists for every
+council added *after* the foundation lands.
 
 Workflow:
 
-1. Check if `config/authorities/<council>.yaml` already exists — if so, treat
-   as an update/resume rather than a fresh onboarding.
-2. Dispatch the **`source-onboarding`** subagent to research the council's
+1. Check if `config/<county>/<region>.yaml` already exists — if so, treat as
+   an update/resume rather than a fresh onboarding.
+2. Dispatch the **`source-onboarding`** subagent to research the region's
    planning-list site(s): URL(s), file format, update cadence, and to pull
-   down 1–2 sample files into `data/raw/<council>/samples/`. Findings get
-   appended to `docs/source-inventory.md`.
+   down 1–2 sample files into `data/<county>/<region>/temp/samples/`.
+   Findings get appended to `docs/source-inventory.md`.
 3. Based on the subagent's findings, classify the parser family:
    `pdf_table_lines`, `pdf_table_text_fallback`, `docx_state_machine`, or
    `pdf_ocr_pipeline` (per dev plan section 6.3 and duffy's
    `multi_city_comparison.md` precedent).
-4. Scaffold `config/authorities/<council>.yaml` (source URLs, parser family,
-   filename patterns) and `src/sources/<council>/` (thin source module
-   following the `src/sources/base/` interface).
+4. Scaffold `config/<county>/<region>.yaml` (source URLs, parser family,
+   filename patterns) and `src/sources/<county>/<region>/` (thin source
+   module following the `src/sources/base/` interface).
 5. Dispatch the **`parser-dev`** subagent with the sample files and chosen
    parser family to build/iterate the parser under
-   `src/parsers/<family>/<council>.py`, with a unit test in
+   `src/parsers/<family>/<county>_<region>.py`, with a unit test in
    `tests/unit/parsers/` that asserts the sample file extracts into valid
    canonical raw rows.
 6. Report back: what was scaffolded, parser test status, and what still needs
    human review (e.g. ambiguous column mappings, market-derivation rules for
-   the new council).
+   the new region).
 
 The skill does not run the ingestion pipeline end-to-end or write to the
 database — it only scaffolds code and config for human review.
@@ -201,13 +280,12 @@ gh repo add-collaborator planning-intelligence <github-username> --permission pu
 - RAG/chat-based natural language Q&A (duffy's `chat_app.py` stack) — the dev
   plan's insight/update/detail services are plain SQL/PostGIS-backed, not
   RAG. Revisit as a separate later layer if still wanted.
-- Any council beyond Galway City (County, Limerick, Cork, Dublin, Waterford)
-  — these get added one at a time via `/onboard-council` after the foundation
-  lands.
+- Any council beyond Galway (Limerick, Cork, Dublin, Waterford) — these get
+  added one at a time via `/onboard-council` after the foundation lands.
 - Market-derivation polygon data for Galway Metro commuter belt — needs the
   open questions from the 2026-06-25 commuter-shed discussion resolved first
   (commuter-belt membership rule, POWCAR data confirmation, partition vs.
-  shared-belt approach). `src/markets/galway_metro.py` will scaffold as a
+  shared-belt approach). `src/markets/galway/metro.py` will scaffold as a
   stub pending that.
 - CI/CD, deployment (Hetzner notes exist in duffy's README but aren't part of
   the foundation repo structure itself).
