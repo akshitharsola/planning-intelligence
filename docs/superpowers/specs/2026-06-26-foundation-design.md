@@ -39,7 +39,40 @@ deferred — see section 10.
 - **ORM:** SQLAlchemy for models, Pydantic for canonical schema validation
   (matches dev plan section 7 folder layout).
 - **PDF parsing:** `pdfplumber` (already proven in duffy for Galway City).
-- **Migrations:** Alembic.
+- **Migrations:** Alembic, under `src/core/db/migrations/`. Naming
+  convention: `<revision>_<verb>_<subject>.py` (Alembic's default
+  `alembic revision --autogenerate -m "<verb> <subject>"`, e.g.
+  `0001_create_applications_table.py`), one migration per logical schema
+  change — never hand-edit a migration that's already been applied to a
+  shared environment; create a new one instead.
+- **Dev fixtures/seed data:** `tests/fixtures/` holds anonymized sample rows
+  per region (e.g. `galway_city_sample.sql`, `galway_county_sample.sql`) for
+  seeding a local dev database quickly, separate from `tests/fixtures/`
+  sample *raw files* (PDFs) used by parser unit tests.
+
+### 2.1 Python Environment
+
+Either Conda or `venv` works — no hard dependency on one tool, since
+collaborators may already have a preferred setup. `pyproject.toml` is the
+single source of truth for dependencies either way.
+
+**Conda:**
+```bash
+conda create -n planning-intelligence python=3.11
+conda activate planning-intelligence
+pip install -e ".[dev]"
+```
+
+**venv:**
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+```
+
+`README.md` documents both paths; `.gitignore` excludes `.venv/` and
+`environment.yml`-style local artifacts (no `environment.yml` is committed,
+to avoid implying Conda is required).
 
 ## 3. Repo Layout
 
@@ -98,9 +131,11 @@ planning-intelligence/
 │   │   ├── registry.py
 │   │   └── galway/
 │   │       ├── city.py
-│   │       ├── metro.py
+│   │       ├── metro.py     # stub — see note below
 │   │       └── county.py
-│   └── services/{search_service,update_service,insight_service}.py
+│   ├── services/{search_service,update_service,insight_service}.py
+│   └── monitoring/
+│       └── metrics.py
 └── tests/{fixtures,unit,integration,regression}/
 ```
 
@@ -108,6 +143,22 @@ Every future council follows the same pattern: `config/<county>/`,
 `data/<county>/<region>/temp/`, `src/sources/<county>/<region>/`,
 `src/markets/<county>/<region>.py`. The `/onboard-council` skill (section 6)
 scaffolds new counties this way automatically.
+
+**`src/markets/galway/metro.py`** ships as a stub with a code comment, not a
+working implementation: `# TODO: commuter-belt polygons pending — see
+docs/source-inventory.md and the 2026-06-25 commuter-shed discussion
+(membership rule, POWCAR data, partition vs. shared-belt). Candidate source:
+Galway County's open-data ArcGIS portal.` This keeps the deferral from
+section 10 visible at the point someone would next touch this file, not just
+buried in a spec.
+
+**`src/monitoring/metrics.py`** — minimal ingestion KPIs from the start
+(rows ingested per run, per-region parser error counts/rates), written
+wherever `pipelines/publish.py` finishes a run. No dashboard or alerting in
+this foundation pass — just structured counters that the later `insight_service`
+or an external dashboard can read. This directly answers the CGPT strategy
+report's "parser error %" and "time saved" metrics goals without building
+out the full KPI dashboard yet.
 
 ### 3.1 Raw data storage: `temp/`, not a permanent archive
 
@@ -253,7 +304,18 @@ system prompt).
 ## 8. GitHub Hosting
 
 - Repo created via `gh repo create planning-intelligence --private --source=. --remote=origin` once the initial scaffold + this spec are committed locally.
+- `.gitignore` covers: `.venv/`, `__pycache__/`, `*.pyc`, `.env`, `data/*/*/temp/`
+  (raw downloads — disposable per section 3.1), Postgres data volumes from
+  `docker-compose.yml`, and standard Python/editor artifacts. `.env.example`
+  is committed (no secrets) so collaborators know which variables to set —
+  same pattern as duffy's existing `.env`/`.env.example` split.
 - Initial push of the scaffold to `main`.
+- Branch protection on `main` (set once collaborators are added, see section
+  9): require pull requests before merging, no direct pushes. This is a
+  repo-settings change, not a `gh repo create` flag — done manually via
+  `gh api` or the web UI once the team is in place, since it affects how
+  every collaborator works and is worth agreeing on first rather than
+  silently imposing.
 - Collaborator addition is an owner-only action — done manually (see section
   9) rather than automated, since it grants access to private code and is not
   reversible without the collaborator noticing.
@@ -274,6 +336,25 @@ gh repo add-collaborator planning-intelligence <github-username> --permission pu
 3. Enter their GitHub username or email
 4. Choose a role (Read / Triage / Write / Maintain / Admin)
 5. They'll receive an invite email/notification to accept
+
+Optional, once collaborators are added — enable branch protection on `main`
+(require PRs, no direct pushes):
+
+**Via GitHub CLI:**
+```bash
+gh api repos/<your-username>/planning-intelligence/branches/main/protection \
+  --method PUT \
+  -H "Accept: application/vnd.github+json" \
+  -f required_pull_request_reviews[required_approving_review_count]=1 \
+  -F required_status_checks=null \
+  -F enforce_admins=false \
+  -F restrictions=null
+```
+
+**Via GitHub web UI**:
+1. Go to `.../settings/branches`
+2. Click "Add branch protection rule", branch name pattern `main`
+3. Check "Require a pull request before merging"
 
 ## 10. Explicitly Deferred (Not in This Foundation)
 
