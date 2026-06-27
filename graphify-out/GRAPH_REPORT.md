@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-06-27)
 
 ## Corpus Check
-- 35 files · ~26,348 words
+- 38 files · ~28,897 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 50 nodes · 23 edges · 31 communities detected
-- Extraction: 78% EXTRACTED · 22% INFERRED · 0% AMBIGUOUS · INFERRED: 5 edges (avg confidence: 0.68)
+- 61 nodes · 31 edges · 34 communities detected
+- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 5 edges (avg confidence: 0.68)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -41,6 +41,9 @@
 - [[_COMMUNITY_Community 28|Community 28]]
 - [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
+- [[_COMMUNITY_Community 31|Community 31]]
+- [[_COMMUNITY_Community 32|Community 32]]
+- [[_COMMUNITY_Community 33|Community 33]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `ApplicationCreate` - 4 edges
@@ -52,6 +55,7 @@
 7. `test_application_create_rejects_missing_application_ref()` - 2 edges
 8. `test_application_event_create()` - 2 edges
 9. `OtherRegulatoryFlags` - 2 edges
+10. `create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-` - 1 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `test_application_create_requires_natural_key()` --calls--> `ApplicationCreate`  [INFERRED]
@@ -72,23 +76,23 @@ Cohesion: 0.29
 Nodes (5): Application, ApplicationEvent, Base, Base, DeclarativeBase
 
 ### Community 1 - "Community 1"
-Cohesion: 0.4
-Nodes (4): ApplicationCreate, OtherRegulatoryFlags, test_application_create_rejects_missing_application_ref(), test_application_create_requires_natural_key()
+Cohesion: 0.29
+Nodes (4): ApplicationEventCreate, OtherRegulatoryFlags, BaseModel, test_application_event_create()
 
 ### Community 2 - "Community 2"
 Cohesion: 0.4
-Nodes (3): ApplicationEventCreate, BaseModel, test_application_event_create()
+Nodes (2): create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-, # NOTE: a GIST spatial index on applications.site_geometry is created
 
 ### Community 3 - "Community 3"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.67
+Nodes (3): ApplicationCreate, test_application_create_rejects_missing_application_ref(), test_application_create_requires_natural_key()
 
 ### Community 4 - "Community 4"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 5 - "Community 5"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 6 - "Community 6"
@@ -191,18 +195,26 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 31 - "Community 31"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 32 - "Community 32"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 33 - "Community 33"
+Cohesion: 1.0
+Nodes (0): 
+
 ## Knowledge Gaps
-- **Thin community `Community 3`** (2 nodes): `get_database_url()`, `settings.py`
+- **2 isolated node(s):** `create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-`, `# NOTE: a GIST spatial index on applications.site_geometry is created`
+  These have ≤1 connection - possible missing edges or undocumented components.
+- **Thin community `Community 6`** (2 nodes): `get_database_url()`, `settings.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 4`** (2 nodes): `test_application_has_natural_key_constraint()`, `test_application_natural_key.py`
+- **Thin community `Community 7`** (2 nodes): `test_application_has_natural_key_constraint()`, `test_application_natural_key.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 5`** (2 nodes): `main()`, `scaffold_tree.py`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 6`** (1 nodes): `__init__.py`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 7`** (1 nodes): `__init__.py`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 8`** (1 nodes): `__init__.py`
+- **Thin community `Community 8`** (2 nodes): `main()`, `scaffold_tree.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 9`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -224,13 +236,13 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 18`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (1 nodes): `session.py`
+- **Thin community `Community 19`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 20`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 21`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 22`** (1 nodes): `__init__.py`
+- **Thin community `Community 22`** (1 nodes): `session.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 23`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -248,13 +260,21 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 30`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 31`** (1 nodes): `__init__.py`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 32`** (1 nodes): `__init__.py`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 33`** (1 nodes): `__init__.py`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ApplicationCreate` connect `Community 1` to `Community 2`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `ApplicationCreate` connect `Community 3` to `Community 1`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `ApplicationCreate` (e.g. with `test_application_create_requires_natural_key()` and `test_application_create_rejects_missing_application_ref()`) actually correct?**
   _`ApplicationCreate` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `Base` (e.g. with `ApplicationEvent` and `Application`) actually correct?**
   _`Base` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-`, `# NOTE: a GIST spatial index on applications.site_geometry is created` to the rest of the system?**
+  _2 weakly-connected nodes found - possible documentation gaps or missing edges._
