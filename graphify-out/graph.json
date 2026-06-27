@@ -9,7 +9,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_config_init_py",
-      "community": 2,
+      "community": 6,
       "norm_label": "__init__.py"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/settings.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_config_settings_py",
-      "community": 0,
+      "community": 3,
       "norm_label": "settings.py"
     },
     {
@@ -27,8 +27,71 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/settings.py",
       "source_location": "L12",
       "id": "settings_get_database_url",
-      "community": 0,
+      "community": 3,
       "norm_label": "get_database_url()"
+    },
+    {
+      "label": "test_application_natural_key.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_natural_key.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_natural_key_py",
+      "community": 4,
+      "norm_label": "test_application_natural_key.py"
+    },
+    {
+      "label": "test_application_has_natural_key_constraint()",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_natural_key.py",
+      "source_location": "L6",
+      "id": "test_application_natural_key_test_application_has_natural_key_constraint",
+      "community": 4,
+      "norm_label": "test_application_has_natural_key_constraint()"
+    },
+    {
+      "label": "test_application_schema.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_schema_py",
+      "community": 1,
+      "norm_label": "test_application_schema.py"
+    },
+    {
+      "label": "test_application_create_requires_natural_key()",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py",
+      "source_location": "L7",
+      "id": "test_application_schema_test_application_create_requires_natural_key",
+      "community": 1,
+      "norm_label": "test_application_create_requires_natural_key()"
+    },
+    {
+      "label": "test_application_create_rejects_missing_application_ref()",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py",
+      "source_location": "L24",
+      "id": "test_application_schema_test_application_create_rejects_missing_application_ref",
+      "community": 1,
+      "norm_label": "test_application_create_rejects_missing_application_ref()"
+    },
+    {
+      "label": "test_application_event_schema.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_event_schema_py",
+      "community": 2,
+      "norm_label": "test_application_event_schema.py"
+    },
+    {
+      "label": "test_application_event_create()",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py",
+      "source_location": "L4",
+      "id": "test_application_event_schema_test_application_event_create",
+      "community": 2,
+      "norm_label": "test_application_event_create()"
     },
     {
       "label": "scaffold_tree.py",
@@ -36,7 +99,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/scaffold_tree.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_scripts_scaffold_tree_py",
-      "community": 1,
+      "community": 5,
       "norm_label": "scaffold_tree.py"
     },
     {
@@ -45,7 +108,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/scaffold_tree.py",
       "source_location": "L64",
       "id": "scaffold_tree_main",
-      "community": 1,
+      "community": 5,
       "norm_label": "main()"
     },
     {
@@ -54,7 +117,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_init_py",
-      "community": 3,
+      "community": 7,
       "norm_label": "__init__.py"
     },
     {
@@ -63,7 +126,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_init_py",
-      "community": 4,
+      "community": 8,
       "norm_label": "__init__.py"
     },
     {
@@ -72,7 +135,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_ocr/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_pdf_ocr_init_py",
-      "community": 5,
+      "community": 9,
       "norm_label": "__init__.py"
     },
     {
@@ -81,7 +144,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_text_fallback/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_pdf_text_fallback_init_py",
-      "community": 6,
+      "community": 10,
       "norm_label": "__init__.py"
     },
     {
@@ -90,7 +153,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/docx_state_machine/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_docx_state_machine_init_py",
-      "community": 7,
+      "community": 11,
       "norm_label": "__init__.py"
     },
     {
@@ -99,7 +162,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_pdf_lines_init_py",
-      "community": 8,
+      "community": 12,
       "norm_label": "__init__.py"
     },
     {
@@ -108,7 +171,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_init_py",
-      "community": 9,
+      "community": 13,
       "norm_label": "__init__.py"
     },
     {
@@ -117,7 +180,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_normalization_init_py",
-      "community": 10,
+      "community": 14,
       "norm_label": "__init__.py"
     },
     {
@@ -126,7 +189,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/geo/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_geo_init_py",
-      "community": 11,
+      "community": 15,
       "norm_label": "__init__.py"
     },
     {
@@ -135,8 +198,35 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/lifecycle/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_lifecycle_init_py",
-      "community": 12,
+      "community": 16,
       "norm_label": "__init__.py"
+    },
+    {
+      "label": "application_event.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_application_event_py",
+      "community": 0,
+      "norm_label": "application_event.py"
+    },
+    {
+      "label": "ApplicationEvent",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py",
+      "source_location": "L11",
+      "id": "application_event_applicationevent",
+      "community": 0,
+      "norm_label": "applicationevent"
+    },
+    {
+      "label": "Base",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "base",
+      "community": 0,
+      "norm_label": "base"
     },
     {
       "label": "__init__.py",
@@ -144,8 +234,53 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_init_py",
-      "community": 13,
+      "community": 17,
       "norm_label": "__init__.py"
+    },
+    {
+      "label": "application.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_application_py",
+      "community": 0,
+      "norm_label": "application.py"
+    },
+    {
+      "label": "Application",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application.py",
+      "source_location": "L12",
+      "id": "application_application",
+      "community": 0,
+      "norm_label": "application"
+    },
+    {
+      "label": "application_event.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_event_py",
+      "community": 2,
+      "norm_label": "application_event.py"
+    },
+    {
+      "label": "ApplicationEventCreate",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py",
+      "source_location": "L18",
+      "id": "application_event_applicationeventcreate",
+      "community": 2,
+      "norm_label": "applicationeventcreate"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "basemodel",
+      "community": 2,
+      "norm_label": "basemodel"
     },
     {
       "label": "__init__.py",
@@ -153,8 +288,44 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_init_py",
-      "community": 14,
+      "community": 18,
       "norm_label": "__init__.py"
+    },
+    {
+      "label": "application.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_py",
+      "community": 1,
+      "norm_label": "application.py"
+    },
+    {
+      "label": "OtherRegulatoryFlags",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py",
+      "source_location": "L7",
+      "id": "application_otherregulatoryflags",
+      "community": 1,
+      "norm_label": "otherregulatoryflags"
+    },
+    {
+      "label": "ApplicationCreate",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py",
+      "source_location": "L12",
+      "id": "application_applicationcreate",
+      "community": 1,
+      "norm_label": "applicationcreate"
+    },
+    {
+      "label": "session.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/session.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_session_py",
+      "community": 19,
+      "norm_label": "session.py"
     },
     {
       "label": "__init__.py",
@@ -162,8 +333,35 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_init_py",
-      "community": 15,
+      "community": 20,
       "norm_label": "__init__.py"
+    },
+    {
+      "label": "base.py",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/base.py",
+      "source_location": "L1",
+      "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_base_py",
+      "community": 0,
+      "norm_label": "base.py"
+    },
+    {
+      "label": "Base",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/base.py",
+      "source_location": "L4",
+      "id": "base_base",
+      "community": 0,
+      "norm_label": "base"
+    },
+    {
+      "label": "DeclarativeBase",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "declarativebase",
+      "community": 0,
+      "norm_label": "declarativebase"
     },
     {
       "label": "__init__.py",
@@ -171,7 +369,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_pipelines_init_py",
-      "community": 16,
+      "community": 21,
       "norm_label": "__init__.py"
     },
     {
@@ -180,7 +378,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_markets_init_py",
-      "community": 17,
+      "community": 22,
       "norm_label": "__init__.py"
     },
     {
@@ -189,7 +387,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_markets_galway_init_py",
-      "community": 18,
+      "community": 23,
       "norm_label": "__init__.py"
     },
     {
@@ -198,7 +396,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_init_py",
-      "community": 19,
+      "community": 24,
       "norm_label": "__init__.py"
     },
     {
@@ -207,7 +405,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_galway_init_py",
-      "community": 20,
+      "community": 25,
       "norm_label": "__init__.py"
     },
     {
@@ -216,7 +414,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_galway_city_init_py",
-      "community": 21,
+      "community": 26,
       "norm_label": "__init__.py"
     },
     {
@@ -225,7 +423,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/county/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_galway_county_init_py",
-      "community": 22,
+      "community": 27,
       "norm_label": "__init__.py"
     },
     {
@@ -234,7 +432,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_base_init_py",
-      "community": 23,
+      "community": 28,
       "norm_label": "__init__.py"
     },
     {
@@ -243,7 +441,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/monitoring/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_monitoring_init_py",
-      "community": 24,
+      "community": 29,
       "norm_label": "__init__.py"
     },
     {
@@ -252,7 +450,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_services_init_py",
-      "community": 25,
+      "community": 30,
       "norm_label": "__init__.py"
     }
   ],
@@ -272,6 +470,90 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_natural_key.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_natural_key_py",
+      "_tgt": "test_application_natural_key_test_application_has_natural_key_constraint",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_natural_key_py",
+      "target": "test_application_natural_key_test_application_has_natural_key_constraint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_schema_py",
+      "_tgt": "test_application_schema_test_application_create_requires_natural_key",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_schema_py",
+      "target": "test_application_schema_test_application_create_requires_natural_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_schema_py",
+      "_tgt": "test_application_schema_test_application_create_rejects_missing_application_ref",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_schema_py",
+      "target": "test_application_schema_test_application_create_rejects_missing_application_ref",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "test_application_schema_test_application_create_requires_natural_key",
+      "_tgt": "application_applicationcreate",
+      "source": "test_application_schema_test_application_create_requires_natural_key",
+      "target": "application_applicationcreate"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_src": "test_application_schema_test_application_create_rejects_missing_application_ref",
+      "_tgt": "application_applicationcreate",
+      "source": "test_application_schema_test_application_create_rejects_missing_application_ref",
+      "target": "application_applicationcreate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_event_schema_py",
+      "_tgt": "test_application_event_schema_test_application_event_create",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_event_schema_py",
+      "target": "test_application_event_schema_test_application_event_create",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_src": "test_application_event_schema_test_application_event_create",
+      "_tgt": "application_event_applicationeventcreate",
+      "source": "test_application_event_schema_test_application_event_create",
+      "target": "application_event_applicationeventcreate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/scaffold_tree.py",
       "source_location": "L64",
       "weight": 1.0,
@@ -279,6 +561,174 @@
       "_tgt": "scaffold_tree_main",
       "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_scripts_scaffold_tree_py",
       "target": "scaffold_tree_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_application_event_py",
+      "_tgt": "application_event_applicationevent",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_application_event_py",
+      "target": "application_event_applicationevent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "application_event_applicationevent",
+      "_tgt": "base",
+      "source": "application_event_applicationevent",
+      "target": "base",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py",
+      "source_location": "L8",
+      "weight": 0.8,
+      "_src": "application_event_applicationevent",
+      "_tgt": "base_base",
+      "source": "application_event_applicationevent",
+      "target": "base_base",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "application_application",
+      "_tgt": "base",
+      "source": "base",
+      "target": "application_application",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_application_py",
+      "_tgt": "application_application",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_application_py",
+      "target": "application_application",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "_src": "application_application",
+      "_tgt": "base_base",
+      "source": "application_application",
+      "target": "base_base",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_event_py",
+      "_tgt": "application_event_applicationeventcreate",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_event_py",
+      "target": "application_event_applicationeventcreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "application_event_applicationeventcreate",
+      "_tgt": "basemodel",
+      "source": "application_event_applicationeventcreate",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "application_otherregulatoryflags",
+      "_tgt": "basemodel",
+      "source": "basemodel",
+      "target": "application_otherregulatoryflags",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "application_applicationcreate",
+      "_tgt": "basemodel",
+      "source": "basemodel",
+      "target": "application_applicationcreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_py",
+      "_tgt": "application_otherregulatoryflags",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_py",
+      "target": "application_otherregulatoryflags",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_py",
+      "_tgt": "application_applicationcreate",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_py",
+      "target": "application_applicationcreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/base.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_base_py",
+      "_tgt": "base_base",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_base_py",
+      "target": "base_base",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/base.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_src": "base_base",
+      "_tgt": "declarativebase",
+      "source": "base_base",
+      "target": "declarativebase",
       "confidence_score": 1.0
     }
   ],
