@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# .githooks/pre-commit
+set -euo pipefail
+
+if command -v graphify >/dev/null 2>&1; then
+    graphify update . || {
+        echo "graphify update failed — see output above. Commit aborted." >&2
+        exit 1
+    }
+    git add graphify-out/
+else
+    echo "Warning: graphify not installed on this machine — graphify-out/ may go stale." >&2
+fi

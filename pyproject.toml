@@ -1,0 +1,26 @@
+[project]
+name = "planning-intelligence"
+version = "0.1.0"
+description = "Multi-council Irish planning-data ingestion platform"
+requires-python = ">=3.11"
+dependencies = [
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "pydantic>=2.6",
+    "psycopg2-binary>=2.9",
+    "geoalchemy2>=0.14",
+    "pdfplumber>=0.11",
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "python-dotenv>=1.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

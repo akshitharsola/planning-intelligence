@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/*/*/temp/*
+!data/*/*/temp/.gitkeep
+postgres-data/
+*.egg-info/
+.pytest_cache/
+.coverage
+.DS_Store
