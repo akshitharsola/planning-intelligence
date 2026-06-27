@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-06-27)
 
 ## Corpus Check
-- 42 files · ~30,034 words
+- 45 files · ~30,541 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 76 nodes · 42 edges · 38 communities detected
-- Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.7)
+- 91 nodes · 65 edges · 40 communities detected
+- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -48,63 +48,65 @@
 - [[_COMMUNITY_Community 35|Community 35]]
 - [[_COMMUNITY_Community 36|Community 36]]
 - [[_COMMUNITY_Community 37|Community 37]]
+- [[_COMMUNITY_Community 38|Community 38]]
+- [[_COMMUNITY_Community 39|Community 39]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `ApplicationCreate` - 4 edges
-2. `Base` - 4 edges
-3. `BaseSource` - 4 edges
-4. `ApplicationEvent` - 3 edges
-5. `Application` - 3 edges
-6. `ApplicationEventCreate` - 3 edges
-7. `load_region_config()` - 3 edges
-8. `test_application_create_requires_natural_key()` - 2 edges
-9. `test_application_create_rejects_missing_application_ref()` - 2 edges
-10. `test_application_event_create()` - 2 edges
+1. `GalwayCityScraper` - 9 edges
+2. `BaseSource` - 6 edges
+3. `ApplicationCreate` - 4 edges
+4. `Base` - 4 edges
+5. `test_build_local_path_uses_temp_dir()` - 3 edges
+6. `ApplicationEvent` - 3 edges
+7. `Application` - 3 edges
+8. `ApplicationEventCreate` - 3 edges
+9. `load_region_config()` - 3 edges
+10. `_normalise_week()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `Galway City Council weekly planning lists scraper.  Ported from duffy's scraper.` --uses--> `BaseSource`  [INFERRED]
+  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/source.py
+- `GalwayCityScraper` --uses--> `BaseSource`  [INFERRED]
+  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/source.py
 - `test_application_create_requires_natural_key()` --calls--> `ApplicationCreate`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py
 - `test_application_create_rejects_missing_application_ref()` --calls--> `ApplicationCreate`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py
 - `test_application_event_create()` --calls--> `ApplicationEventCreate`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py
-- `test_load_galway_city_config()` --calls--> `load_region_config()`  [INFERRED]
-  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_discover_galway_city.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/discover.py
-- `ApplicationEvent` --uses--> `Base`  [INFERRED]
-  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/base.py
 
 ## Communities
 
 ### Community 0 - "Community 0"
+Cohesion: 0.23
+Nodes (7): BaseSource, GalwayCityScraper, _make_dl_url(), _normalise_week(), Galway City Council weekly planning lists scraper.  Ported from duffy's scraper., test_build_local_path_uses_temp_dir(), test_normalise_week_handles_dot_date_ranges()
+
+### Community 1 - "Community 1"
 Cohesion: 0.22
 Nodes (7): ApplicationCreate, ApplicationEventCreate, OtherRegulatoryFlags, BaseModel, test_application_event_create(), test_application_create_rejects_missing_application_ref(), test_application_create_requires_natural_key()
 
-### Community 1 - "Community 1"
+### Community 2 - "Community 2"
 Cohesion: 0.29
 Nodes (5): Application, ApplicationEvent, Base, Base, DeclarativeBase
 
-### Community 2 - "Community 2"
+### Community 3 - "Community 3"
 Cohesion: 0.33
 Nodes (3): ABC, BaseSource, Interface every region's source module implements.
 
-### Community 3 - "Community 3"
+### Community 4 - "Community 4"
 Cohesion: 0.4
 Nodes (2): create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-, # NOTE: a GIST spatial index on applications.site_geometry is created
 
-### Community 4 - "Community 4"
+### Community 5 - "Community 5"
 Cohesion: 0.4
 Nodes (3): load_region_config(), Load a `config/<county>/<region>.yaml` region config file., test_load_galway_city_config()
-
-### Community 5 - "Community 5"
-Cohesion: 0.67
-Nodes (0): 
 
 ### Community 6 - "Community 6"
 Cohesion: 0.67
 Nodes (0): 
 
 ### Community 7 - "Community 7"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 8 - "Community 8"
@@ -213,30 +215,36 @@ Nodes (0):
 
 ### Community 34 - "Community 34"
 Cohesion: 1.0
-Nodes (1): Return a list of dicts describing available remote items         (e.g. PDF links
+Nodes (0): 
 
 ### Community 35 - "Community 35"
 Cohesion: 1.0
-Nodes (1): Download the given items into self.temp_dir, return local paths.
+Nodes (0): 
 
 ### Community 36 - "Community 36"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Return a list of dicts describing available remote items         (e.g. PDF links
 
 ### Community 37 - "Community 37"
+Cohesion: 1.0
+Nodes (1): Download the given items into self.temp_dir, return local paths.
+
+### Community 38 - "Community 38"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 39 - "Community 39"
 Cohesion: 1.0
 Nodes (0): 
 
 ## Knowledge Gaps
 - **6 isolated node(s):** `create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-`, `# NOTE: a GIST spatial index on applications.site_geometry is created`, `Load a `config/<county>/<region>.yaml` region config file.`, `Interface every region's source module implements.`, `Return a list of dicts describing available remote items         (e.g. PDF links` (+1 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 7`** (2 nodes): `get_database_url()`, `settings.py`
+- **Thin community `Community 8`** (2 nodes): `get_database_url()`, `settings.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 8`** (2 nodes): `test_application_has_natural_key_constraint()`, `test_application_natural_key.py`
+- **Thin community `Community 9`** (2 nodes): `test_application_has_natural_key_constraint()`, `test_application_natural_key.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 9`** (2 nodes): `main()`, `scaffold_tree.py`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 10`** (1 nodes): `__init__.py`
+- **Thin community `Community 10`** (2 nodes): `main()`, `scaffold_tree.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 11`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -264,11 +272,11 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 23`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 24`** (1 nodes): `session.py`
+- **Thin community `Community 24`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 25`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (1 nodes): `__init__.py`
+- **Thin community `Community 26`** (1 nodes): `session.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 27`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -284,21 +292,33 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 33`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (1 nodes): `Return a list of dicts describing available remote items         (e.g. PDF links`
+- **Thin community `Community 34`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (1 nodes): `Download the given items into self.temp_dir, return local paths.`
+- **Thin community `Community 35`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (1 nodes): `__init__.py`
+- **Thin community `Community 36`** (1 nodes): `Return a list of dicts describing available remote items         (e.g. PDF links`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (1 nodes): `__init__.py`
+- **Thin community `Community 37`** (1 nodes): `Download the given items into self.temp_dir, return local paths.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 38`** (1 nodes): `__init__.py`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 39`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `GalwayCityScraper` connect `Community 0` to `Community 3`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+- **Why does `BaseSource` connect `Community 3` to `Community 0`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Are the 2 inferred relationships involving `GalwayCityScraper` (e.g. with `BaseSource` and `test_build_local_path_uses_temp_dir()`) actually correct?**
+  _`GalwayCityScraper` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 2 inferred relationships involving `BaseSource` (e.g. with `GalwayCityScraper` and `Galway City Council weekly planning lists scraper.  Ported from duffy's scraper.`) actually correct?**
+  _`BaseSource` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `ApplicationCreate` (e.g. with `test_application_create_requires_natural_key()` and `test_application_create_rejects_missing_application_ref()`) actually correct?**
   _`ApplicationCreate` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `Base` (e.g. with `ApplicationEvent` and `Application`) actually correct?**
   _`Base` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-`, `# NOTE: a GIST spatial index on applications.site_geometry is created`, `Load a `config/<county>/<region>.yaml` region config file.` to the rest of the system?**
-  _6 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Are the 2 inferred relationships involving `test_build_local_path_uses_temp_dir()` (e.g. with `GalwayCityScraper` and `._build_local_path()`) actually correct?**
+  _`test_build_local_path_uses_temp_dir()` has 2 INFERRED edges - model-reasoned connections that need verification._
