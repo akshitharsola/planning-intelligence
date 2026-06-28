@@ -1,0 +1,21 @@
+source_entity: GALWAY_COUNTY_COUNCIL
+planning_authority: Galway County Council
+parser_family: pdf_table_lines
+# Placeholder URL — source-onboarding subagent confirms the exact current
+# URL and PDF link structure before parser-dev builds against real samples
+# (spec section 5.2). Update this once confirmed.
+weekly_list_url: "https://www.galwaycoco.ie/planning/weekly-lists/"
+eplanning_endpoint: "https://eplanning.galwaycoco.ie/SearchListing/RECEIVED"
+eplanning_window_days: 42
+column_map:
+  "file number": file_number
+  "applicants name": applicant
+  "applicant name": applicant
+  "app. type": app_type
+  "date received": date_received
+  "development description and location": description
+  "description": description
+  "eis recd.": eis
+  "protected structure": protected_structure
+  "decision": decision
+  "date of decision": decision_date

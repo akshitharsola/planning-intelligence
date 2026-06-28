@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-06-28)
 
 ## Corpus Check
-- 62 files · ~38,141 words
+- 64 files · ~38,892 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 160 nodes · 166 edges · 46 communities detected
-- Extraction: 75% EXTRACTED · 25% INFERRED · 0% AMBIGUOUS · INFERRED: 41 edges (avg confidence: 0.73)
+- 167 nodes · 177 edges · 46 communities detected
+- Extraction: 75% EXTRACTED · 25% INFERRED · 0% AMBIGUOUS · INFERRED: 44 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -62,16 +62,14 @@
 2. `GalwayCityScraper` - 9 edges
 3. `extract_location()` - 7 edges
 4. `ApplicationCreate` - 7 edges
-5. `_normalise_rows()` - 6 edges
-6. `derive_market_entities()` - 6 edges
-7. `BaseSource` - 6 edges
-8. `FakeApplication` - 5 edges
-9. `_extract_rows()` - 5 edges
-10. `_map_column()` - 5 edges
+5. `GalwayCountyScraper` - 7 edges
+6. `BaseSource` - 7 edges
+7. `_normalise_rows()` - 6 edges
+8. `derive_market_entities()` - 6 edges
+9. `FakeApplication` - 5 edges
+10. `_extract_rows()` - 5 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Galway City Council weekly planning lists scraper.  Ported from duffy's scraper.` --uses--> `BaseSource`  [INFERRED]
-  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/source.py
 - `test_map_column_exact_match()` --calls--> `_map_column()`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py
 - `test_map_column_partial_match()` --calls--> `_map_column()`  [INFERRED]
@@ -80,6 +78,8 @@
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py
 - `test_normalise_rows_skips_boilerplate()` --calls--> `_normalise_rows()`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py
+- `test_application_create_requires_natural_key()` --calls--> `ApplicationCreate`  [INFERRED]
+  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py
 
 ## Communities
 
@@ -92,28 +92,28 @@ Cohesion: 0.2
 Nodes (16): _clean_cells(), extract_planning_table(), _extract_rows(), _is_boilerplate(), _is_duplicate_header(), _looks_like_header(), _map_column(), _norm() (+8 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.23
-Nodes (7): BaseSource, GalwayCityScraper, _make_dl_url(), _normalise_week(), Galway City Council weekly planning lists scraper.  Ported from duffy's scraper., test_build_local_path_uses_temp_dir(), test_normalise_week_handles_dot_date_ranges()
+Cohesion: 0.16
+Nodes (7): ABC, BaseSource, GalwayCountyScraper, Galway City Council weekly planning lists scraper.  Ported from duffy's scraper., BaseSource, Interface every region's source module implements., test_parse_pdf_links_filters_to_pdfs_only()
 
 ### Community 3 - "Community 3"
-Cohesion: 0.22
-Nodes (8): is_galway_city(), is_galway_county(), derive_market_entities(), Market-entity derivation registry. Metro derivation is deliberately NOT wired in, FakeApplication, test_galway_city_council_maps_to_galway_city(), test_galway_county_council_maps_to_galway_county(), test_unknown_authority_maps_to_empty_list()
-
-### Community 4 - "Community 4"
 Cohesion: 0.21
 Nodes (8): Application, ApplicationEvent, Base, Base, DeclarativeBase, Resolve stage: dedup applications by the natural key (planning_authority + appli, resolve_and_upsert(), test_normalize_resolve_publish_roundtrip()
 
+### Community 4 - "Community 4"
+Cohesion: 0.22
+Nodes (8): is_galway_city(), is_galway_county(), derive_market_entities(), Market-entity derivation registry. Metro derivation is deliberately NOT wired in, FakeApplication, test_galway_city_council_maps_to_galway_city(), test_galway_county_council_maps_to_galway_county(), test_unknown_authority_maps_to_empty_list()
+
 ### Community 5 - "Community 5"
+Cohesion: 0.29
+Nodes (5): GalwayCityScraper, _make_dl_url(), _normalise_week(), test_build_local_path_uses_temp_dir(), test_normalise_week_handles_dot_date_ranges()
+
+### Community 6 - "Community 6"
 Cohesion: 0.31
 Nodes (8): _extract_address(), _extract_area(), _extract_eircode(), extract_location(), _looks_like_address(), Location extraction for Galway descriptions — ported from duffy's location_extra, test_extract_location_finds_eircode_and_area(), test_extract_location_handles_empty_description()
 
-### Community 6 - "Community 6"
+### Community 7 - "Community 7"
 Cohesion: 0.25
 Nodes (6): get_metrics_snapshot(), Minimal ingestion KPIs: rows ingested per run, per-region parser error counts/ra, record_ingestion_run(), publish(), Publish stage: commits the session and records ingestion metrics (spec section 3, test_record_ingestion_run_increments_counters()
-
-### Community 7 - "Community 7"
-Cohesion: 0.33
-Nodes (3): ABC, BaseSource, Interface every region's source module implements.
 
 ### Community 8 - "Community 8"
 Cohesion: 0.4
@@ -340,12 +340,12 @@ Nodes (0):
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `normalize_row()` connect `Community 0` to `Community 4`, `Community 5`?**
-  _High betweenness centrality (0.063) - this node is a cross-community bridge._
-- **Why does `test_normalize_resolve_publish_roundtrip()` connect `Community 4` to `Community 0`, `Community 6`?**
-  _High betweenness centrality (0.042) - this node is a cross-community bridge._
-- **Why does `ApplicationCreate` connect `Community 0` to `Community 4`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+- **Why does `normalize_row()` connect `Community 0` to `Community 3`, `Community 6`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `test_normalize_resolve_publish_roundtrip()` connect `Community 3` to `Community 0`, `Community 7`?**
+  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **Why does `ApplicationCreate` connect `Community 0` to `Community 3`?**
+  _High betweenness centrality (0.032) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `normalize_row()` (e.g. with `test_normalize_row_received_maps_to_application_received_event()` and `test_normalize_row_granted_sets_decision_fields()`) actually correct?**
   _`normalize_row()` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `GalwayCityScraper` (e.g. with `BaseSource` and `test_build_local_path_uses_temp_dir()`) actually correct?**
