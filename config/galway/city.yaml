@@ -1,0 +1,69 @@
+source_entity: GALWAY_CITY_COUNCIL
+planning_authority: Galway City Council
+parser_family: pdf_table_lines
+base_url: "https://files.galwaycity.ie/gccplanninglists/"
+lookback_months: 3
+pdf_patterns:
+  received:
+    - "planning applications received"
+    - "received  applications"
+    - "received applications"
+  granted:
+    - "planning applications granted"
+  refused:
+    - "planning applications refused"
+  firvalidated:
+    - "firvalidated"
+    - "fir validated"
+    - "first validated"
+  invalid:
+    - "invalid applications"
+  further_recd:
+    - "further information received"
+  further_reqd:
+    - "further information requested"
+  section5:
+    - "section 5"
+  section96:
+    - "section 96"
+  finger_post:
+    - "finger post"
+  outdoor:
+    - "outdoor furniture"
+  scaffolding:
+    - "scaffolding"
+  telecomms:
+    - "telecommunications"
+column_map:
+  "file number": file_number
+  "file no": file_number
+  "applicants name": applicant
+  "applicant name": applicant
+  "applicant's name": applicant
+  "app. type": app_type
+  "app type": app_type
+  "type": app_type
+  "date received": date_received
+  "development description and location": description
+  "development description": description
+  "description": description
+  "eis recd.": eis
+  "eis recd": eis
+  "eis": eis
+  "prot. stru": protected_structure
+  "prot stru": protected_structure
+  "protected structure": protected_structure
+  "ipc lic.": ipc_licence
+  "ipc lic": ipc_licence
+  "waste lic.": waste_licence
+  "waste lic": waste_licence
+  "m.o. date": mo_date
+  "m.o date": mo_date
+  "mo date": mo_date
+  "m.o. number": mo_number
+  "m.o number": mo_number
+  "mo number": mo_number
+  "certificate number": cert_number
+  "cert. no.": cert_number
+  "decision": decision
+  "date of decision": decision_date
