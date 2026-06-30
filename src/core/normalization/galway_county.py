@@ -1,42 +1,91 @@
 """
-County normalization reuses City's status/event mapping and date parsing
-(both authority-agnostic) but skips Galway City's neighbourhood gazetteer
-in src/core/normalization/location.py, since County addresses reference
-towns (Oranmore, Tuam, ...) rather than City neighbourhoods. site_locality
-extraction for County is left as a plain pass-through of the description
-for this foundation pass — refining it is in scope for a future
-parser-dev iteration once real address patterns are reviewed.
+County normalization maps Galway County Council's ArcGIS Feature Service
+attributes directly to the canonical ApplicationCreate schema. Unlike City,
+there is no source_type-per-PDF-list convention here — status is derived
+from the record's own Decision/ApplicationStatus fields (verified against
+live data: e.g. ApplicationStatus="Application Finalised" with
+Decision="Granted (Conditional)" or "Refused"; ApplicationStatus alone
+covers Withdrawn/Incompleted App/Deemed Withdrawal cases where Decision is
+the "n\\a" null sentinel).
+
+site_locality extraction reuses City's status/date helpers (both
+authority-agnostic) but skips City's neighbourhood gazetteer in
+src/core/normalization/location.py, since County's Location field is a
+townland/place name, not a City-style street address — left as a plain
+pass-through of Location for this pass.
 """
 
-from datetime import datetime
+from datetime import date, datetime
 
-from src.pipelines.normalize import _SOURCE_TYPE_TO_STATUS, _expand_app_type, _flag_yes, _parse_date
+from src.pipelines.normalize import _parse_date
 from src.core.schemas.application import ApplicationCreate, OtherRegulatoryFlags
 
+_NULL_SENTINELS = {"n/a", "n\\a", "na", "none", "null", "", "-"}
 
-def normalize_county_row(raw_row: dict, source_type: str, region_config: dict,
-                         source_file: str) -> ApplicationCreate:
-    status, event_type = _SOURCE_TYPE_TO_STATUS.get(source_type, ("Received", "APPLICATION_RECEIVED"))
-    description = raw_row.get("description", "")
-    date_received = _parse_date(raw_row.get("date_received")) or datetime.now().date()
+
+def normalize_county_row(raw_row: dict, region_config: dict, source_file: str) -> ApplicationCreate:
+    status, event_type = _derive_status(
+        raw_row.get("ApplicationStatus"), raw_row.get("Decision")
+    )
+    description = _clean_str(raw_row.get("Description")) or ""
+    date_received = _parse_date(_arcgis_date(raw_row.get("ReceivedDate"))) or date.today()
+    decision_date = _parse_date(_arcgis_date(raw_row.get("DecisionDate")))
+    decision_due_date = _parse_date(_arcgis_date(raw_row.get("DecisionDueDate")))
 
     return ApplicationCreate(
         planning_authority=region_config["planning_authority"],
         source_entity=region_config["source_entity"],
-        application_ref=raw_row.get("file_number", ""),
-        applicant_name=raw_row.get("applicant", ""),
-        site_address=description,
+        application_ref=_clean_str(raw_row.get("ApplicationNumber")) or "",
+        applicant_name=_clean_str(raw_row.get("ApplicantName")) or "",
+        site_address=_clean_str(raw_row.get("Location")),
         site_locality=None,
         site_county="Galway",
         development_description=description,
-        application_type=_expand_app_type(raw_row.get("app_type", "")),
+        application_type=_clean_str(raw_row.get("ApplicationType")) or "Permission",
         planning_status_current=status,
         status_event_type=event_type,
         date_received=date_received,
-        protected_structure_flag=_flag_yes(raw_row.get("protected_structure", "")),
-        eia_eis_flag=_flag_yes(raw_row.get("eis", "")),
+        decision_due_date=decision_due_date,
+        decision_date=decision_date,
+        protected_structure_flag=False,
+        eia_eis_flag=False,
         other_regulatory_flags=OtherRegulatoryFlags(),
-        source_system="Galway County Weekly Lists PDF",
+        official_documents_url=_clean_str(raw_row.get("MoreInfo")),
+        source_system="Galway County Council ArcGIS Feature Service",
         source_file=source_file,
         raw_payload_json=raw_row,
     )
+
+
+def _clean_str(value) -> str | None:
+    if value is None:
+        return None
+    cleaned = str(value).strip()
+    return None if cleaned.lower() in _NULL_SENTINELS else cleaned or None
+
+
+def _arcgis_date(value) -> str | None:
+    """ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values."""
+    cleaned = _clean_str(value)
+    return cleaned
+
+
+def _derive_status(application_status, decision) -> tuple[str, str]:
+    decision_clean = _clean_str(decision)
+    status_clean = _clean_str(application_status)
+
+    if decision_clean:
+        decision_lower = decision_clean.lower()
+        if "grant" in decision_lower:
+            return "Granted", "DECISION_GRANTED"
+        if "refus" in decision_lower:
+            return "Refused", "DECISION_REFUSED"
+
+    if status_clean:
+        status_lower = status_clean.lower()
+        if "withdraw" in status_lower:
+            return "Withdrawn", "APPLICATION_WITHDRAWN"
+        if "incomplete" in status_lower:
+            return "Invalid", "APPLICATION_INVALID"
+
+    return "Received", "APPLICATION_RECEIVED"

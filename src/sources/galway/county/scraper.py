@@ -1,15 +1,19 @@
 """
-Galway County Council weekly planning lists scraper — built fresh, no
-duffy precedent (spec section 5.2). The weekly-list page is plain HTML
-with PDF download links, unlike Galway City's filegator REST API.
+Galway County Council planning register scraper — built fresh, no duffy
+precedent (spec section 5.2). Source is the council's public ArcGIS Feature
+Service (no auth required), not a PDF weekly list: galwaycoco.ie redirects
+to galway.ie and isn't directly scrapable, and eplanning.ie's HTML table
+was assessed as too fragile. The ArcGIS endpoint returns structured JSON
+records directly, paginated via an incrementing OBJECTID watermark, so
+there are no files to download — discover() does the full fetch and
+acquire() is a passthrough to satisfy the BaseSource contract.
 """
 
 import logging
-from pathlib import Path
-from urllib.parse import urljoin
 
 import requests
-from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from src.sources.base.source import BaseSource
 
@@ -18,34 +22,72 @@ logger = logging.getLogger(__name__)
 
 class GalwayCountyScraper(BaseSource):
     def discover(self) -> list[dict]:
-        url = self.region_config["weekly_list_url"]
-        resp = requests.get(url, timeout=20)
+        url = self.region_config["arcgis_query_url"]
+        watermark_field = self.region_config["watermark_field"]
+        page_size = self.region_config["page_size"]
+        out_fields = ",".join(self.region_config["out_fields"])
+        watermark = self.region_config.get("watermark", 0)
+
+        session = self._build_session()
+        records: list[dict] = []
+        current_watermark = watermark
+
+        while True:
+            page = self._query_page(
+                session, url, watermark_field, current_watermark, page_size, out_fields
+            )
+            if not page:
+                break
+            records.extend(page)
+            current_watermark = page[-1][watermark_field]
+            if len(page) < page_size:
+                break
+
+        session.close()
+        return records
+
+    def acquire(self, items: list[dict]) -> list[dict]:
+        return items
+
+    @staticmethod
+    def _build_session() -> requests.Session:
+        session = requests.Session()
+        retry = Retry(
+            total=5,
+            backoff_factor=1.0,
+            status_forcelist=[429, 500, 502, 503, 504],
+            allowed_methods=["GET"],
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount("https://", adapter)
+        session.mount("http://", adapter)
+        return session
+
+    @staticmethod
+    def _query_page(
+        session: requests.Session,
+        url: str,
+        watermark_field: str,
+        watermark: int,
+        page_size: int,
+        out_fields: str,
+    ) -> list[dict]:
+        params = {
+            "where": f"{watermark_field} > {watermark}",
+            "outFields": out_fields,
+            "returnGeometry": "false",
+            "orderByFields": f"{watermark_field} ASC",
+            "resultRecordCount": page_size,
+            "f": "json",
+        }
+        resp = session.get(url, params=params, timeout=30)
         resp.raise_for_status()
-        return self._parse_pdf_links(resp.text, base_url=url)
+        payload = resp.json()
 
-    def acquire(self, items: list[dict]) -> list[Path]:
-        saved: list[Path] = []
-        for link in items:
-            local_path = Path(self.temp_dir) / link["filename"]
-            local_path.parent.mkdir(parents=True, exist_ok=True)
-            r = requests.get(link["url"], timeout=60)
-            r.raise_for_status()
-            if r.content[:4] == b"%PDF":
-                local_path.write_bytes(r.content)
-                saved.append(local_path)
-            else:
-                logger.error(f"Response for {link['filename']} is not a PDF")
-        return saved
+        if "error" in payload:
+            raise RuntimeError(
+                f"ArcGIS API error {payload['error'].get('code')}: "
+                f"{payload['error'].get('message')}"
+            )
 
-    def _parse_pdf_links(self, html: str, base_url: str | None = None) -> list[dict]:
-        base_url = base_url or self.region_config["weekly_list_url"]
-        soup = BeautifulSoup(html, "html.parser")
-        links: list[dict] = []
-        for a in soup.find_all("a", href=True):
-            href = a["href"]
-            if not href.lower().endswith(".pdf"):
-                continue
-            full_url = urljoin(base_url, href)
-            filename = href.rsplit("/", 1)[-1]
-            links.append({"url": full_url, "filename": filename})
-        return links
+        return [f["attributes"] for f in payload.get("features", [])]

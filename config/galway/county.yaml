@@ -1,21 +1,38 @@
 source_entity: GALWAY_COUNTY_COUNCIL
 planning_authority: Galway County Council
-parser_family: pdf_table_lines
-# Placeholder URL — source-onboarding subagent confirms the exact current
-# URL and PDF link structure before parser-dev builds against real samples
-# (spec section 5.2). Update this once confirmed.
-weekly_list_url: "https://www.galwaycoco.ie/planning/weekly-lists/"
-eplanning_endpoint: "https://eplanning.galwaycoco.ie/SearchListing/RECEIVED"
-eplanning_window_days: 42
-column_map:
-  "file number": file_number
-  "applicants name": applicant
-  "applicant name": applicant
-  "app. type": app_type
-  "date received": date_received
-  "development description and location": description
-  "description": description
-  "eis recd.": eis
-  "protected structure": protected_structure
-  "decision": decision
-  "date of decision": decision_date
+parser_family: arcgis_feature_service
+
+# Public, no-auth ArcGIS Feature Service confirmed live (verified via direct
+# REST query). Replaces the original placeholder PDF weekly-list approach —
+# galwaycoco.ie redirects to galway.ie and is not directly scrapable;
+# eplanning.ie's HTML table was assessed as fragile. This endpoint returns
+# structured JSON with a clean incremental watermark (OBJECTID), so no PDF
+# parsing or boilerplate-stripping is needed for County.
+arcgis_query_url: "https://services1.arcgis.com/mJI7JYqAOKXPG7Hh/arcgis/rest/services/GCC_PlanningRegisterPts_16/FeatureServer/2/query"
+watermark_field: "OBJECTID"
+page_size: 1000
+out_fields:
+  - OBJECTID
+  - County
+  - PlanningAuthority
+  - ApplicationNumber
+  - ApplicantName
+  - ReceivedDate
+  - ApplicationType
+  - ApplicationStatus
+  - Location
+  - Description
+  - Decision
+  - DecisionDate
+  - DecisionDueDate
+  - WithdrawnDate
+  - GrantDate
+  - ExpiryDate
+  - AppealNotificationDate
+  - AppealRefNum
+  - AppealDecision
+  - AppealDecisionDate
+  - ITMEasting
+  - ITMNorthing
+  - MoreInfo
+  - GlobalID
