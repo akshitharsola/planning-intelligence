@@ -14,6 +14,22 @@ persistence needed for incremental, idempotent re-runs.
 Out of scope: actually scheduling the scripts (cron/CI) — that's a
 follow-up decision once the scripts exist and have been run for real.
 
+**Reuse, not parallel logic.** Both scripts are thin orchestration over the
+pipeline functions already defined in the foundation design and built in
+Tasks 1-10 — `load_region_config` (`src/pipelines/discover.py:6`),
+`<Scraper>.discover()`/`.acquire()` (`src/sources/galway/{city,county}/`),
+`extract_planning_table` (`src/parsers/pdf_lines/galway_city.py:49`),
+`normalize_row`/`normalize_county_row` (`src/pipelines/normalize.py:23`,
+`src/core/normalization/galway_county.py:26`), `resolve_and_upsert`
+(`src/pipelines/resolve.py:15`), and `publish`
+(`src/pipelines/publish.py:11`). The CLI scripts add **only** two things
+that don't already exist: the per-record try/except loop (sequencing, not
+new business logic) and the `ingestion_state` read/writes around it. No
+pipeline stage is reimplemented or forked — `resolve_and_upsert`'s upsert
+semantics, `publish`'s commit + metrics recording, and existing
+normalization logic are called as-is, unmodified, exactly as County's
+prior end-to-end smoke test already proved they work.
+
 ## 2. New persistence
 
 One Alembic migration (`0002_create_ingestion_state.py`, following the
@@ -38,6 +54,22 @@ CREATE TABLE ingested_files (
 `ingestion_state` holds County's `OBJECTID` watermark (as text, parsed to
 int by the caller). `ingested_files` holds City's per-PDF dedup record,
 keyed by the file identifier `discover()` already returns.
+
+**Assumption this strategy depends on:** `OBJECTID` is treated as a stable,
+monotonically-increasing insertion order from the ArcGIS Feature Service —
+i.e. a record's `OBJECTID` never changes once assigned, and new records are
+always assigned higher values than all existing ones. This was true for
+every record observed during last session's live testing, but it is an
+assumption about the source's behavior, not a guarantee documented by Esri
+or Galway County Council. If the council ever reorders, reindexes, or
+backfills the underlying feature layer (e.g. importing older paper records
+with `OBJECTID`s assigned after newer ones), a "max successful OBJECTID"
+watermark would silently skip those backfilled records — they'd have an
+`OBJECTID` below the stored watermark and never be queried again. Mitigation
+is out of scope for this design (it would need a secondary check, e.g.
+periodically re-querying near OBJECTID 0 or cross-checking total record
+counts) but the risk should be revisited if County data ever looks like it
+has unexplained gaps.
 
 A thin module `src/core/ingestion_state.py` wraps both tables behind four
 functions, used by both scripts — no pipeline stage needs to know about
@@ -80,13 +112,19 @@ SQL directly:
 4. For each remaining file: `acquire()` it, then `extract_planning_table()`
    to get rows, then per-row try/except (`normalize_row` →
    `resolve_and_upsert`), logging and skipping failed rows same as County.
-5. Once a file's rows have all been attempted (regardless of whether some
-   rows failed), `mark_file_ingested` for that file — a file is never
-   retried once attempted. A row that failed inside a successfully-attempted
-   file is not retried; it's logged and dropped. (Decision: simplicity over
-   self-healing — a transient row failure requires manual investigation via
-   the error log, same as County's record-level failures would if they
-   never resolve.)
+5. A file is marked ingested (`mark_file_ingested`) **only if every row in
+   it succeeded** (zero row-level exceptions). If any row failed, the file
+   is left unmarked, so the *entire file* — including its already-succeeded
+   rows — is retried in full next run. This is deliberately self-healing
+   rather than "mark done regardless": `resolve_and_upsert` is idempotent
+   (upsert on natural key), so re-processing already-good rows on retry is
+   cheap, and a transient downstream failure (e.g. a momentary DB hiccup on
+   one row) heals itself automatically instead of permanently and silently
+   dropping that row. The tradeoff is that a row with a *persistent* parse
+   failure (e.g. a malformed PDF row) will cause its file to retry forever
+   without making progress, until someone investigates the error log —
+   acceptable because it fails loud (the file keeps reappearing in run
+   logs as not-yet-ingested) rather than failing silent.
 6. `publish(session, "galway_city", rows_ingested, parse_errors)`.
 7. `--dry-run`: same shape as County — discovers, filters already-ingested
    files, acquires and parses remaining files, prints a summary (files
@@ -108,12 +146,19 @@ other new data. Failures are logged with enough identifying detail
 
 ## 6. Testing
 
-- Unit tests for `src/core/ingestion_state.py`: get/set watermark
+- `tests/unit/core/test_ingestion_state.py` (matches the existing
+  `tests/unit/core/` sibling for `src/core/`): get/set watermark
   round-trip, is/mark file-ingested round-trip, against a real test
-  Postgres, consistent with how `resolve_and_upsert` is already tested.
-- Integration test per script: full flow against test Postgres with a
-  stubbed source (mock `discover`/`acquire` return values, real
-  normalize/resolve/publish/state-write), asserting: watermark advances
-  correctly past successes only; a forced failure on one record doesn't
-  block others; a second run with the same stub input ingests nothing new
-  (idempotency via watermark / file-tracking).
+  Postgres, consistent with how `resolve_and_upsert` is already tested —
+  no DB mocking.
+- `tests/integration/test_ingest_galway_city.py` and
+  `tests/integration/test_ingest_galway_county.py` (matches the existing
+  `tests/integration/` convention used by
+  `test_galway_city_pipeline_end_to_end.py`): full flow against test
+  Postgres with a stubbed source (mock `discover`/`acquire` return values,
+  real normalize/resolve/publish/state-write), asserting: watermark
+  advances correctly past successes only; a forced failure on one record
+  doesn't block others; a second run with the same stub input ingests
+  nothing new (idempotency via watermark / file-tracking); City's
+  self-healing retry actually re-attempts a file after a forced single-row
+  failure followed by a clean run.
