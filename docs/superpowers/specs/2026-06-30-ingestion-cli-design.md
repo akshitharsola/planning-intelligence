@@ -55,21 +55,37 @@ CREATE TABLE ingested_files (
 int by the caller). `ingested_files` holds City's per-PDF dedup record,
 keyed by the file identifier `discover()` already returns.
 
-**Assumption this strategy depends on:** `OBJECTID` is treated as a stable,
+**Risk — unverified operational assumption, not a guaranteed source
+contract.** This strategy depends on `OBJECTID` being a stable,
 monotonically-increasing insertion order from the ArcGIS Feature Service —
 i.e. a record's `OBJECTID` never changes once assigned, and new records are
-always assigned higher values than all existing ones. This was true for
-every record observed during last session's live testing, but it is an
-assumption about the source's behavior, not a guarantee documented by Esri
-or Galway County Council. If the council ever reorders, reindexes, or
-backfills the underlying feature layer (e.g. importing older paper records
-with `OBJECTID`s assigned after newer ones), a "max successful OBJECTID"
-watermark would silently skip those backfilled records — they'd have an
-`OBJECTID` below the stored watermark and never be queried again. Mitigation
-is out of scope for this design (it would need a secondary check, e.g.
-periodically re-querying near OBJECTID 0 or cross-checking total record
-counts) but the risk should be revisited if County data ever looks like it
-has unexplained gaps.
+always assigned higher values than all existing ones. Status of this
+assumption:
+
+- **What's actually been verified:** a single one-shot fetch (discover →
+  normalize → write → re-read in a fresh session) against live data, last
+  session. `OBJECTID` ordering looked consistent across that one sample.
+- **What has NOT been verified:** repeated incremental runs — i.e. whether
+  querying `OBJECTID > watermark` on a second run actually returns only
+  and all the genuinely-new records, with no gaps, over time. That is
+  exactly the behavior this CLI introduces and has not been exercised
+  against the real source yet, only designed.
+- Esri/ArcGIS does not document `OBJECTID` immutability or strict
+  monotonicity as a guaranteed contract; Galway County Council has not
+  documented it either — it is an observed pattern in one sample, not a
+  promise.
+- **Failure mode if the assumption breaks:** if the council ever reorders,
+  reindexes, or backfills the underlying feature layer (e.g. importing
+  older paper records with `OBJECTID`s assigned after newer ones), a "max
+  successful OBJECTID" watermark would silently skip those backfilled
+  records permanently — they'd have an `OBJECTID` below the stored
+  watermark and never be queried again.
+- Mitigation is out of scope for this design (it would need a secondary
+  check, e.g. periodically re-querying near `OBJECTID` 0 or cross-checking
+  total record counts against the source). This must stay flagged as a
+  live risk — not treated as settled — until incremental runs have
+  actually been observed over real time against the live source, which
+  this design alone does not provide.
 
 A thin module `src/core/ingestion_state.py` wraps both tables behind four
 functions, used by both scripts — no pipeline stage needs to know about
@@ -122,9 +138,15 @@ SQL directly:
    one row) heals itself automatically instead of permanently and silently
    dropping that row. The tradeoff is that a row with a *persistent* parse
    failure (e.g. a malformed PDF row) will cause its file to retry forever
-   without making progress, until someone investigates the error log —
-   acceptable because it fails loud (the file keeps reappearing in run
-   logs as not-yet-ingested) rather than failing silent.
+   without making progress, keeping that one file permanently "hot" in run
+   logs every time the script executes. This is acceptable **only on the
+   assumption that log-driven manual remediation is the team's intended
+   model for City's persistent failures** — i.e. someone is expected to
+   notice the repeating log line and fix the row/file by hand. If that
+   assumption doesn't hold (e.g. nobody is watching the logs), a
+   persistently malformed file degrades into silent noise rather than
+   silent data loss, which is a different but still real problem this
+   design does not solve.
 6. `publish(session, "galway_city", rows_ingested, parse_errors)`.
 7. `--dry-run`: same shape as County — discovers, filters already-ingested
    files, acquires and parses remaining files, prints a summary (files
@@ -144,7 +166,28 @@ eventually) — one malformed PDF row or ArcGIS record must not block all
 other new data. Failures are logged with enough identifying detail
 (region, source identifier, exception) to debug from logs alone.
 
-## 6. Testing
+## 6. Layout cross-check
+
+Cross-checked against `docs/foundation-development-plan.md` §7 (Repo /
+Folder Structure), the authoritative layout spec, not just inferred from
+existing siblings:
+
+- `src/core/ingestion_state.py` — fits the plan's `src/core/` bucket
+  alongside `models/`, `db/`, `schemas/`, `normalization/`, `lifecycle/`,
+  `geo/`. No new top-level package needed.
+- `tests/unit/core/`, `tests/integration/` — both named explicitly in the
+  plan's `tests/` tree.
+- `scripts/ingest_galway_city.py` / `scripts/ingest_galway_county.py` —
+  `scripts/` is not part of the plan's §7 tree (it predates this design,
+  added later for `scaffold_tree.py`); kept consistent with that existing
+  precedent rather than introducing a second scripts location.
+- `config/galway/{city,county}.yaml` (consumed via `load_region_config`,
+  unchanged by this design) — note the actual repo layout already diverges
+  from the plan's original `config/authorities/galway_city.yaml` naming;
+  this is a pre-existing, already-accepted deviation from Tasks 1-10, not
+  something introduced by this design.
+
+## 7. Testing
 
 - `tests/unit/core/test_ingestion_state.py` (matches the existing
   `tests/unit/core/` sibling for `src/core/`): get/set watermark
