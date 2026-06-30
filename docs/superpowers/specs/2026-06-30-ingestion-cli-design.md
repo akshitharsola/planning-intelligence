@@ -100,10 +100,14 @@ SQL directly:
 
 1. Open `SessionLocal()`. `get_watermark(session, "galway_county")` — `None`
    on first run (fetch all).
-2. `GalwayCountyScraper.discover()` gains an optional `min_watermark: str |
-   None` param. When set, the ArcGIS query adds a `OBJECTID > {min_watermark}`
-   filter so only new records are paginated. `acquire()` is unchanged
-   (passthrough).
+2. **No scraper code change needed.** `GalwayCountyScraper.discover()`
+   (`src/sources/galway/county/scraper.py:24-47`) already reads
+   `self.region_config.get("watermark", 0)` as its pagination starting
+   point — this was already built and unit-tested, just never wired to a
+   persisted value. The script loads `config/galway/county.yaml` via
+   `load_region_config`, then sets `region_config["watermark"] = int(stored)
+   if stored else 0` before constructing `GalwayCountyScraper(region_config,
+   temp_dir)`. `acquire()` is unchanged (passthrough).
 3. For each returned record, in a try/except:
    - `normalize_county_row` → `resolve_and_upsert`
    - On success, track this record's `OBJECTID` as a candidate new watermark
