@@ -1,8 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head><title>Planning Intelligence Dashboard</title></head>
+<head>
+  <title>Planning Intelligence Dashboard</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 <body>
-<h1>Planning Intelligence Dashboard</h1>
-<p>Total applications: {{ summary.total_applications }}</p>
+  <h1>Planning Intelligence Dashboard</h1>
+
+  <section id="kpi-cards">
+    <div class="kpi-card">
+      <span class="kpi-label">Total applications</span>
+      <span class="kpi-value">{{ summary.total_applications }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Councils covered</span>
+      <span class="kpi-value">{{ summary.distinct_authorities }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Coverage date range</span>
+      <span class="kpi-value">{{ summary.earliest_received }} &ndash; {{ summary.latest_received }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Last ingestion</span>
+      <span class="kpi-value">{{ summary.latest_ingested_at }}</span>
+    </div>
+  </section>
+
+  <section id="charts">
+    <canvas id="monthly-chart"></canvas>
+    <canvas id="status-chart"></canvas>
+    <canvas id="type-chart"></canvas>
+  </section>
+
+  <script>
+    const monthlyData = {{ monthly_counts | tojson }};
+    const statusData = {{ status_breakdown | tojson }};
+    const typeData = {{ type_breakdown | tojson }};
+  </script>
+  <script src="/static/app.js"></script>
+
+  <section id="filters">
+    <form method="get" action="/">
+      <input type="text" name="planning_authority" placeholder="Planning authority" value="{{ filters.planning_authority or '' }}">
+      <input type="text" name="planning_status_current" placeholder="Status" value="{{ filters.planning_status_current or '' }}">
+      <input type="text" name="application_type" placeholder="Application type" value="{{ filters.application_type or '' }}">
+      <input type="date" name="date_received_from" value="{{ filters.date_received_from or '' }}">
+      <input type="date" name="date_received_to" value="{{ filters.date_received_to or '' }}">
+      <input type="text" name="q" placeholder="Search applicant, address, description" value="{{ filters.q or '' }}">
+      <button type="submit">Filter</button>
+    </form>
+  </section>
+
+  <section id="applications-table">
+    {% include "partials/application_table.html" %}
+  </section>
 </body>
 </html>
