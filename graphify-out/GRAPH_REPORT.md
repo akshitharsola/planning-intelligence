@@ -1,4 +1,4 @@
-# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-01)
+# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard  (2026-07-01)
 
 ## Corpus Check
 - 76 files · ~59,364 words
@@ -386,5 +386,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`run_county_ingestion()` has 12 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 9 inferred relationships involving `normalize_county_row()` (e.g. with `test_normalize_county_row_received()` and `test_normalize_county_row_granted()`) actually correct?**
   _`normalize_county_row()` has 9 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 5 inferred relationships involving `GalwayCityScraper` (e.g. with `Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve` and `Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d`) actually correct?**
+- **Are the 5 inferred relationships involving `GalwayCityScraper` (e.g. with `test_build_local_path_uses_temp_dir()` and `run_city_ingestion()`) actually correct?**
   _`GalwayCityScraper` has 5 INFERRED edges - model-reasoned connections that need verification._

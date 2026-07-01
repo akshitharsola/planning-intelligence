@@ -4650,6 +4650,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/resolve.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_src": "application_event_applicationevent",
+      "_tgt": "resolve_resolve_and_upsert",
+      "source": "application_event_applicationevent",
+      "target": "resolve_resolve_and_upsert"
+    },
+    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py",
@@ -4672,18 +4684,6 @@
       "confidence_score": 0.5,
       "source": "application_event_applicationevent",
       "target": "resolve_rationale_1"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/resolve.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "_src": "application_event_applicationevent",
-      "_tgt": "resolve_resolve_and_upsert",
-      "source": "application_event_applicationevent",
-      "target": "resolve_resolve_and_upsert"
     },
     {
       "relation": "inherits",
@@ -4710,6 +4710,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/resolve.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_src": "application_application",
+      "_tgt": "resolve_resolve_and_upsert",
+      "source": "application_application",
+      "target": "resolve_resolve_and_upsert"
+    },
+    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application.py",
@@ -4732,18 +4744,6 @@
       "confidence_score": 0.5,
       "source": "application_application",
       "target": "resolve_rationale_1"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/resolve.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_src": "application_application",
-      "_tgt": "resolve_resolve_and_upsert",
-      "source": "application_application",
-      "target": "resolve_resolve_and_upsert"
     },
     {
       "relation": "contains",
@@ -4818,6 +4818,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_src": "application_otherregulatoryflags",
+      "_tgt": "normalize_normalize_row",
+      "source": "application_otherregulatoryflags",
+      "target": "normalize_normalize_row"
+    },
+    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
@@ -4834,11 +4846,11 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
-      "source_location": "L49",
+      "source_location": "L32",
       "weight": 1.0,
-      "_src": "application_otherregulatoryflags",
+      "_src": "application_applicationcreate",
       "_tgt": "normalize_normalize_row",
-      "source": "application_otherregulatoryflags",
+      "source": "application_applicationcreate",
       "target": "normalize_normalize_row"
     },
     {
@@ -4864,18 +4876,6 @@
       "confidence_score": 0.5,
       "source": "application_applicationcreate",
       "target": "normalize_rationale_1"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "_src": "application_applicationcreate",
-      "_tgt": "normalize_normalize_row",
-      "source": "application_applicationcreate",
-      "target": "normalize_normalize_row"
     },
     {
       "relation": "contains",
