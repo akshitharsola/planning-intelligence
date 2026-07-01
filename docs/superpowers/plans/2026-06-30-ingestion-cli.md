@@ -1054,3 +1054,17 @@ If any step failed, do not commit a "done" claim — report the failure to the u
 **OBJECTID-monotonicity assumption: held over this test window**, with one caveat — the window did not include any genuinely new record, so the "no gaps in real new data" half of the assumption remains unexercised. What **was** verified: the watermark persists correctly, the query boundary (`OBJECTID > watermark`) is exact (proven both by the 0-result matching live ground truth and by the forced-failure re-open test on a known 5-record window), and a failed record's `OBJECTID` never gets silently marked as ingested or advances the watermark past itself. This is real evidence beyond unit/integration tests against stubs, but it is not yet the strongest possible form of the gate (an actual new-record appearance was not observed). Recommendation: keep the risk flagged as in the design spec (§2) until the first live incremental run following a real council publish is observed and spot-checked the same way.
 
 Given the above, Task 7 is considered **passed** for the mechanisms it could exercise with real live data (persistence, exact boundary behavior, forced-failure watermark protection), with the residual "real new data" case explicitly left open rather than claimed as proven.
+
+---
+
+#### Final whole-branch review — recorded 2026-07-01
+
+Reviewed the full 12-commit diff (`f781624..63c538c`, merge-base of `main` and `feat/galway-county-arcgis`) on the most capable available model, per subagent-driven-development's final-review step. Verdict: **Approved with non-blocking notes**. No Critical or Important findings. Confirmed cross-task: migration schema matches both scripts' assumptions, dry-run is a true no-op in both scripts, no SQL injection risk (all raw queries use bound params or an `int()`-cast watermark, never interpolated user text), no leftover debug/dead code from the `607864f` fix cycle, and both scripts' retry/self-heal semantics are correct end-to-end (traced through `publish()`'s commit boundary).
+
+Minor, non-blocking notes (not fixed — recorded for future cleanup, not required before merge):
+1. County commits application rows and the watermark in two separate transactions (`publish()`'s internal commit, then `set_watermark`, then the script's own commit) — a crash between them could leave the watermark one run stale. Harmless since upsert is idempotent; City avoids this by marking files before its single commit. Consider moving `set_watermark` ahead of `publish` for symmetry.
+2. Both scripts call `session.commit()` redundantly right after `publish()` already commits — a no-op, purely cosmetic.
+3. City's `main()` still prints the raw result dict rather than prose (already-known Minor from Task 4, unchanged).
+4. `test_file_with_one_bad_row_is_not_marked_ingested_and_retries` has a stream-of-consciousness inline comment left over from test design that should be tidied; the test itself is valid and correctly asserts the retry behavior.
+
+County incremental ingestion and City per-file ingestion are both considered done under this branch, with the Task 7 caveat and these four Minors carried forward as known, accepted, non-blocking items. Next: `superpowers:finishing-a-development-branch`.
