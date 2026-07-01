@@ -3,7 +3,8 @@ from unittest.mock import patch
 
 from src.core.db.session import SessionLocal
 from src.core.ingestion_state import is_file_ingested
-from scripts.ingest_galway_city import run_city_ingestion, _match_source_type
+from src.pipelines.discover import load_region_config
+from scripts.ingest_galway_city import run_city_ingestion, _match_source_type, CONFIG_PATH
 
 REGION = "galway_city"
 
@@ -35,9 +36,10 @@ def test_match_source_type_finds_pattern_key():
     # against the lowercased filename literally (spaces, not underscores) —
     # mirrors GalwayCityScraper.discover()'s own matching at
     # src/sources/galway/city/scraper.py:67.
-    assert _match_source_type("planning applications received week1.pdf") == "received"
-    assert _match_source_type("planning applications granted week1.pdf") == "granted"
-    assert _match_source_type("unmatched_file.pdf") is None
+    region_config = load_region_config(CONFIG_PATH)
+    assert _match_source_type("planning applications received week1.pdf", region_config) == "received"
+    assert _match_source_type("planning applications granted week1.pdf", region_config) == "granted"
+    assert _match_source_type("unmatched_file.pdf", region_config) is None
 
 
 def test_first_run_ingests_all_rows_and_marks_file():

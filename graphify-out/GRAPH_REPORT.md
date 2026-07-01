@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-01)
 
 ## Corpus Check
-- 76 files · ~53,080 words
+- 76 files · ~53,091 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 228 nodes · 306 edges · 52 communities detected
-- Extraction: 67% EXTRACTED · 33% INFERRED · 0% AMBIGUOUS · INFERRED: 102 edges (avg confidence: 0.75)
+- 228 nodes · 307 edges · 52 communities detected
+- Extraction: 66% EXTRACTED · 34% INFERRED · 0% AMBIGUOUS · INFERRED: 103 edges (avg confidence: 0.75)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -375,9 +375,9 @@ Nodes (0):
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `run_city_ingestion()` connect `Community 1` to `Community 0`, `Community 3`, `Community 4`, `Community 5`, `Community 7`, `Community 8`?**
-  _High betweenness centrality (0.240) - this node is a cross-community bridge._
+  _High betweenness centrality (0.239) - this node is a cross-community bridge._
 - **Why does `run_county_ingestion()` connect `Community 2` to `Community 0`, `Community 1`, `Community 4`, `Community 7`, `Community 8`?**
-  _High betweenness centrality (0.142) - this node is a cross-community bridge._
+  _High betweenness centrality (0.143) - this node is a cross-community bridge._
 - **Why does `normalize_row()` connect `Community 0` to `Community 1`, `Community 9`, `Community 7`?**
   _High betweenness centrality (0.131) - this node is a cross-community bridge._
 - **Are the 13 inferred relationships involving `run_city_ingestion()` (e.g. with `test_first_run_ingests_all_rows_and_marks_file()` and `test_second_run_skips_already_ingested_file()`) actually correct?**

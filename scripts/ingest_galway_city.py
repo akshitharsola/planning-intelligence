@@ -26,7 +26,7 @@ REGION = "galway_city"
 CONFIG_PATH = Path("config/galway/city.yaml")
 
 
-def _match_source_type(filename: str) -> str | None:
+def _match_source_type(filename: str, region_config: dict) -> str | None:
     """Re-derive which pdf_patterns key matched this filename.
 
     GalwayCityScraper.discover() already filters to filenames containing a
@@ -35,7 +35,6 @@ def _match_source_type(filename: str) -> str | None:
     src/sources/galway/city/scraper.py:67 (lowercased filename, literal
     space-separated substrings).
     """
-    region_config = load_region_config(CONFIG_PATH)
     pdf_patterns = region_config["pdf_patterns"]
     lower = filename.lower()
     for source_type, substrings in pdf_patterns.items():
@@ -65,7 +64,7 @@ def run_city_ingestion(dry_run: bool = False) -> dict:
         if to_acquire:
             local_paths = scraper.acquire(to_acquire)
             for local_path in local_paths:
-                source_type = _match_source_type(local_path.name)
+                source_type = _match_source_type(local_path.name, region_config)
                 if source_type is None:
                     logger.warning(
                         "Could not determine source_type for file=%s; skipping.",
