@@ -22,18 +22,6 @@ pdf_patterns:
     - "further information received"
   further_reqd:
     - "further information requested"
-  section5:
-    - "section 5"
-  section96:
-    - "section 96"
-  finger_post:
-    - "finger post"
-  outdoor:
-    - "outdoor furniture"
-  scaffolding:
-    - "scaffolding"
-  telecomms:
-    - "telecommunications"
 column_map:
   "file number": file_number
   "file no": file_number
