@@ -4,10 +4,20 @@ ApplicationCreate schema. source_type comes from the pdf_patterns key
 the file matched (see config/galway/city.yaml).
 """
 
+import re
 from datetime import datetime
 
 from src.core.normalization.location import extract_location
 from src.core.schemas.application import ApplicationCreate, OtherRegulatoryFlags
+
+# Real Galway file numbers are "YY/NNNNN" (e.g. 26/60159); test fixtures use
+# a readable "PREFIX/NNNN" convention. Both are a short alnum token, a
+# slash, then digits only — this rejects the free-text/date-range values
+# seen from non-application PDFs (licence lists) force-parsed into this
+# schema, e.g. "01/01/2026 - 01/01/2027", "3 years requested",
+# "Not Confirmed Yet". See config/galway/city.yaml pdf_patterns history for
+# the incident this guards against.
+_FILE_NUMBER_RE = re.compile(r"^[A-Za-z0-9]+/\d+$")
 
 _SOURCE_TYPE_TO_STATUS = {
     "received": ("Received", "APPLICATION_RECEIVED"),
@@ -54,6 +64,21 @@ def normalize_row(raw_row: dict, source_type: str, region_config: dict,
         source_file=source_file,
         raw_payload_json=raw_row,
     )
+
+
+def is_plausible_application_row(app_create: ApplicationCreate) -> bool:
+    """Reject rows that don't look like real planning applications.
+
+    Guards against non-application PDFs (licence/declaration lists) being
+    force-parsed into the applications schema by an over-broad pdf_patterns
+    match. Callers should skip (not raise on) rows failing this check, and
+    log them distinctly from parse/normalize failures.
+    """
+    if not _FILE_NUMBER_RE.match(app_create.application_ref or ""):
+        return False
+    if not app_create.applicant_name.strip():
+        return False
+    return True
 
 
 def _flag_yes(val: str) -> bool:

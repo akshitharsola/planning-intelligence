@@ -15,7 +15,7 @@ from src.core.db.session import SessionLocal
 from src.core.ingestion_state import is_file_ingested, mark_file_ingested
 from src.parsers.pdf_lines.galway_city import extract_planning_table
 from src.pipelines.discover import load_region_config
-from src.pipelines.normalize import normalize_row
+from src.pipelines.normalize import is_plausible_application_row, normalize_row
 from src.pipelines.publish import publish
 from src.pipelines.resolve import resolve_and_upsert
 from src.sources.galway.city.scraper import GalwayCityScraper
@@ -60,6 +60,7 @@ def run_city_ingestion(dry_run: bool = False) -> dict:
 
         ingested = 0
         failed = 0
+        rejected = 0
 
         if to_acquire:
             local_paths = scraper.acquire(to_acquire)
@@ -83,6 +84,17 @@ def run_city_ingestion(dry_run: bool = False) -> dict:
                             region_config=region_config,
                             source_file=local_path.name,
                         )
+                        if not is_plausible_application_row(app_create):
+                            rejected += 1
+                            logger.warning(
+                                "Rejected implausible row (not a real application) "
+                                "region=%s file=%s file_number=%r applicant=%r: "
+                                "file may be a non-application list mismatched by "
+                                "pdf_patterns; check config/galway/city.yaml",
+                                REGION, local_path.name, row.get("file_number"),
+                                row.get("applicant"),
+                            )
+                            continue
                         if not dry_run:
                             resolve_and_upsert(session, app_create)
                         ingested += 1
@@ -103,14 +115,15 @@ def run_city_ingestion(dry_run: bool = False) -> dict:
 
         logger.info(
             "City ingestion run complete: discovered=%d skipped_already_ingested=%d "
-            "ingested=%d failed=%d dry_run=%s",
-            len(links), skipped, ingested, failed, dry_run,
+            "ingested=%d rejected=%d failed=%d dry_run=%s",
+            len(links), skipped, ingested, rejected, failed, dry_run,
         )
 
         return {
             "discovered": len(links),
             "skipped_already_ingested": skipped,
             "ingested": ingested,
+            "rejected": rejected,
             "failed": failed,
         }
     finally:
