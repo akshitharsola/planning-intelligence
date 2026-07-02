@@ -35,7 +35,10 @@ def _extraction_prompt(db: Session) -> str:
         '  "date_received_from": "YYYY-MM-DD"\n'
         '  "date_received_to": "YYYY-MM-DD"\n'
         '  "q": free-text keyword to search applicant/address/description (e.g. a place name)\n\n'
-        "If the question mentions a place name (e.g. a town or area), put it in \"q\". "
+        "If the question mentions a place name (e.g. a town or area), put it ONLY in \"q\" "
+        "-- do not also guess \"planning_authority\" from the place name, even if you know "
+        "which council the place falls under. Only set \"planning_authority\" if the "
+        "question explicitly names a council. "
         "If a field can't be determined, omit the key entirely rather than guessing."
     )
 
@@ -64,12 +67,14 @@ def _summarize(client: LLMClient, question: str, filters: dict, rows: list, tota
     system = (
         "You answer questions about Irish planning applications using only the data "
         "provided below. Be concise (2-4 sentences). Do not invent details not present "
-        "in the data. If there are more results than shown, mention the total count."
+        "in the data. If total matches exceeds the number of rows shown, explicitly say "
+        "these are only a few examples out of the total, not the full list."
     )
     user = (
         f"Question: {question}\n"
         f"Total matches: {total}\n"
-        f"Showing up to {MAX_RESULTS_FOR_CONTEXT}:\n{context}"
+        f"Rows shown below: {min(total, MAX_RESULTS_FOR_CONTEXT)} of {total}\n"
+        f"{context}"
     )
     try:
         return client.chat(system, user)
