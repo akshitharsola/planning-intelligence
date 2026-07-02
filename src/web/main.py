@@ -2,14 +2,14 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import urlencode
 
-from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, Form, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from src.core.db.session import SessionLocal
-from src.services import application_service, dashboard_service
+from src.services import application_service, chat_service, dashboard_service
 
 WEB_DIR = Path(__file__).resolve().parent
 
@@ -64,8 +64,8 @@ def dashboard(
 
     summary = dashboard_service.get_summary(db)
     monthly_counts = dashboard_service.get_monthly_counts(db)
-    status_breakdown = dashboard_service.get_status_breakdown(db)
-    type_breakdown = dashboard_service.get_type_breakdown(db)
+    status_breakdown = dashboard_service.get_status_breakdown(db, planning_authority)
+    type_breakdown = dashboard_service.get_type_breakdown(db, planning_authority)
     authorities = dashboard_service.get_distinct_authorities(db)
     statuses = sorted(row["label"] for row in status_breakdown if row["label"])
     application_types = sorted(row["label"] for row in type_breakdown if row["label"])
@@ -99,6 +99,26 @@ def dashboard(
             "statuses": statuses,
             "application_types": application_types,
         },
+    )
+
+
+@app.get("/chat", response_class=HTMLResponse)
+def chat_page(request: Request):
+    return templates.TemplateResponse(
+        request, "chat.html", {"question": None, "result": None, "submitted": False}
+    )
+
+
+@app.post("/chat", response_class=HTMLResponse)
+def chat_ask(
+    request: Request,
+    question: str = Form(default=""),
+    db: Session = Depends(get_db),
+):
+    question = question.strip()
+    result = chat_service.answer_question(db, question) if question else None
+    return templates.TemplateResponse(
+        request, "chat.html", {"question": question, "result": result, "submitted": True}
     )
 
 

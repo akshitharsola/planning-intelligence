@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ask Planning Intelligence</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <h1>Ask Planning Intelligence</h1>
+  <p><a href="/">&larr; Back to dashboard</a></p>
+
+  <form method="post" action="/chat">
+    <input type="text" name="question" placeholder="e.g. What's new in Oranmore?" value="{{ question or '' }}" style="width: 60%;">
+    <button type="submit">Ask</button>
+  </form>
+
+  {% if result %}
+  <section id="chat-answer">
+    <h2>Answer</h2>
+    <p>{{ result.answer }}</p>
+    {% if result.filters %}
+    <p><small>Interpreted as: {{ result.filters }}</small></p>
+    {% endif %}
+  </section>
+
+  <section id="chat-results">
+    <h2>Matching applications ({{ result.total }})</h2>
+    <table id="chat-application-table">
+      <thead>
+        <tr>
+          <th>Planning Authority</th>
+          <th>Application Ref</th>
+          <th>Applicant</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Date Received</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for app in result.applications %}
+        <tr>
+          <td>{{ app.planning_authority }}</td>
+          <td>
+            <a href="/applications/{{ app.planning_authority | urlencode }}/{{ app.application_ref | urlencode }}">
+              {{ app.application_ref }}
+            </a>
+          </td>
+          <td>{{ app.applicant_name }}</td>
+          <td>{{ app.application_type }}</td>
+          <td>{{ app.planning_status_current }}</td>
+          <td>{{ app.date_received }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No applications match the current filters.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  {% elif submitted %}
+  <p>No question asked.</p>
+  {% endif %}
+</body>
+</html>

@@ -35,26 +35,30 @@ def get_monthly_counts(db: Session) -> list[dict]:
     return [{"label": r.label, "value": r.value} for r in rows]
 
 
-def get_status_breakdown(db: Session) -> list[dict]:
+def get_status_breakdown(db: Session, planning_authority: str | None = None) -> list[dict]:
+    query = db.query(
+        Application.planning_status_current.label("label"),
+        func.count(Application.id).label("value"),
+    )
+    if planning_authority:
+        query = query.filter(Application.planning_authority == planning_authority)
     rows = (
-        db.query(
-            Application.planning_status_current.label("label"),
-            func.count(Application.id).label("value"),
-        )
-        .group_by(Application.planning_status_current)
+        query.group_by(Application.planning_status_current)
         .order_by(func.count(Application.id).desc())
         .all()
     )
     return [{"label": r.label, "value": r.value} for r in rows]
 
 
-def get_type_breakdown(db: Session) -> list[dict]:
+def get_type_breakdown(db: Session, planning_authority: str | None = None) -> list[dict]:
+    query = db.query(
+        Application.application_type.label("label"),
+        func.count(Application.id).label("value"),
+    )
+    if planning_authority:
+        query = query.filter(Application.planning_authority == planning_authority)
     rows = (
-        db.query(
-            Application.application_type.label("label"),
-            func.count(Application.id).label("value"),
-        )
-        .group_by(Application.application_type)
+        query.group_by(Application.application_type)
         .order_by(func.count(Application.id).desc())
         .all()
     )

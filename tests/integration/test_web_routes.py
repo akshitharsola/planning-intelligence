@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from src.web import main
 from src.web.main import app
 
 client = TestClient(app)
@@ -8,6 +9,28 @@ client = TestClient(app)
 def test_dashboard_route_returns_200():
     response = client.get("/")
     assert response.status_code == 200
+
+
+def test_chat_page_get_returns_200():
+    response = client.get("/chat")
+    assert response.status_code == 200
+    assert "Ask" in response.text
+
+
+def test_chat_post_returns_answer(monkeypatch):
+    def fake_answer_question(db, question, client=None):
+        return {"answer": "Fake answer.", "filters": {"q": "oranmore"}, "applications": [], "total": 0}
+
+    monkeypatch.setattr(main.chat_service, "answer_question", fake_answer_question)
+    response = client.post("/chat", data={"question": "What's new in Oranmore?"})
+    assert response.status_code == 200
+    assert "Fake answer." in response.text
+
+
+def test_chat_post_empty_question_shows_no_question_message():
+    response = client.post("/chat", data={"question": "  "})
+    assert response.status_code == 200
+    assert "No question asked." in response.text
 
 
 def test_detail_route_returns_404_for_unknown_application():
@@ -27,6 +50,12 @@ def test_dashboard_shows_kpi_and_chart_containers():
 def test_dashboard_filter_by_planning_authority_narrows_table():
     response = client.get("/", params={"planning_authority": "Galway City Council"})
     assert response.status_code == 200
+
+
+def test_status_dropdown_options_scoped_to_selected_authority():
+    response = client.get("/", params={"planning_authority": "Galway City Council"})
+    assert response.status_code == 200
+    assert "Withdrawn" not in response.text
 
 
 def test_dashboard_pagination_params_accepted():
