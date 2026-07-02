@@ -1753,7 +1753,7 @@
       "label": "application_detail()",
       "file_type": "code",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/web/main.py",
-      "source_location": "L92",
+      "source_location": "L95",
       "id": "main_application_detail",
       "community": 5,
       "norm_label": "application_detail()"
@@ -6084,7 +6084,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/web/main.py",
-      "source_location": "L92",
+      "source_location": "L95",
       "weight": 1.0,
       "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_web_dashboard_src_web_main_py",
       "_tgt": "main_application_detail",

@@ -41,13 +41,16 @@ def dashboard(
     planning_authority: str | None = Query(default=None),
     planning_status_current: str | None = Query(default=None),
     application_type: str | None = Query(default=None),
-    date_received_from: date | None = Query(default=None),
-    date_received_to: date | None = Query(default=None),
+    date_received_from: str | None = Query(default=None),
+    date_received_to: str | None = Query(default=None),
     q: str | None = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=25, ge=1, le=200),
     db: Session = Depends(get_db),
 ):
+    date_received_from = date.fromisoformat(date_received_from) if date_received_from else None
+    date_received_to = date.fromisoformat(date_received_to) if date_received_to else None
+
     summary = dashboard_service.get_summary(db)
     monthly_counts = dashboard_service.get_monthly_counts(db)
     status_breakdown = dashboard_service.get_status_breakdown(db)
