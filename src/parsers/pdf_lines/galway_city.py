@@ -150,6 +150,8 @@ def _is_boilerplate(text: str) -> bool:
 
 def _map_column(raw: str, column_map: dict) -> str:
     key = re.sub(r"\s+", " ", raw.lower()).strip().rstrip(".")
+    if not key:
+        return "_unnamed"
     if key in column_map:
         return column_map[key]
     for k, v in column_map.items():
