@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard  (2026-07-02)
 
 ## Corpus Check
-- 84 files · ~64,396 words
+- 84 files · ~64,483 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 271 nodes · 380 edges · 55 communities detected
-- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 121 edges (avg confidence: 0.76)
+- 275 nodes · 385 edges · 55 communities detected
+- Extraction: 69% EXTRACTED · 31% INFERRED · 0% AMBIGUOUS · INFERRED: 121 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -74,11 +74,13 @@
 5. `normalize_row()` - 11 edges
 6. `ApplicationCreate` - 10 edges
 7. `GalwayCountyScraper` - 10 edges
-8. `get_watermark()` - 7 edges
-9. `extract_location()` - 7 edges
-10. `OtherRegulatoryFlags` - 7 edges
+8. `dashboard()` - 8 edges
+9. `get_watermark()` - 7 edges
+10. `extract_location()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `test_is_file_ingested_false_when_unset()` --calls--> `is_file_ingested()`  [INFERRED]
+  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_ingestion_state.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/ingestion_state.py
 - `Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve` --uses--> `GalwayCityScraper`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py
 - `Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d` --uses--> `GalwayCityScraper`  [INFERRED]
@@ -86,8 +88,6 @@
 - `Galway County ingestion CLI: discover -> normalize -> resolve -> publish against` --uses--> `GalwayCountyScraper`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_county.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/county/scraper.py
 - `test_map_column_exact_match()` --calls--> `_map_column()`  [INFERRED]
-  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py
-- `test_map_column_partial_match()` --calls--> `_map_column()`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py
 
 ## Communities
@@ -97,48 +97,48 @@ Cohesion: 0.12
 Nodes (23): ApplicationCreate, ApplicationEventCreate, OtherRegulatoryFlags, BaseModel, _arcgis_date(), _clean_str(), _derive_status(), normalize_county_row() (+15 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.12
-Nodes (23): load_region_config(), Load a `config/<county>/<region>.yaml` region config file., main(), _match_source_type(), Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve, Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d, run_city_ingestion(), get_watermark() (+15 more)
+Cohesion: 0.15
+Nodes (17): load_region_config(), Load a `config/<county>/<region>.yaml` region config file., main(), _match_source_type(), Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve, Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d, run_city_ingestion(), is_file_ingested() (+9 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.11
 Nodes (14): Application, ApplicationEvent, Base, Base, DeclarativeBase, get_metrics_snapshot(), Minimal ingestion KPIs: rows ingested per run, per-region parser error counts/ra, record_ingestion_run() (+6 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.16
-Nodes (13): ABC, BaseSource, _build_session(), GalwayCountyScraper, _query_page(), acquire(), BaseSource, discover() (+5 more)
+Cohesion: 0.21
+Nodes (16): main(), Galway County ingestion CLI: discover -> normalize -> resolve -> publish against, run_county_ingestion(), get_watermark(), set_watermark(), _cleanup(), _fake_records(), A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful (+8 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.2
-Nodes (16): _clean_cells(), extract_planning_table(), _extract_rows(), _is_boilerplate(), _is_duplicate_header(), _looks_like_header(), _map_column(), _norm() (+8 more)
+Nodes (14): get_distinct_authorities(), get_monthly_counts(), get_status_breakdown(), get_summary(), get_type_breakdown(), dashboard(), _parse_optional_date(), _cleanup() (+6 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.23
-Nodes (11): get_by_natural_key(), search(), application_detail(), _cleanup(), _insert(), _seed(), test_get_by_natural_key_found(), test_get_by_natural_key_not_found_returns_none() (+3 more)
+Cohesion: 0.16
+Nodes (13): ABC, BaseSource, _build_session(), GalwayCountyScraper, _query_page(), acquire(), BaseSource, discover() (+5 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.29
-Nodes (13): get_distinct_authorities(), get_monthly_counts(), get_status_breakdown(), get_summary(), get_type_breakdown(), dashboard(), _cleanup(), _insert_application() (+5 more)
+Cohesion: 0.2
+Nodes (16): _clean_cells(), extract_planning_table(), _extract_rows(), _is_boilerplate(), _is_duplicate_header(), _looks_like_header(), _map_column(), _norm() (+8 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.26
-Nodes (6): GalwayCityScraper, _make_dl_url(), _normalise_week(), Galway City Council weekly planning lists scraper.  Ported from duffy's scraper., test_build_local_path_uses_temp_dir(), test_normalise_week_handles_dot_date_ranges()
-
-### Community 8 - "Community 8"
 Cohesion: 0.22
 Nodes (8): is_galway_city(), is_galway_county(), derive_market_entities(), Market-entity derivation registry. Metro derivation is deliberately NOT wired in, FakeApplication, test_galway_city_council_maps_to_galway_city(), test_galway_county_council_maps_to_galway_county(), test_unknown_authority_maps_to_empty_list()
 
+### Community 8 - "Community 8"
+Cohesion: 0.32
+Nodes (11): get_by_natural_key(), search(), application_detail(), _cleanup(), _insert(), _seed(), test_get_by_natural_key_found(), test_get_by_natural_key_not_found_returns_none() (+3 more)
+
 ### Community 9 - "Community 9"
-Cohesion: 0.35
-Nodes (10): main(), Galway County ingestion CLI: discover -> normalize -> resolve -> publish against, run_county_ingestion(), _cleanup(), _fake_records(), A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful, test_dry_run_does_not_write_to_db_or_set_watermark(), test_first_run_ingests_all_and_sets_watermark() (+2 more)
+Cohesion: 0.26
+Nodes (6): GalwayCityScraper, _make_dl_url(), _normalise_week(), Galway City Council weekly planning lists scraper.  Ported from duffy's scraper., test_build_local_path_uses_temp_dir(), test_normalise_week_handles_dot_date_ranges()
 
 ### Community 10 - "Community 10"
-Cohesion: 0.31
-Nodes (8): _extract_address(), _extract_area(), _extract_eircode(), extract_location(), _looks_like_address(), Location extraction for Galway descriptions — ported from duffy's location_extra, test_extract_location_finds_eircode_and_area(), test_extract_location_handles_empty_description()
+Cohesion: 0.2
+Nodes (3): _cleanup_detail(), _seed_detail(), test_detail_page_shows_all_expected_fields()
 
 ### Community 11 - "Community 11"
-Cohesion: 0.28
-Nodes (3): _cleanup_detail(), _seed_detail(), test_detail_page_shows_all_expected_fields()
+Cohesion: 0.31
+Nodes (8): _extract_address(), _extract_area(), _extract_eircode(), extract_location(), _looks_like_address(), Location extraction for Galway descriptions — ported from duffy's location_extra, test_extract_location_finds_eircode_and_area(), test_extract_location_handles_empty_description()
 
 ### Community 12 - "Community 12"
 Cohesion: 0.4
@@ -393,12 +393,12 @@ Nodes (0):
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `run_city_ingestion()` connect `Community 1` to `Community 0`, `Community 2`, `Community 3`, `Community 4`, `Community 7`?**
-  _High betweenness centrality (0.242) - this node is a cross-community bridge._
-- **Why does `normalize_row()` connect `Community 0` to `Community 1`, `Community 2`, `Community 10`?**
-  _High betweenness centrality (0.215) - this node is a cross-community bridge._
-- **Why does `extract_location()` connect `Community 10` to `Community 0`?**
-  _High betweenness centrality (0.162) - this node is a cross-community bridge._
+- **Why does `run_city_ingestion()` connect `Community 1` to `Community 0`, `Community 2`, `Community 5`, `Community 6`, `Community 9`?**
+  _High betweenness centrality (0.237) - this node is a cross-community bridge._
+- **Why does `normalize_row()` connect `Community 0` to `Community 1`, `Community 2`, `Community 11`?**
+  _High betweenness centrality (0.212) - this node is a cross-community bridge._
+- **Why does `extract_location()` connect `Community 11` to `Community 0`?**
+  _High betweenness centrality (0.161) - this node is a cross-community bridge._
 - **Are the 13 inferred relationships involving `run_city_ingestion()` (e.g. with `test_first_run_ingests_all_rows_and_marks_file()` and `test_second_run_skips_already_ingested_file()`) actually correct?**
   _`run_city_ingestion()` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `run_county_ingestion()` (e.g. with `test_first_run_ingests_all_and_sets_watermark()` and `test_second_run_with_stored_watermark_ingests_only_new()`) actually correct?**

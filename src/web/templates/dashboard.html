@@ -19,11 +19,11 @@
     </div>
     <div class="kpi-card">
       <span class="kpi-label">Coverage date range</span>
-      <span class="kpi-value">{{ summary.earliest_received }} &ndash; {{ summary.latest_received }}</span>
+      <span class="kpi-value">{% if summary.earliest_received and summary.latest_received %}{{ summary.earliest_received }} &ndash; {{ summary.latest_received }}{% else %}No data yet{% endif %}</span>
     </div>
     <div class="kpi-card">
       <span class="kpi-label">Last ingestion</span>
-      <span class="kpi-value">{{ summary.latest_ingested_at }}</span>
+      <span class="kpi-value">{{ summary.latest_ingested_at or "No data yet" }}</span>
     </div>
   </section>
 

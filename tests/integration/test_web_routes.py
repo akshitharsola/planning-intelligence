@@ -34,6 +34,24 @@ def test_dashboard_pagination_params_accepted():
     assert response.status_code == 200
 
 
+def test_dashboard_rejects_malformed_date_filter():
+    response = client.get("/", params={"date_received_from": "not-a-date"})
+    assert response.status_code == 400
+
+
+def test_dashboard_accepts_empty_date_filter_params():
+    response = client.get(
+        "/", params={"date_received_from": "", "date_received_to": ""}
+    )
+    assert response.status_code == 200
+
+
+def test_dashboard_out_of_range_page_returns_empty_results():
+    response = client.get("/", params={"page": 99999})
+    assert response.status_code == 200
+    assert "No applications match the current filters." in response.text
+
+
 from datetime import date
 
 from sqlalchemy import text

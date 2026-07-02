@@ -35,6 +35,17 @@ def _replace_param(query_params, key, value):
 templates.env.filters["replace_param"] = _replace_param
 
 
+def _parse_optional_date(value: str | None, field_name: str) -> date | None:
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        raise HTTPException(
+            status_code=400, detail=f"{field_name} must be a valid YYYY-MM-DD date"
+        )
+
+
 @app.get("/", response_class=HTMLResponse)
 def dashboard(
     request: Request,
@@ -48,8 +59,8 @@ def dashboard(
     page_size: int = Query(default=25, ge=1, le=200),
     db: Session = Depends(get_db),
 ):
-    date_received_from = date.fromisoformat(date_received_from) if date_received_from else None
-    date_received_to = date.fromisoformat(date_received_to) if date_received_to else None
+    date_received_from = _parse_optional_date(date_received_from, "date_received_from")
+    date_received_to = _parse_optional_date(date_received_to, "date_received_to")
 
     summary = dashboard_service.get_summary(db)
     monthly_counts = dashboard_service.get_monthly_counts(db)
