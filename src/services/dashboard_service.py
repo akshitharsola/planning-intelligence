@@ -59,3 +59,13 @@ def get_type_breakdown(db: Session) -> list[dict]:
         .all()
     )
     return [{"label": r.label, "value": r.value} for r in rows]
+
+
+def get_distinct_authorities(db: Session) -> list[str]:
+    rows = (
+        db.query(Application.planning_authority)
+        .distinct()
+        .order_by(Application.planning_authority)
+        .all()
+    )
+    return [r[0] for r in rows]

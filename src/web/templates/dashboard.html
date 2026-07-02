@@ -42,9 +42,24 @@
 
   <section id="filters">
     <form method="get" action="/">
-      <input type="text" name="planning_authority" placeholder="Planning authority" value="{{ filters.planning_authority or '' }}">
-      <input type="text" name="planning_status_current" placeholder="Status" value="{{ filters.planning_status_current or '' }}">
-      <input type="text" name="application_type" placeholder="Application type" value="{{ filters.application_type or '' }}">
+      <select name="planning_authority">
+        <option value="">All planning authorities</option>
+        {% for authority in authorities %}
+        <option value="{{ authority }}" {% if filters.planning_authority == authority %}selected{% endif %}>{{ authority }}</option>
+        {% endfor %}
+      </select>
+      <select name="planning_status_current">
+        <option value="">All statuses</option>
+        {% for status in statuses %}
+        <option value="{{ status }}" {% if filters.planning_status_current == status %}selected{% endif %}>{{ status }}</option>
+        {% endfor %}
+      </select>
+      <select name="application_type">
+        <option value="">All application types</option>
+        {% for app_type in application_types %}
+        <option value="{{ app_type }}" {% if filters.application_type == app_type %}selected{% endif %}>{{ app_type }}</option>
+        {% endfor %}
+      </select>
       <input type="date" name="date_received_from" value="{{ filters.date_received_from or '' }}">
       <input type="date" name="date_received_to" value="{{ filters.date_received_to or '' }}">
       <input type="text" name="q" placeholder="Search applicant, address, description" value="{{ filters.q or '' }}">

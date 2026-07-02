@@ -52,6 +52,9 @@ def dashboard(
     monthly_counts = dashboard_service.get_monthly_counts(db)
     status_breakdown = dashboard_service.get_status_breakdown(db)
     type_breakdown = dashboard_service.get_type_breakdown(db)
+    authorities = dashboard_service.get_distinct_authorities(db)
+    statuses = sorted(row["label"] for row in status_breakdown if row["label"])
+    application_types = sorted(row["label"] for row in type_breakdown if row["label"])
 
     filters = {
         "planning_authority": planning_authority,
@@ -78,6 +81,9 @@ def dashboard(
             "page_size": page_size,
             "total_pages": total_pages,
             "filters": filters,
+            "authorities": authorities,
+            "statuses": statuses,
+            "application_types": application_types,
         },
     )
 
