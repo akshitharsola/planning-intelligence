@@ -42,19 +42,19 @@
 
   <section id="filters">
     <form method="get" action="/">
-      <select name="planning_authority">
+      <select name="planning_authority" onchange="this.form.submit()">
         <option value="">All planning authorities</option>
         {% for authority in authorities %}
         <option value="{{ authority }}" {% if filters.planning_authority == authority %}selected{% endif %}>{{ authority }}</option>
         {% endfor %}
       </select>
-      <select name="planning_status_current">
+      <select name="planning_status_current" onchange="this.form.submit()">
         <option value="">All statuses</option>
         {% for status in statuses %}
         <option value="{{ status }}" {% if filters.planning_status_current == status %}selected{% endif %}>{{ status }}</option>
         {% endfor %}
       </select>
-      <select name="application_type">
+      <select name="application_type" onchange="this.form.submit()">
         <option value="">All application types</option>
         {% for app_type in application_types %}
         <option value="{{ app_type }}" {% if filters.application_type == app_type %}selected{% endif %}>{{ app_type }}</option>
