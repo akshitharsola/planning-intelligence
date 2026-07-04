@@ -1,3 +1,5 @@
+import pytest
+
 from src.core.normalization.galway_county import normalize_county_row
 
 REGION_CONFIG = {
@@ -117,3 +119,35 @@ def test_normalize_county_row_unrecognized_decision_flags_for_review():
     app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:4")
     assert app.planning_status_current == "Unknown/Needs Review"
     assert app.status_event_type == "STATUS_UNRECOGNIZED"
+
+
+def test_normalize_county_row_rejects_missing_application_number():
+    raw_row = {
+        "OBJECTID": 5,
+        "ApplicationNumber": None,
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "PERMISSION",
+        "ApplicationStatus": "Application Pending",
+        "ReceivedDate": "01/01/2020",
+        "Decision": "n\\a",
+        "Location": "Athenry",
+        "Description": "test",
+    }
+    with pytest.raises(ValueError, match="ApplicationNumber"):
+        normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:5")
+
+
+def test_normalize_county_row_rejects_blank_application_number():
+    raw_row = {
+        "OBJECTID": 6,
+        "ApplicationNumber": "   ",
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "PERMISSION",
+        "ApplicationStatus": "Application Pending",
+        "ReceivedDate": "01/01/2020",
+        "Decision": "n\\a",
+        "Location": "Athenry",
+        "Description": "test",
+    }
+    with pytest.raises(ValueError, match="ApplicationNumber"):
+        normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:6")
