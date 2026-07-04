@@ -60,3 +60,60 @@ def test_normalize_county_row_withdrawn():
     app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:1")
     assert app.planning_status_current == "Withdrawn"
     assert app.status_event_type == "APPLICATION_WITHDRAWN"
+
+
+def test_normalize_county_row_appeal_granted():
+    raw_row = {
+        "OBJECTID": 2,
+        "ApplicationNumber": "20/2",
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "PERMISSION",
+        "ApplicationStatus": "Application Finalised",
+        "ReceivedDate": "01/01/2020",
+        "Decision": "n\\a",
+        "AppealDecision": "Grant Permission",
+        "Location": "Athenry",
+        "Description": "test",
+    }
+    app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:2")
+    assert app.planning_status_current == "Granted"
+    assert app.status_event_type == "DECISION_GRANTED"
+
+
+def test_normalize_county_row_appeal_refused():
+    raw_row = {
+        "OBJECTID": 3,
+        "ApplicationNumber": "20/3",
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "PERMISSION",
+        "ApplicationStatus": "Application Finalised",
+        "ReceivedDate": "01/01/2020",
+        "Decision": "n\\a",
+        "AppealDecision": "Refuse Permission",
+        "Location": "Athenry",
+        "Description": "test",
+    }
+    app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:3")
+    assert app.planning_status_current == "Refused"
+    assert app.status_event_type == "DECISION_REFUSED"
+
+
+def test_normalize_county_row_unrecognized_decision_flags_for_review():
+    # Deliberately does NOT contain "grant" or "refus" as a substring (unlike
+    # e.g. "Part Grant Part Refusal", which would false-match the existing
+    # grant/refuse checks) — this must be a decision string with no
+    # recognized outcome word at all, to genuinely exercise the fallback.
+    raw_row = {
+        "OBJECTID": 4,
+        "ApplicationNumber": "20/4",
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "PERMISSION",
+        "ApplicationStatus": "Application Finalised",
+        "ReceivedDate": "01/01/2020",
+        "Decision": "Referred Back To Planning Authority",
+        "Location": "Athenry",
+        "Description": "test",
+    }
+    app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:4")
+    assert app.planning_status_current == "Unknown/Needs Review"
+    assert app.status_event_type == "STATUS_UNRECOGNIZED"

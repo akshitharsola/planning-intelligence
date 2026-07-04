@@ -25,7 +25,7 @@ _NULL_SENTINELS = {"n/a", "n\\a", "na", "none", "null", "", "-"}
 
 def normalize_county_row(raw_row: dict, region_config: dict, source_file: str) -> ApplicationCreate:
     status, event_type = _derive_status(
-        raw_row.get("ApplicationStatus"), raw_row.get("Decision")
+        raw_row.get("ApplicationStatus"), raw_row.get("Decision"), raw_row.get("AppealDecision")
     )
     description = _clean_str(raw_row.get("Description")) or ""
     date_received = _parse_date(_arcgis_date(raw_row.get("ReceivedDate"))) or date.today()
@@ -70,9 +70,10 @@ def _arcgis_date(value) -> str | None:
     return cleaned
 
 
-def _derive_status(application_status, decision) -> tuple[str, str]:
+def _derive_status(application_status, decision, appeal_decision=None) -> tuple[str, str]:
     decision_clean = _clean_str(decision)
     status_clean = _clean_str(application_status)
+    appeal_clean = _clean_str(appeal_decision)
 
     if decision_clean:
         decision_lower = decision_clean.lower()
@@ -80,6 +81,16 @@ def _derive_status(application_status, decision) -> tuple[str, str]:
             return "Granted", "DECISION_GRANTED"
         if "refus" in decision_lower:
             return "Refused", "DECISION_REFUSED"
+
+    if appeal_clean:
+        appeal_lower = appeal_clean.lower()
+        if "grant" in appeal_lower:
+            return "Granted", "DECISION_GRANTED"
+        if "refus" in appeal_lower:
+            return "Refused", "DECISION_REFUSED"
+
+    if decision_clean:
+        return "Unknown/Needs Review", "STATUS_UNRECOGNIZED"
 
     if status_clean:
         status_lower = status_clean.lower()
