@@ -4,12 +4,18 @@ extracts search filters and summarizes results, it never writes to the DB
 or triggers other actions.
 """
 
+from datetime import date
+
 from sqlalchemy.orm import Session
 
 from src.services import application_service, dashboard_service
 from src.services.llm_client import LLMClient, extract_json, get_llm_client
 
 MAX_RESULTS_FOR_CONTEXT = 20
+
+
+def _today() -> date:
+    return date.today()
 
 _FILTER_KEYS = (
     "planning_authority",
@@ -26,6 +32,9 @@ def _extraction_prompt(db: Session) -> str:
     statuses = sorted(r["label"] for r in dashboard_service.get_status_breakdown(db) if r["label"])
     types = sorted(r["label"] for r in dashboard_service.get_type_breakdown(db) if r["label"])
     return (
+        f"Today's date is {_today().isoformat()}. Resolve relative date phrases "
+        "like 'last month', 'this year', or 'last week' against this date, not "
+        "your training data.\n\n"
         "You translate a user's question about Irish planning applications into a JSON "
         "filter object. Reply with ONLY the JSON object, no other text.\n\n"
         "Allowed keys (omit any key you can't confidently determine):\n"
@@ -34,12 +43,21 @@ def _extraction_prompt(db: Session) -> str:
         '  "application_type": one of ' + str(types) + "\n"
         '  "date_received_from": "YYYY-MM-DD"\n'
         '  "date_received_to": "YYYY-MM-DD"\n'
-        '  "q": free-text keyword to search applicant/address/description (e.g. a place name)\n\n'
+        '  "q": one or more space-separated keywords to search applicant/address/description '
+        '(e.g. a place name); every keyword must match, so only include words that should ALL '
+        "be present\n\n"
         "If the question mentions a place name (e.g. a town or area), put it ONLY in \"q\" "
         "-- do not also guess \"planning_authority\" from the place name, even if you know "
         "which council the place falls under. Only set \"planning_authority\" if the "
         "question explicitly names a council. "
-        "If a field can't be determined, omit the key entirely rather than guessing."
+        "Do not put dates or date phrases inside \"q\" -- always express any time range "
+        "using \"date_received_from\" / \"date_received_to\" instead, and never combine "
+        "a place name and a date into one \"q\" string. "
+        "If a field can't be determined, omit the key entirely rather than guessing.\n\n"
+        "Examples:\n"
+        f'  Question: "What\'s new in Tuam for last month"\n'
+        '  Reply: {"q": "Tuam", "date_received_from": "<first day of last month>", '
+        '"date_received_to": "<last day of last month>"}\n'
     )
 
 

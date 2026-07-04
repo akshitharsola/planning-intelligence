@@ -40,14 +40,15 @@ def search(db: Session, filters: dict, page: int, page_size: int) -> tuple[list[
 
     q = filters.get("q")
     if q:
-        pattern = f"%{q}%"
-        query = query.filter(
-            or_(
-                Application.applicant_name.ilike(pattern),
-                Application.site_address.ilike(pattern),
-                Application.development_description.ilike(pattern),
+        for keyword in q.split():
+            pattern = f"%{keyword}%"
+            query = query.filter(
+                or_(
+                    Application.applicant_name.ilike(pattern),
+                    Application.site_address.ilike(pattern),
+                    Application.development_description.ilike(pattern),
+                )
             )
-        )
 
     total = query.with_entities(func.count(Application.id)).scalar()
 

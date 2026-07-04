@@ -121,6 +121,38 @@ def test_search_filters_by_planning_authority():
         _cleanup()
 
 
+def test_search_q_multiple_keywords_all_must_match():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            rows, total = search(session, {"q": "Oranmore signage"}, page=1, page_size=25)
+        finally:
+            session.close()
+        refs = {r.application_ref for r in rows}
+        assert f"{PREFIX}/0002" in refs
+        assert f"{PREFIX}/0001" not in refs
+    finally:
+        _cleanup()
+
+
+def test_search_q_multiple_keywords_no_match_when_one_keyword_absent():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            rows, total = search(session, {"q": "Oranmore extension"}, page=1, page_size=25)
+        finally:
+            session.close()
+        refs = {r.application_ref for r in rows}
+        assert f"{PREFIX}/0001" not in refs
+        assert f"{PREFIX}/0002" not in refs
+    finally:
+        _cleanup()
+
+
 def test_search_q_matches_site_address_case_insensitive():
     _cleanup()
     _seed()
