@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Planning Intelligence Dashboard</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Planning Intelligence Dashboard</h1>
+  <p><a href="/chat">Ask a question &rarr;</a></p>
+
+  <section id="kpi-cards">
+    <div class="kpi-card">
+      <span class="kpi-label">Total applications</span>
+      <span class="kpi-value">{{ summary.total_applications }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Councils covered</span>
+      <span class="kpi-value">{{ summary.distinct_authorities }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Coverage date range</span>
+      <span class="kpi-value">{% if summary.earliest_received and summary.latest_received %}{{ summary.earliest_received }} &ndash; {{ summary.latest_received }}{% else %}No data yet{% endif %}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Last ingestion</span>
+      <span class="kpi-value">{{ summary.latest_ingested_at or "No data yet" }}</span>
+    </div>
+  </section>
+
+  <section id="charts">
+    <canvas id="monthly-chart"></canvas>
+    <canvas id="status-chart"></canvas>
+    <canvas id="type-chart"></canvas>
+  </section>
+
+  <script>
+    const monthlyData = {{ monthly_counts | tojson }};
+    const statusData = {{ status_breakdown | tojson }};
+    const typeData = {{ type_breakdown | tojson }};
+  </script>
+  <script src="/static/app.js"></script>
+
+  <section id="filters">
+    <form method="get" action="/">
+      <select name="planning_authority" onchange="this.form.submit()">
+        <option value="">All planning authorities</option>
+        {% for authority in authorities %}
+        <option value="{{ authority }}" {% if filters.planning_authority == authority %}selected{% endif %}>{{ authority }}</option>
+        {% endfor %}
+      </select>
+      <select name="planning_status_current" onchange="this.form.submit()">
+        <option value="">All statuses</option>
+        {% for status in statuses %}
+        <option value="{{ status }}" {% if filters.planning_status_current == status %}selected{% endif %}>{{ status }}</option>
+        {% endfor %}
+      </select>
+      <select name="application_type" onchange="this.form.submit()">
+        <option value="">All application types</option>
+        {% for app_type in application_types %}
+        <option value="{{ app_type }}" {% if filters.application_type == app_type %}selected{% endif %}>{{ app_type }}</option>
+        {% endfor %}
+      </select>
+      <input type="date" name="date_received_from" value="{{ filters.date_received_from or '' }}">
+      <input type="date" name="date_received_to" value="{{ filters.date_received_to or '' }}">
+      <input type="text" name="q" placeholder="Search applicant, address, description" value="{{ filters.q or '' }}">
+      <button type="submit">Filter</button>
+    </form>
+  </section>
+
+  <section id="applications-table">
+    {% include "partials/application_table.html" %}
+  </section>
+</body>
+</html>

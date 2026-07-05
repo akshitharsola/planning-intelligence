@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ application.application_ref }}</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <a href="/">&larr; Back to dashboard</a>
+  <h1>{{ application.application_ref }}</h1>
+  <p>{{ application.planning_authority }}</p>
+
+  <table>
+    <tr><th>Applicant</th><td>{{ application.applicant_name }}</td></tr>
+    <tr><th>Site address</th><td>{{ application.site_address }}</td></tr>
+    <tr><th>Site locality</th><td>{{ application.site_locality }}</td></tr>
+    <tr><th>Site county</th><td>{{ application.site_county }}</td></tr>
+    <tr><th>Description</th><td>{{ application.development_description }}</td></tr>
+    <tr><th>Application type</th><td>{{ application.application_type }}</td></tr>
+    <tr><th>Current status</th><td>{{ application.planning_status_current }}</td></tr>
+    <tr><th>Date received</th><td>{{ application.date_received }}</td></tr>
+    <tr><th>Decision due date</th><td>{{ application.decision_due_date }}</td></tr>
+    <tr><th>Decision date</th><td>{{ application.decision_date }}</td></tr>
+    <tr><th>Further information requested</th><td>{{ application.further_information_flag }}</td></tr>
+    <tr><th>Protected structure</th><td>{{ application.protected_structure_flag }}</td></tr>
+    <tr><th>EIA/EIS</th><td>{{ application.eia_eis_flag }}</td></tr>
+  </table>
+
+  <h2>Provenance</h2>
+  <table>
+    <tr><th>Source system</th><td>{{ application.source_system }}</td></tr>
+    <tr><th>Source file</th><td>{{ application.source_file }}</td></tr>
+    <tr><th>Source ingested at</th><td>{{ application.source_ingested_at }}</td></tr>
+    {% if application.official_detail_url %}
+    <tr><th>Official detail URL</th><td><a href="{{ application.official_detail_url }}">{{ application.official_detail_url }}</a></td></tr>
+    {% endif %}
+    {% if application.official_documents_url %}
+    <tr><th>Official documents URL</th><td><a href="{{ application.official_documents_url }}">{{ application.official_documents_url }}</a></td></tr>
+    {% endif %}
+  </table>
+</body>
+</html>

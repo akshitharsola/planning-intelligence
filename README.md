@@ -48,6 +48,27 @@ as-is.
 pytest
 ```
 
+## Web dashboard
+
+A minimal local dashboard for browsing ingested planning applications.
+
+1. Ensure Postgres is running and `.env` has a valid `DATABASE_URL`
+   (see `.env.example`).
+2. Install dependencies if you haven't already: `pip install -e .`
+3. Start the dashboard:
+
+   ```bash
+   uvicorn src.web.main:app --reload
+   ```
+
+4. Open `http://localhost:8000` in a browser.
+
+The dashboard shows KPI totals, three charts (monthly applications
+received, status breakdown, application type breakdown), and a
+filterable/paginated applications table. Click any application reference
+to view its full detail page, including provenance fields (source system,
+source file, ingestion timestamp, and official source URLs where present).
+
 ## Adding a new council
 
 Use the `/onboard-council <county_slug> <region_slug>` skill (see
