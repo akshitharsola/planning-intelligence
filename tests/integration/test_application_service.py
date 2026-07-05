@@ -189,3 +189,35 @@ def test_search_pagination_returns_correct_slice_and_total():
         assert total1 == total2 == 2
     finally:
         _cleanup()
+
+
+def test_search_q_matches_application_ref():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            rows, total = search(session, {"q": f"{PREFIX}/0001"}, page=1, page_size=25)
+        finally:
+            session.close()
+        refs = {r.application_ref for r in rows}
+        assert f"{PREFIX}/0001" in refs
+        assert f"{PREFIX}/0002" not in refs
+    finally:
+        _cleanup()
+
+
+def test_search_q_matches_application_ref_case_insensitive_partial():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            rows, total = search(session, {"q": "0001"}, page=1, page_size=25)
+        finally:
+            session.close()
+        refs = {r.application_ref for r in rows}
+        assert f"{PREFIX}/0001" in refs
+        assert f"{PREFIX}/0002" not in refs
+    finally:
+        _cleanup()

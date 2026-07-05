@@ -47,6 +47,7 @@ def search(db: Session, filters: dict, page: int, page_size: int) -> tuple[list[
                     Application.applicant_name.ilike(pattern),
                     Application.site_address.ilike(pattern),
                     Application.development_description.ilike(pattern),
+                    Application.application_ref.ilike(pattern),
                 )
             )
 
