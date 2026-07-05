@@ -22,16 +22,25 @@ no mocks).
 
 ## Global Constraints
 
-- Test runner: `/opt/anaconda3/bin/python -m pytest` (the plain `python3` /
-  `pytest` on PATH does not have the project's dependencies installed —
-  this is a pre-existing environment quirk, not something to fix).
+- Test runner: `.venv/bin/python -m pytest` (the repo root's `.venv` — it
+  has `psycopg2`, `pdfplumber`, `sqlalchemy`, and `pytest` all installed
+  and a reachable Postgres DB behind it; confirmed 67/67 tests pass with
+  it). Do not use the plain `python3` / `pytest` on PATH or the anaconda
+  interpreter used in a prior session — neither has the full dependency
+  set installed.
 - Ignore these test files when running the suite — they fail to *collect*
-  (not run) due to missing system packages (`psycopg2`, `pdfplumber`),
-  which is pre-existing and out of scope:
+  (not run) due to missing system packages, which is pre-existing and out
+  of scope:
   `--ignore=tests/unit/core/test_application_natural_key.py
   --ignore=tests/unit/core/test_ingestion_state.py
   --ignore=tests/unit/parsers/test_galway_city_pdf_lines.py
-  --ignore=tests/unit/services/test_chat_extraction_prompt.py`
+  --ignore=tests/unit/services/test_chat_extraction_prompt.py
+  --ignore=tests/integration/test_web_routes.py`
+  (the last one fails to collect because `fastapi` is not installed in
+  `.venv`, and pytest's package-level collection means this one bad
+  import blocks the rest of `tests/integration/` unless ignored
+  explicitly — it is unrelated to this plan's `test_chat_service.py` /
+  `test_application_service.py` targets.)
 - Integration tests in `tests/integration/test_chat_service.py` and
   `tests/integration/test_application_service.py` run against a real
   Postgres DB (via `src.core.db.session.SessionLocal`) — follow the
@@ -138,7 +147,7 @@ def test_search_q_matches_application_ref_case_insensitive_partial():
 
 Run:
 ```bash
-/opt/anaconda3/bin/python -m pytest tests/integration/test_application_service.py::test_search_q_matches_application_ref tests/integration/test_application_service.py::test_search_q_matches_application_ref_case_insensitive_partial -v
+.venv/bin/python -m pytest tests/integration/test_application_service.py::test_search_q_matches_application_ref tests/integration/test_application_service.py::test_search_q_matches_application_ref_case_insensitive_partial -v
 ```
 Expected: both FAIL — `f"{PREFIX}/0001" in refs` is False, because
 `application_ref` is not yet part of the `q` filter's `or_(...)` clause.
@@ -182,7 +191,7 @@ Add `Application.application_ref` to the `or_(...)` clause:
 
 Run:
 ```bash
-/opt/anaconda3/bin/python -m pytest tests/integration/test_application_service.py -v
+.venv/bin/python -m pytest tests/integration/test_application_service.py -v
 ```
 Expected: PASS, all tests in the file including the two new ones and the
 pre-existing ones (`test_search_q_multiple_keywords_all_must_match`, etc. —
@@ -287,7 +296,7 @@ def test_answer_question_keeps_valid_application_type():
 
 Run:
 ```bash
-/opt/anaconda3/bin/python -m pytest tests/integration/test_chat_service.py::test_answer_question_drops_hallucinated_application_type tests/integration/test_chat_service.py::test_answer_question_keeps_valid_application_type -v
+.venv/bin/python -m pytest tests/integration/test_chat_service.py::test_answer_question_drops_hallucinated_application_type tests/integration/test_chat_service.py::test_answer_question_keeps_valid_application_type -v
 ```
 Expected: `test_answer_question_drops_hallucinated_application_type` FAILS
 (`"application_type" not in result["filters"]` is False, and/or `total`
@@ -334,7 +343,7 @@ def _extract_filters(client: LLMClient, db: Session, question: str) -> dict:
 
 Run:
 ```bash
-/opt/anaconda3/bin/python -m pytest tests/integration/test_chat_service.py -v
+.venv/bin/python -m pytest tests/integration/test_chat_service.py -v
 ```
 Expected: PASS, all tests in the file including both new tests and the
 pre-existing ones (in particular
@@ -358,7 +367,7 @@ git commit -m "fix: drop hallucinated application_type instead of filtering on i
 - [ ] **Step 1: Run the full scoped test suite**
 
 ```bash
-/opt/anaconda3/bin/python -m pytest tests/unit tests/integration \
+.venv/bin/python -m pytest tests/unit tests/integration \
   --ignore=tests/unit/core/test_application_natural_key.py \
   --ignore=tests/unit/core/test_ingestion_state.py \
   --ignore=tests/unit/parsers/test_galway_city_pdf_lines.py \
