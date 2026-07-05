@@ -32,6 +32,13 @@ _SOURCE_TYPE_TO_STATUS = {
 
 def normalize_row(raw_row: dict, source_type: str, region_config: dict,
                    source_file: str) -> ApplicationCreate:
+    file_number = str(raw_row.get("file_number", "")).strip()
+    if not file_number:
+        raise ValueError(
+            f"City record missing file_number (source_file={source_file!r}); "
+            "refusing to normalize a row with a blank natural-key component."
+        )
+
     status, event_type = _SOURCE_TYPE_TO_STATUS.get(source_type, ("Received", "APPLICATION_RECEIVED"))
     description = raw_row.get("description", "")
     location = extract_location(description)
@@ -42,7 +49,7 @@ def normalize_row(raw_row: dict, source_type: str, region_config: dict,
     return ApplicationCreate(
         planning_authority=region_config["planning_authority"],
         source_entity=region_config["source_entity"],
-        application_ref=raw_row.get("file_number", ""),
+        application_ref=file_number,
         applicant_name=raw_row.get("applicant", ""),
         site_address=location["address"],
         site_locality=location["area"],

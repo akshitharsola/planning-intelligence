@@ -1,3 +1,5 @@
+import pytest
+
 from src.pipelines.normalize import normalize_row
 
 REGION_CONFIG = {
@@ -40,3 +42,26 @@ def test_normalize_row_granted_sets_decision_fields():
     assert app.planning_status_current == "Granted"
     assert app.status_event_type == "DECISION_GRANTED"
     assert app.decision_date is not None
+
+
+def test_normalize_row_rejects_missing_file_number():
+    raw_row = {
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "test",
+    }
+    with pytest.raises(ValueError, match="file_number"):
+        normalize_row(raw_row, source_type="received", region_config=REGION_CONFIG,
+                      source_file="Weekly Lists - Planning Applications Received.pdf")
+
+
+def test_normalize_row_rejects_blank_file_number():
+    raw_row = {
+        "file_number": "   ",
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "test",
+    }
+    with pytest.raises(ValueError, match="file_number"):
+        normalize_row(raw_row, source_type="received", region_config=REGION_CONFIG,
+                      source_file="Weekly Lists - Planning Applications Received.pdf")
