@@ -7647,6 +7647,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_src": "application_otherregulatoryflags",
+      "_tgt": "normalize_normalize_row",
+      "source": "application_otherregulatoryflags",
+      "target": "normalize_normalize_row"
+    },
+    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
@@ -7669,18 +7681,6 @@
       "confidence_score": 0.5,
       "source": "application_otherregulatoryflags",
       "target": "normalize_rationale_81"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
-      "source_location": "L49",
-      "weight": 1.0,
-      "_src": "application_otherregulatoryflags",
-      "_tgt": "normalize_normalize_row",
-      "source": "application_otherregulatoryflags",
-      "target": "normalize_normalize_row"
     },
     {
       "relation": "uses",
@@ -7719,6 +7719,18 @@
       "target": "galway_county_rationale_68"
     },
     {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "application_applicationcreate",
+      "_tgt": "normalize_normalize_row",
+      "source": "application_applicationcreate",
+      "target": "normalize_normalize_row"
+    },
+    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
@@ -7741,18 +7753,6 @@
       "confidence_score": 0.5,
       "source": "application_applicationcreate",
       "target": "normalize_rationale_81"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "_src": "application_applicationcreate",
-      "_tgt": "normalize_normalize_row",
-      "source": "application_applicationcreate",
-      "target": "normalize_normalize_row"
     },
     {
       "relation": "uses",

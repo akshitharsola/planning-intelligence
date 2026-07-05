@@ -1,7 +1,7 @@
-# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening  (2026-07-05)
+# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/chat-search-filter-bugs  (2026-07-05)
 
 ## Corpus Check
-- 91 files · ~79,682 words
+- 91 files · ~81,567 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
