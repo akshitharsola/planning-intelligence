@@ -2987,9 +2987,9 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/chat_service.py",
       "source_location": "L146",
-      "id": "chat_service_rationale_146",
       "community": 8,
-      "norm_label": "returns {\"answer\": str, \"filters\": dict, \"applications\": list, \"total\": int}."
+      "norm_label": "returns {\"answer\": str, \"filters\": dict, \"applications\": list, \"total\": int}.",
+      "id": "chat_service_rationale_146"
     },
     {
       "label": "__init__.py",
@@ -9664,9 +9664,9 @@
       "weight": 0.8,
       "_src": "chat_service_rationale_146",
       "_tgt": "llm_client_llmclient",
+      "confidence_score": 0.5,
       "source": "chat_service_rationale_146",
-      "target": "llm_client_llmclient",
-      "confidence_score": 0.5
+      "target": "llm_client_llmclient"
     },
     {
       "relation": "contains",
@@ -9830,8 +9830,8 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/chat_service.py",
       "source_location": "L12",
       "weight": 0.8,
-      "_src": "chat_service_rationale_132",
-      "_tgt": "llm_client_llmclient",
+      "_src": "llm_client_llmclient",
+      "_tgt": "chat_service_rationale_132",
       "confidence_score": 0.5,
       "source": "llm_client_llmclient",
       "target": "chat_service_rationale_132"

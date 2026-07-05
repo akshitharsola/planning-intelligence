@@ -69,6 +69,24 @@ filterable/paginated applications table. Click any application reference
 to view its full detail page, including provenance fields (source system,
 source file, ingestion timestamp, and official source URLs where present).
 
+### Chat feature ("Ask Planning Intelligence")
+
+The `/chat` page answers natural-language questions about the ingested
+applications (e.g. "What's new in Tuam last month?" or "What's the status
+of application 26/20 for Mr Kevin Burke?"). It needs a reachable Ollama
+instance to extract search filters and summarize results:
+
+```bash
+ollama pull llama3.1:8b
+ollama serve   # usually already running as a background service after install
+```
+
+`OLLAMA_BASE_URL` (default `http://localhost:11434`) and `OLLAMA_MODEL`
+(default `llama3.1:8b`) in `.env` control which instance/model it calls —
+see `.env.example`. If Ollama isn't reachable, the chat page reports that
+the AI assistant is temporarily unavailable rather than guessing; it never
+silently returns unfiltered results.
+
 ## Adding a new council
 
 Use the `/onboard-council <county_slug> <region_slug>` skill (see
