@@ -100,7 +100,28 @@ def test_answer_question_extracts_filters_and_summarizes():
         _cleanup()
 
 
-def test_answer_question_falls_back_when_llm_unreachable():
+def test_answer_question_unfiltered_search_when_llm_extracts_no_filters():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            # LLM reachable, but genuinely finds no confident filters for a vague
+            # question -> a real (if broad) unfiltered search is the correct,
+            # intentional result, NOT the "unavailable" outage message.
+            client = FakeLLMClient(replies=["{}", "Showing all applications."])
+            result = answer_question(session, "Show me everything", client=client)
+        finally:
+            session.close()
+
+        assert result["filters"] == {}
+        assert result["total"] >= 1
+        assert result["answer"] == "Showing all applications."
+    finally:
+        _cleanup()
+
+
+def test_answer_question_reports_unavailable_when_llm_unreachable():
     _cleanup()
     _seed()
     try:
@@ -112,11 +133,13 @@ def test_answer_question_falls_back_when_llm_unreachable():
         finally:
             session.close()
 
-        # No filters extracted (LLM unreachable) -> unfiltered search, but the
-        # fallback summary must still be produced without raising.
-        assert result["total"] >= 1
-        assert isinstance(result["answer"], str)
-        assert result["answer"]
+        # Filter extraction failed (LLM unreachable) -> must NOT silently fall
+        # back to an unfiltered search of the whole table. Report the outage
+        # explicitly instead.
+        assert result["total"] == 0
+        assert result["filters"] == {}
+        assert result["applications"] == []
+        assert "unavailable" in result["answer"].lower()
     finally:
         _cleanup()
 

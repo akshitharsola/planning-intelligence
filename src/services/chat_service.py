@@ -113,6 +113,12 @@ def _fallback_summary(rows: list, total: int) -> str:
     return f"Found {total} matching application(s). Examples: {names}."
 
 
+_UNAVAILABLE_MESSAGE = (
+    "The AI assistant is temporarily unavailable, so your question couldn't be "
+    "answered. Please try again in a moment."
+)
+
+
 def answer_question(db: Session, question: str, client: LLMClient | None = None) -> dict:
     """Returns {"answer": str, "filters": dict, "applications": list, "total": int}."""
     client = client or get_llm_client()
@@ -120,7 +126,12 @@ def answer_question(db: Session, question: str, client: LLMClient | None = None)
     try:
         filters = _extract_filters(client, db, question)
     except Exception:
-        filters = {}
+        return {
+            "answer": _UNAVAILABLE_MESSAGE,
+            "filters": {},
+            "applications": [],
+            "total": 0,
+        }
 
     full_filters = {k: filters.get(k) for k in _FILTER_KEYS}
     rows, total = application_service.search(db, full_filters, page=1, page_size=MAX_RESULTS_FOR_CONTEXT)
