@@ -65,3 +65,44 @@ def test_normalize_row_rejects_blank_file_number():
     with pytest.raises(ValueError, match="file_number"):
         normalize_row(raw_row, source_type="received", region_config=REGION_CONFIG,
                       source_file="Weekly Lists - Planning Applications Received.pdf")
+
+
+def test_normalize_row_unrecognized_source_type_flags_for_review():
+    raw_row = {
+        "file_number": "24/9999",
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "test",
+    }
+    app = normalize_row(raw_row, source_type="some_new_pdf_category",
+                        region_config=REGION_CONFIG, source_file="test.pdf")
+    assert app.planning_status_current == "Unknown/Needs Review"
+    assert app.status_event_type == "STATUS_UNRECOGNIZED"
+
+
+def test_normalize_row_blank_source_type_flags_for_review():
+    raw_row = {
+        "file_number": "24/9998",
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "test",
+    }
+    app = normalize_row(raw_row, source_type="", region_config=REGION_CONFIG,
+                        source_file="test.pdf")
+    assert app.planning_status_current == "Unknown/Needs Review"
+    assert app.status_event_type == "STATUS_UNRECOGNIZED"
+
+
+def test_normalize_row_received_source_type_still_maps_correctly():
+    # Regression guard: confirms the fallback change above doesn't alter
+    # behavior for a known-good recognized source_type.
+    raw_row = {
+        "file_number": "24/9997",
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "test",
+    }
+    app = normalize_row(raw_row, source_type="received", region_config=REGION_CONFIG,
+                        source_file="test.pdf")
+    assert app.planning_status_current == "Received"
+    assert app.status_event_type == "APPLICATION_RECEIVED"

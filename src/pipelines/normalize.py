@@ -29,6 +29,8 @@ _SOURCE_TYPE_TO_STATUS = {
     "further_reqd": ("Further Info", "FURTHER_INFORMATION_REQUESTED"),
 }
 
+_UNRECOGNIZED_STATUS = ("Unknown/Needs Review", "STATUS_UNRECOGNIZED")
+
 
 def normalize_row(raw_row: dict, source_type: str, region_config: dict,
                    source_file: str) -> ApplicationCreate:
@@ -39,7 +41,9 @@ def normalize_row(raw_row: dict, source_type: str, region_config: dict,
             "refusing to normalize a row with a blank natural-key component."
         )
 
-    status, event_type = _SOURCE_TYPE_TO_STATUS.get(source_type, ("Received", "APPLICATION_RECEIVED"))
+    status, event_type = _SOURCE_TYPE_TO_STATUS.get(
+        (source_type or "").strip(), _UNRECOGNIZED_STATUS
+    )
     description = raw_row.get("description", "")
     location = extract_location(description)
 
