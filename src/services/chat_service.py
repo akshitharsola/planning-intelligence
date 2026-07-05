@@ -54,6 +54,11 @@ def _extraction_prompt(db: Session) -> str:
         "\"permission\", \"retention\") -- never guess a type just because the question "
         "mentions an application number, applicant name, or address; omit the key if the "
         "question doesn't say what type it is. "
+        "Only set \"planning_status_current\" if the question explicitly names a status "
+        "(e.g. \"granted\", \"refused\", \"withdrawn\") -- never guess a status, and never "
+        "use \"unknown\" or any other word not in the allowed list above, just because the "
+        "question asks what the status IS; asking for the status means the field should "
+        "be omitted, not guessed. "
         "If the question includes an application reference number (e.g. \"26/20\" or "
         "\"2661040\"), always include that exact number as one of the keywords in \"q\", "
         "in addition to any applicant name also mentioned. "
@@ -78,9 +83,18 @@ def _extract_filters(client: LLMClient, db: Session, question: str) -> dict:
         return {}
     filters = {k: v for k, v in parsed.items() if k in _FILTER_KEYS and v}
 
-    allowed_types = {r["label"] for r in dashboard_service.get_type_breakdown(db) if r["label"]}
-    if "application_type" in filters and filters["application_type"] not in allowed_types:
-        del filters["application_type"]
+    enum_filters = {
+        "planning_authority": dashboard_service.get_distinct_authorities(db),
+        "planning_status_current": [
+            r["label"] for r in dashboard_service.get_status_breakdown(db) if r["label"]
+        ],
+        "application_type": [
+            r["label"] for r in dashboard_service.get_type_breakdown(db) if r["label"]
+        ],
+    }
+    for key, allowed_values in enum_filters.items():
+        if key in filters and filters[key] not in set(allowed_values):
+            del filters[key]
 
     return filters
 

@@ -231,3 +231,29 @@ def test_answer_question_keeps_valid_application_type():
         assert result["total"] == 1
     finally:
         _cleanup()
+
+
+def test_answer_question_drops_hallucinated_planning_status():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            client = FakeLLMClient(
+                replies=[
+                    '{"planning_status_current": "Unknown", "q": "chattestville"}',
+                    "There is one new dwelling permission granted in Chattestville.",
+                ]
+            )
+            result = answer_question(session, "What's the status in Chattestville?", client=client)
+        finally:
+            session.close()
+
+        # "Unknown" is not a real planning_status_current value in this dataset ->
+        # must be dropped, not applied as a filter, so the real (Granted-status)
+        # row still matches.
+        assert "planning_status_current" not in result["filters"]
+        assert result["total"] == 1
+        assert result["applications"][0].application_ref == f"{PREFIX}/0001"
+    finally:
+        _cleanup()
