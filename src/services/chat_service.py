@@ -67,7 +67,13 @@ def _extract_filters(client: LLMClient, db: Session, question: str) -> dict:
     parsed = extract_json(reply)
     if not parsed:
         return {}
-    return {k: v for k, v in parsed.items() if k in _FILTER_KEYS and v}
+    filters = {k: v for k, v in parsed.items() if k in _FILTER_KEYS and v}
+
+    allowed_types = {r["label"] for r in dashboard_service.get_type_breakdown(db) if r["label"]}
+    if "application_type" in filters and filters["application_type"] not in allowed_types:
+        del filters["application_type"]
+
+    return filters
 
 
 def _summarize(client: LLMClient, question: str, filters: dict, rows: list, total: int) -> str:

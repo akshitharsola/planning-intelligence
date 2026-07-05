@@ -159,3 +159,52 @@ def test_answer_question_ignores_unknown_filter_keys_from_llm():
         assert result["total"] == 1
     finally:
         _cleanup()
+
+
+def test_answer_question_drops_hallucinated_application_type():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            client = FakeLLMClient(
+                replies=[
+                    '{"application_type": "NOTREALTYPE", "q": "chattestville"}',
+                    "There is one new dwelling permission granted in Chattestville.",
+                ]
+            )
+            result = answer_question(session, "What's new in Chattestville?", client=client)
+        finally:
+            session.close()
+
+        # "NOTREALTYPE" is not a real application_type in this dataset -> must be
+        # dropped, not applied as a filter, so the real (Permission-typed) row
+        # still matches.
+        assert "application_type" not in result["filters"]
+        assert result["total"] == 1
+        assert result["applications"][0].application_ref == f"{PREFIX}/0001"
+    finally:
+        _cleanup()
+
+
+def test_answer_question_keeps_valid_application_type():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            client = FakeLLMClient(
+                replies=[
+                    '{"application_type": "Permission", "q": "chattestville"}',
+                    "There is one new dwelling permission granted in Chattestville.",
+                ]
+            )
+            result = answer_question(session, "What's new in Chattestville?", client=client)
+        finally:
+            session.close()
+
+        # "Permission" IS a real application_type in this dataset -> must be kept.
+        assert result["filters"]["application_type"] == "Permission"
+        assert result["total"] == 1
+    finally:
+        _cleanup()
