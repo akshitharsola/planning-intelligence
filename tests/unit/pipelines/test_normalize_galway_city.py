@@ -93,6 +93,19 @@ def test_normalize_row_blank_source_type_flags_for_review():
     assert app.status_event_type == "STATUS_UNRECOGNIZED"
 
 
+def test_normalize_row_none_source_type_flags_for_review():
+    raw_row = {
+        "file_number": "24/9996",
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "test",
+    }
+    app = normalize_row(raw_row, source_type=None, region_config=REGION_CONFIG,
+                        source_file="test.pdf")
+    assert app.planning_status_current == "Unknown/Needs Review"
+    assert app.status_event_type == "STATUS_UNRECOGNIZED"
+
+
 def test_normalize_row_received_source_type_still_maps_correctly():
     # Regression guard: confirms the fallback change above doesn't alter
     # behavior for a known-good recognized source_type.

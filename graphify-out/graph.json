@@ -9,7 +9,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_config_init_py",
-      "community": 25,
+      "community": 26,
       "norm_label": "__init__.py"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/settings.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_config_settings_py",
-      "community": 20,
+      "community": 21,
       "norm_label": "settings.py"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/settings.py",
       "source_location": "L12",
       "id": "settings_get_database_url",
-      "community": 20,
+      "community": 21,
       "norm_label": "get_database_url()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/conftest.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_conftest_py",
-      "community": 21,
+      "community": 22,
       "norm_label": "conftest.py"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/conftest.py",
       "source_location": "L7",
       "id": "conftest_reset_metrics_counters",
-      "community": 21,
+      "community": 22,
       "norm_label": "_reset_metrics_counters()"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_parsers_test_galway_city_pdf_lines_py",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_galway_city_pdf_lines.py"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L13",
       "id": "test_galway_city_pdf_lines_test_map_column_exact_match",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_map_column_exact_match()"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L17",
       "id": "test_galway_city_pdf_lines_test_map_column_partial_match",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_map_column_partial_match()"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L21",
       "id": "test_galway_city_pdf_lines_test_map_column_fallback_slug",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_map_column_fallback_slug()"
     },
     {
@@ -90,7 +90,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L25",
       "id": "test_galway_city_pdf_lines_test_map_column_empty_header_does_not_collide_with_first_map_entry",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_map_column_empty_header_does_not_collide_with_first_map_entry()"
     },
     {
@@ -99,7 +99,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L34",
       "id": "test_galway_city_pdf_lines_test_normalise_rows_skips_boilerplate",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_normalise_rows_skips_boilerplate()"
     },
     {
@@ -108,7 +108,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L47",
       "id": "test_galway_city_pdf_lines_test_is_boilerplate_detects_legal_notice",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_is_boilerplate_detects_legal_notice()"
     },
     {
@@ -117,7 +117,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py",
       "source_location": "L52",
       "id": "test_galway_city_pdf_lines_test_normalise_rows_unnamed_column_does_not_clobber_file_number",
-      "community": 7,
+      "community": 6,
       "norm_label": "test_normalise_rows_unnamed_column_does_not_clobber_file_number()"
     },
     {
@@ -126,7 +126,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_init_py",
-      "community": 26,
+      "community": 27,
       "norm_label": "__init__.py"
     },
     {
@@ -135,7 +135,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_natural_key.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_natural_key_py",
-      "community": 22,
+      "community": 23,
       "norm_label": "test_application_natural_key.py"
     },
     {
@@ -144,7 +144,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_natural_key.py",
       "source_location": "L6",
       "id": "test_application_natural_key_test_application_has_natural_key_constraint",
-      "community": 22,
+      "community": 23,
       "norm_label": "test_application_has_natural_key_constraint()"
     },
     {
@@ -180,7 +180,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_core_test_application_event_schema_py",
-      "community": 0,
+      "community": 15,
       "norm_label": "test_application_event_schema.py"
     },
     {
@@ -189,7 +189,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py",
       "source_location": "L4",
       "id": "test_application_event_schema_test_application_event_create",
-      "community": 0,
+      "community": 15,
       "norm_label": "test_application_event_create()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_ingestion_state.py",
       "source_location": "L62",
       "id": "test_ingestion_state_test_mark_then_is_file_ingested_roundtrips",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_mark_then_is_file_ingested_roundtrips()"
     },
     {
@@ -337,10 +337,19 @@
       "norm_label": "test_normalize_row_blank_source_type_flags_for_review()"
     },
     {
-      "label": "test_normalize_row_received_source_type_still_maps_correctly()",
+      "label": "test_normalize_row_none_source_type_flags_for_review()",
       "file_type": "code",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening/tests/unit/pipelines/test_normalize_galway_city.py",
       "source_location": "L96",
+      "id": "test_normalize_galway_city_test_normalize_row_none_source_type_flags_for_review",
+      "community": 0,
+      "norm_label": "test_normalize_row_none_source_type_flags_for_review()"
+    },
+    {
+      "label": "test_normalize_row_received_source_type_still_maps_correctly()",
+      "file_type": "code",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening/tests/unit/pipelines/test_normalize_galway_city.py",
+      "source_location": "L109",
       "id": "test_normalize_galway_city_test_normalize_row_received_source_type_still_maps_correctly",
       "community": 0,
       "norm_label": "test_normalize_row_received_source_type_still_maps_correctly()"
@@ -432,7 +441,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_pipelines_init_py",
-      "community": 27,
+      "community": 28,
       "norm_label": "__init__.py"
     },
     {
@@ -441,7 +450,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_discover_galway_city.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_pipelines_test_discover_galway_city_py",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_discover_galway_city.py"
     },
     {
@@ -450,7 +459,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_discover_galway_city.py",
       "source_location": "L6",
       "id": "test_discover_galway_city_test_load_galway_city_config",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_load_galway_city_config()"
     },
     {
@@ -513,7 +522,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/sources/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_sources_init_py",
-      "community": 28,
+      "community": 29,
       "norm_label": "__init__.py"
     },
     {
@@ -594,7 +603,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/skills/test_onboard_council_skill_files.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_unit_skills_test_onboard_council_skill_files_py",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_onboard_council_skill_files.py"
     },
     {
@@ -603,7 +612,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/skills/test_onboard_council_skill_files.py",
       "source_location": "L8",
       "id": "test_onboard_council_skill_files_test_skill_file_exists_and_references_both_subagents",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_skill_file_exists_and_references_both_subagents()"
     },
     {
@@ -612,7 +621,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/skills/test_onboard_council_skill_files.py",
       "source_location": "L15",
       "id": "test_onboard_council_skill_files_test_source_onboarding_agent_has_frontmatter",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_source_onboarding_agent_has_frontmatter()"
     },
     {
@@ -621,7 +630,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/skills/test_onboard_council_skill_files.py",
       "source_location": "L22",
       "id": "test_onboard_council_skill_files_test_parser_dev_agent_has_frontmatter",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_parser_dev_agent_has_frontmatter()"
     },
     {
@@ -648,7 +657,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/tests/unit/services/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_web_dashboard_tests_unit_services_init_py",
-      "community": 29,
+      "community": 30,
       "norm_label": "__init__.py"
     },
     {
@@ -972,7 +981,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_city.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_tests_integration_test_ingest_galway_city_py",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_ingest_galway_city.py"
     },
     {
@@ -981,7 +990,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_city.py",
       "source_location": "L12",
       "id": "test_ingest_galway_city_cleanup",
-      "community": 6,
+      "community": 7,
       "norm_label": "_cleanup()"
     },
     {
@@ -990,7 +999,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_city.py",
       "source_location": "L34",
       "id": "test_ingest_galway_city_test_match_source_type_finds_pattern_key",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_match_source_type_finds_pattern_key()"
     },
     {
@@ -999,7 +1008,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_city.py",
       "source_location": "L45",
       "id": "test_ingest_galway_city_test_first_run_ingests_all_rows_and_marks_file",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_first_run_ingests_all_rows_and_marks_file()"
     },
     {
@@ -1008,7 +1017,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_city.py",
       "source_location": "L84",
       "id": "test_ingest_galway_city_test_second_run_skips_already_ingested_file",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_second_run_skips_already_ingested_file()"
     },
     {
@@ -1017,7 +1026,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_city.py",
       "source_location": "L117",
       "id": "test_ingest_galway_city_test_file_with_one_bad_row_is_not_marked_ingested_and_retries",
-      "community": 6,
+      "community": 7,
       "norm_label": "test_file_with_one_bad_row_is_not_marked_ingested_and_retries()"
     },
     {
@@ -1359,7 +1368,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_scripts_ingest_galway_city_py",
-      "community": 6,
+      "community": 7,
       "norm_label": "ingest_galway_city.py"
     },
     {
@@ -1368,7 +1377,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py",
       "source_location": "L29",
       "id": "ingest_galway_city_match_source_type",
-      "community": 6,
+      "community": 7,
       "norm_label": "_match_source_type()"
     },
     {
@@ -1377,7 +1386,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py",
       "source_location": "L46",
       "id": "ingest_galway_city_run_city_ingestion",
-      "community": 6,
+      "community": 7,
       "norm_label": "run_city_ingestion()"
     },
     {
@@ -1386,7 +1395,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py",
       "source_location": "L133",
       "id": "ingest_galway_city_main",
-      "community": 6,
+      "community": 7,
       "norm_label": "main()"
     },
     {
@@ -1394,7 +1403,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py",
       "source_location": "L1",
-      "community": 6,
+      "community": 7,
       "norm_label": "galway city ingestion cli: discover -> acquire -> parse -> normalize -> resolve",
       "id": "ingest_galway_city_rationale_1"
     },
@@ -1403,7 +1412,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py",
       "source_location": "L30",
-      "community": 6,
+      "community": 7,
       "norm_label": "re-derive which pdf_patterns key matched this filename.      galwaycityscraper.d",
       "id": "ingest_galway_city_rationale_30"
     },
@@ -1413,7 +1422,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_scripts_init_py",
-      "community": 30,
+      "community": 31,
       "norm_label": "__init__.py"
     },
     {
@@ -1422,7 +1431,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/scaffold_tree.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_scripts_scaffold_tree_py",
-      "community": 23,
+      "community": 24,
       "norm_label": "scaffold_tree.py"
     },
     {
@@ -1431,7 +1440,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/scaffold_tree.py",
       "source_location": "L64",
       "id": "scaffold_tree_main",
-      "community": 23,
+      "community": 24,
       "norm_label": "main()"
     },
     {
@@ -1476,7 +1485,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_init_py",
-      "community": 31,
+      "community": 32,
       "norm_label": "__init__.py"
     },
     {
@@ -1485,7 +1494,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_init_py",
-      "community": 32,
+      "community": 33,
       "norm_label": "__init__.py"
     },
     {
@@ -1494,7 +1503,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_ocr/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_pdf_ocr_init_py",
-      "community": 33,
+      "community": 34,
       "norm_label": "__init__.py"
     },
     {
@@ -1503,7 +1512,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_text_fallback/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_pdf_text_fallback_init_py",
-      "community": 34,
+      "community": 35,
       "norm_label": "__init__.py"
     },
     {
@@ -1512,7 +1521,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/docx_state_machine/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_docx_state_machine_init_py",
-      "community": 35,
+      "community": 36,
       "norm_label": "__init__.py"
     },
     {
@@ -1521,7 +1530,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_pdf_lines_init_py",
-      "community": 36,
+      "community": 37,
       "norm_label": "__init__.py"
     },
     {
@@ -1530,7 +1539,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_parsers_pdf_lines_galway_city_py",
-      "community": 7,
+      "community": 6,
       "norm_label": "galway_city.py"
     },
     {
@@ -1539,7 +1548,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L49",
       "id": "galway_city_extract_planning_table",
-      "community": 7,
+      "community": 6,
       "norm_label": "extract_planning_table()"
     },
     {
@@ -1548,7 +1557,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L68",
       "id": "galway_city_extract_rows",
-      "community": 7,
+      "community": 6,
       "norm_label": "_extract_rows()"
     },
     {
@@ -1557,7 +1566,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L93",
       "id": "galway_city_clean_cells",
-      "community": 7,
+      "community": 6,
       "norm_label": "_clean_cells()"
     },
     {
@@ -1566,7 +1575,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L100",
       "id": "galway_city_looks_like_header",
-      "community": 7,
+      "community": 6,
       "norm_label": "_looks_like_header()"
     },
     {
@@ -1575,7 +1584,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L106",
       "id": "galway_city_is_duplicate_header",
-      "community": 7,
+      "community": 6,
       "norm_label": "_is_duplicate_header()"
     },
     {
@@ -1584,7 +1593,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L112",
       "id": "galway_city_norm",
-      "community": 7,
+      "community": 6,
       "norm_label": "_norm()"
     },
     {
@@ -1593,7 +1602,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L116",
       "id": "galway_city_normalise_rows",
-      "community": 7,
+      "community": 6,
       "norm_label": "_normalise_rows()"
     },
     {
@@ -1602,7 +1611,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L146",
       "id": "galway_city_is_boilerplate",
-      "community": 7,
+      "community": 6,
       "norm_label": "_is_boilerplate()"
     },
     {
@@ -1611,7 +1620,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L151",
       "id": "galway_city_map_column",
-      "community": 7,
+      "community": 6,
       "norm_label": "_map_column()"
     },
     {
@@ -1619,7 +1628,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L1",
-      "community": 7,
+      "community": 6,
       "norm_label": "galway city weekly-list pdf parser \u2014 first concrete implementation of the pdf_ta",
       "id": "galway_city_rationale_1"
     },
@@ -1628,7 +1637,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py",
       "source_location": "L50",
-      "community": 7,
+      "community": 6,
       "norm_label": "open a pdf and extract all table rows as a list of dicts keyed by     column_map",
       "id": "galway_city_rationale_50"
     },
@@ -1665,7 +1674,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/ingestion_state.py",
       "source_location": "L34",
       "id": "ingestion_state_is_file_ingested",
-      "community": 6,
+      "community": 7,
       "norm_label": "is_file_ingested()"
     },
     {
@@ -1674,7 +1683,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/ingestion_state.py",
       "source_location": "L44",
       "id": "ingestion_state_mark_file_ingested",
-      "community": 6,
+      "community": 7,
       "norm_label": "mark_file_ingested()"
     },
     {
@@ -1692,7 +1701,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_init_py",
-      "community": 37,
+      "community": 38,
       "norm_label": "__init__.py"
     },
     {
@@ -1764,7 +1773,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_normalization_init_py",
-      "community": 38,
+      "community": 39,
       "norm_label": "__init__.py"
     },
     {
@@ -1836,7 +1845,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/geo/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_geo_init_py",
-      "community": 39,
+      "community": 40,
       "norm_label": "__init__.py"
     },
     {
@@ -1845,7 +1854,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/lifecycle/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_lifecycle_init_py",
-      "community": 40,
+      "community": 41,
       "norm_label": "__init__.py"
     },
     {
@@ -1881,7 +1890,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_models_init_py",
-      "community": 41,
+      "community": 42,
       "norm_label": "__init__.py"
     },
     {
@@ -1908,7 +1917,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_application_event_py",
-      "community": 0,
+      "community": 15,
       "norm_label": "application_event.py"
     },
     {
@@ -1917,7 +1926,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py",
       "source_location": "L18",
       "id": "application_event_applicationeventcreate",
-      "community": 0,
+      "community": 15,
       "norm_label": "applicationeventcreate"
     },
     {
@@ -1935,7 +1944,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_schemas_init_py",
-      "community": 42,
+      "community": 43,
       "norm_label": "__init__.py"
     },
     {
@@ -1971,7 +1980,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/session.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_session_py",
-      "community": 43,
+      "community": 44,
       "norm_label": "session.py"
     },
     {
@@ -1980,7 +1989,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_init_py",
-      "community": 44,
+      "community": 45,
       "norm_label": "__init__.py"
     },
     {
@@ -2016,7 +2025,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/env.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_migrations_env_py",
-      "community": 18,
+      "community": 19,
       "norm_label": "env.py"
     },
     {
@@ -2025,7 +2034,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/env.py",
       "source_location": "L19",
       "id": "env_run_migrations_offline",
-      "community": 18,
+      "community": 19,
       "norm_label": "run_migrations_offline()"
     },
     {
@@ -2034,7 +2043,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/env.py",
       "source_location": "L26",
       "id": "env_run_migrations_online",
-      "community": 18,
+      "community": 19,
       "norm_label": "run_migrations_online()"
     },
     {
@@ -2043,7 +2052,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/core/db/migrations/versions/0003_add_search_indexes.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_web_dashboard_src_core_db_migrations_versions_0003_add_search_indexes_py",
-      "community": 16,
+      "community": 17,
       "norm_label": "0003_add_search_indexes.py"
     },
     {
@@ -2052,7 +2061,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/core/db/migrations/versions/0003_add_search_indexes.py",
       "source_location": "L17",
       "id": "0003_add_search_indexes_upgrade",
-      "community": 16,
+      "community": 17,
       "norm_label": "upgrade()"
     },
     {
@@ -2061,7 +2070,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/core/db/migrations/versions/0003_add_search_indexes.py",
       "source_location": "L58",
       "id": "0003_add_search_indexes_downgrade",
-      "community": 16,
+      "community": 17,
       "norm_label": "downgrade()"
     },
     {
@@ -2069,7 +2078,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/core/db/migrations/versions/0003_add_search_indexes.py",
       "source_location": "L1",
-      "community": 16,
+      "community": 17,
       "norm_label": "add search indexes  revision id: 0003 revises: 0002 create date: 2026-07-04 00:0",
       "id": "0003_add_search_indexes_rationale_1"
     },
@@ -2124,7 +2133,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0002_create_ingestion_state.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_core_db_migrations_versions_0002_create_ingestion_state_py",
-      "community": 17,
+      "community": 18,
       "norm_label": "0002_create_ingestion_state.py"
     },
     {
@@ -2133,7 +2142,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0002_create_ingestion_state.py",
       "source_location": "L17",
       "id": "0002_create_ingestion_state_upgrade",
-      "community": 17,
+      "community": 18,
       "norm_label": "upgrade()"
     },
     {
@@ -2142,7 +2151,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0002_create_ingestion_state.py",
       "source_location": "L34",
       "id": "0002_create_ingestion_state_downgrade",
-      "community": 17,
+      "community": 18,
       "norm_label": "downgrade()"
     },
     {
@@ -2150,7 +2159,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0002_create_ingestion_state.py",
       "source_location": "L1",
-      "community": 17,
+      "community": 18,
       "norm_label": "create ingestion_state and ingested_files  revision id: 0002 revises: 0001 creat",
       "id": "0002_create_ingestion_state_rationale_1"
     },
@@ -2160,7 +2169,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/web/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_web_dashboard_src_web_init_py",
-      "community": 45,
+      "community": 46,
       "norm_label": "__init__.py"
     },
     {
@@ -2241,7 +2250,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/web/static/app.js",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_web_dashboard_src_web_static_app_js",
-      "community": 24,
+      "community": 25,
       "norm_label": "app.js"
     },
     {
@@ -2250,7 +2259,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/web/static/app.js",
       "source_location": "L1",
       "id": "app_renderbarchart",
-      "community": 24,
+      "community": 25,
       "norm_label": "renderbarchart()"
     },
     {
@@ -2348,9 +2357,9 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening/src/pipelines/normalize.py",
       "source_location": "L81",
-      "id": "normalize_rationale_81",
       "community": 0,
-      "norm_label": "reject rows that don't look like real planning applications.      guards against"
+      "norm_label": "reject rows that don't look like real planning applications.      guards against",
+      "id": "normalize_rationale_81"
     },
     {
       "label": "discover.py",
@@ -2358,7 +2367,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/discover.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_pipelines_discover_py",
-      "community": 6,
+      "community": 7,
       "norm_label": "discover.py"
     },
     {
@@ -2367,7 +2376,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/discover.py",
       "source_location": "L6",
       "id": "discover_load_region_config",
-      "community": 6,
+      "community": 7,
       "norm_label": "load_region_config()"
     },
     {
@@ -2375,7 +2384,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/discover.py",
       "source_location": "L7",
-      "community": 6,
+      "community": 7,
       "norm_label": "load a `config/<county>/<region>.yaml` region config file.",
       "id": "discover_rationale_7"
     },
@@ -2385,7 +2394,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_pipelines_init_py",
-      "community": 46,
+      "community": 47,
       "norm_label": "__init__.py"
     },
     {
@@ -2448,7 +2457,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_markets_init_py",
-      "community": 47,
+      "community": 48,
       "norm_label": "__init__.py"
     },
     {
@@ -2475,7 +2484,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/metro.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_markets_galway_metro_py",
-      "community": 19,
+      "community": 20,
       "norm_label": "metro.py"
     },
     {
@@ -2484,7 +2493,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/metro.py",
       "source_location": "L11",
       "id": "metro_is_in_galway_metro",
-      "community": 19,
+      "community": 20,
       "norm_label": "is_in_galway_metro()"
     },
     {
@@ -2492,7 +2501,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/metro.py",
       "source_location": "L1",
-      "community": 19,
+      "community": 20,
       "norm_label": "# todo: commuter-belt polygons pending \u2014 see docs/source-inventory.md and",
       "id": "metro_rationale_1"
     },
@@ -2502,7 +2511,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_markets_galway_init_py",
-      "community": 48,
+      "community": 49,
       "norm_label": "__init__.py"
     },
     {
@@ -2529,7 +2538,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_init_py",
-      "community": 49,
+      "community": 50,
       "norm_label": "__init__.py"
     },
     {
@@ -2538,7 +2547,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_galway_init_py",
-      "community": 50,
+      "community": 51,
       "norm_label": "__init__.py"
     },
     {
@@ -2646,7 +2655,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_galway_city_init_py",
-      "community": 51,
+      "community": 52,
       "norm_label": "__init__.py"
     },
     {
@@ -2709,7 +2718,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/county/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_galway_county_init_py",
-      "community": 52,
+      "community": 53,
       "norm_label": "__init__.py"
     },
     {
@@ -2718,7 +2727,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_sources_base_init_py",
-      "community": 53,
+      "community": 54,
       "norm_label": "__init__.py"
     },
     {
@@ -2789,7 +2798,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/source.py",
       "source_location": "L14",
-      "community": 54,
+      "community": 55,
       "norm_label": "return a list of dicts describing available remote items         (e.g. pdf links",
       "id": "source_rationale_14"
     },
@@ -2798,7 +2807,7 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/source.py",
       "source_location": "L22",
-      "community": 55,
+      "community": 56,
       "norm_label": "download the given items into self.temp_dir, return local paths.",
       "id": "source_rationale_22"
     },
@@ -2844,7 +2853,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/monitoring/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_monitoring_init_py",
-      "community": 56,
+      "community": 57,
       "norm_label": "__init__.py"
     },
     {
@@ -2934,7 +2943,7 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/__init__.py",
       "source_location": "L1",
       "id": "users_akshitharsola_documents_aiagentic_planning_intelligence_src_services_init_py",
-      "community": 57,
+      "community": 58,
       "norm_label": "__init__.py"
     },
     {
@@ -3768,6 +3777,18 @@
       "source_location": "L96",
       "weight": 1.0,
       "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_city_normalizer_hardening_tests_unit_pipelines_test_normalize_galway_city_py",
+      "_tgt": "test_normalize_galway_city_test_normalize_row_none_source_type_flags_for_review",
+      "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_city_normalizer_hardening_tests_unit_pipelines_test_normalize_galway_city_py",
+      "target": "test_normalize_galway_city_test_normalize_row_none_source_type_flags_for_review",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening/tests/unit/pipelines/test_normalize_galway_city.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "_src": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_city_normalizer_hardening_tests_unit_pipelines_test_normalize_galway_city_py",
       "_tgt": "test_normalize_galway_city_test_normalize_row_received_source_type_still_maps_correctly",
       "source": "users_akshitharsola_documents_aiagentic_planning_intelligence_claude_worktrees_city_normalizer_hardening_tests_unit_pipelines_test_normalize_galway_city_py",
       "target": "test_normalize_galway_city_test_normalize_row_received_source_type_still_maps_correctly",
@@ -3843,6 +3864,18 @@
       "_src": "test_normalize_galway_city_test_normalize_row_blank_source_type_flags_for_review",
       "_tgt": "normalize_normalize_row",
       "source": "test_normalize_galway_city_test_normalize_row_blank_source_type_flags_for_review",
+      "target": "normalize_normalize_row"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening/tests/unit/pipelines/test_normalize_galway_city.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_src": "test_normalize_galway_city_test_normalize_row_none_source_type_flags_for_review",
+      "_tgt": "normalize_normalize_row",
+      "source": "test_normalize_galway_city_test_normalize_row_none_source_type_flags_for_review",
       "target": "normalize_normalize_row"
     },
     {
@@ -7631,11 +7664,11 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening/src/pipelines/normalize.py",
       "source_location": "L11",
       "weight": 0.8,
-      "_src": "normalize_rationale_81",
-      "_tgt": "application_otherregulatoryflags",
+      "_src": "application_otherregulatoryflags",
+      "_tgt": "normalize_rationale_81",
+      "confidence_score": 0.5,
       "source": "application_otherregulatoryflags",
-      "target": "normalize_rationale_81",
-      "confidence_score": 0.5
+      "target": "normalize_rationale_81"
     },
     {
       "relation": "calls",
@@ -7703,11 +7736,11 @@
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/city-normalizer-hardening/src/pipelines/normalize.py",
       "source_location": "L11",
       "weight": 0.8,
-      "_src": "normalize_rationale_81",
-      "_tgt": "application_applicationcreate",
+      "_src": "application_applicationcreate",
+      "_tgt": "normalize_rationale_81",
+      "confidence_score": 0.5,
       "source": "application_applicationcreate",
-      "target": "normalize_rationale_81",
-      "confidence_score": 0.5
+      "target": "normalize_rationale_81"
     },
     {
       "relation": "calls",
