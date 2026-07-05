@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-05)
 
 ## Corpus Check
-- 91 files · ~82,499 words
+- 91 files · ~82,793 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 364 nodes · 551 edges · 58 communities detected
-- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 177 edges (avg confidence: 0.75)
+- 365 nodes · 552 edges · 58 communities detected
+- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 178 edges (avg confidence: 0.75)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -100,16 +100,16 @@ Cohesion: 0.08
 Nodes (39): ApplicationCreate, ApplicationEventCreate, OtherRegulatoryFlags, BaseModel, _arcgis_date(), _clean_str(), _derive_status(), normalize_county_row() (+31 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.11
-Nodes (23): _extract_filters(), _extraction_prompt(), _fallback_summary(), Natural-language Q&A over the applications table. Read-only: the LLM only extrac, _summarize(), _today(), get_distinct_authorities(), get_monthly_counts() (+15 more)
-
-### Community 2 - "Community 2"
 Cohesion: 0.1
 Nodes (19): ABC, BaseSource, _build_session(), GalwayCityScraper, GalwayCountyScraper, _make_dl_url(), _normalise_week(), _query_page() (+11 more)
 
+### Community 2 - "Community 2"
+Cohesion: 0.11
+Nodes (23): _extract_filters(), _extraction_prompt(), _fallback_summary(), Natural-language Q&A over the applications table. Read-only: the LLM only extrac, _summarize(), _today(), get_distinct_authorities(), get_monthly_counts() (+15 more)
+
 ### Community 3 - "Community 3"
 Cohesion: 0.1
-Nodes (19): Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., extract_json(), get_llm_client(), HostedApiClient, LLMClient (+11 more)
+Nodes (20): Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., extract_json(), get_llm_client(), HostedApiClient (+12 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.11
@@ -328,7 +328,7 @@ Cohesion: 1.0
 Nodes (0): 
 
 ## Knowledge Gaps
-- **26 isolated node(s):** `A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful`, `Scripted client: returns queued replies in order, one per .chat() call.`, `Galway City weekly-list PDF parser — first concrete implementation of the pdf_ta`, `Open a PDF and extract all table rows as a list of dicts keyed by     column_map`, `Persisted incremental-ingestion state: County's OBJECTID watermark and City's pe` (+21 more)
+- **27 isolated node(s):** `A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful`, `Scripted client: returns queued replies in order, one per .chat() call.`, `Galway City weekly-list PDF parser — first concrete implementation of the pdf_ta`, `Open a PDF and extract all table rows as a list of dicts keyed by     column_map`, `Persisted incremental-ingestion state: County's OBJECTID watermark and City's pe` (+22 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **Thin community `Community 20`** (2 nodes): `get_database_url()`, `settings.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -411,11 +411,11 @@ Nodes (0):
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `normalize_row()` connect `Community 0` to `Community 4`, `Community 12`, `Community 6`?**
-  _High betweenness centrality (0.299) - this node is a cross-community bridge._
-- **Why does `search()` connect `Community 9` to `Community 8`, `Community 1`, `Community 12`?**
-  _High betweenness centrality (0.258) - this node is a cross-community bridge._
+  _High betweenness centrality (0.300) - this node is a cross-community bridge._
+- **Why does `search()` connect `Community 9` to `Community 8`, `Community 2`, `Community 12`?**
+  _High betweenness centrality (0.260) - this node is a cross-community bridge._
 - **Why does `extract_location()` connect `Community 12` to `Community 0`?**
-  _High betweenness centrality (0.254) - this node is a cross-community bridge._
+  _High betweenness centrality (0.255) - this node is a cross-community bridge._
 - **Are the 14 inferred relationships involving `normalize_county_row()` (e.g. with `test_normalize_county_row_received()` and `test_normalize_county_row_granted()`) actually correct?**
   _`normalize_county_row()` has 14 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 14 inferred relationships involving `run_city_ingestion()` (e.g. with `test_first_run_ingests_all_rows_and_marks_file()` and `test_second_run_skips_already_ingested_file()`) actually correct?**

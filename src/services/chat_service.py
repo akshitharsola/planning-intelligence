@@ -50,6 +50,13 @@ def _extraction_prompt(db: Session) -> str:
         "-- do not also guess \"planning_authority\" from the place name, even if you know "
         "which council the place falls under. Only set \"planning_authority\" if the "
         "question explicitly names a council. "
+        "Only set \"application_type\" if the question explicitly names a type (e.g. "
+        "\"permission\", \"retention\") -- never guess a type just because the question "
+        "mentions an application number, applicant name, or address; omit the key if the "
+        "question doesn't say what type it is. "
+        "If the question includes an application reference number (e.g. \"26/20\" or "
+        "\"2661040\"), always include that exact number as one of the keywords in \"q\", "
+        "in addition to any applicant name also mentioned. "
         "Do not put dates or date phrases inside \"q\" -- always express any time range "
         "using \"date_received_from\" / \"date_received_to\" instead, and never combine "
         "a place name and a date into one \"q\" string. "
@@ -58,6 +65,8 @@ def _extraction_prompt(db: Session) -> str:
         f'  Question: "What\'s new in Tuam for last month"\n'
         '  Reply: {"q": "Tuam", "date_received_from": "<first day of last month>", '
         '"date_received_to": "<last day of last month>"}\n'
+        '  Question: "What\'s the status of application 26/20 for Mr Kevin Burke"\n'
+        '  Reply: {"q": "26/20 Kevin Burke"}\n'
     )
 
 
