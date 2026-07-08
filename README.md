@@ -48,6 +48,37 @@ as-is.
 pytest
 ```
 
+## Weekly scheduled ingestion (macOS)
+
+City ingestion + raw-PDF cleanup run automatically once a week via macOS
+launchd (Sundays at 20:00 local time). County remains manual for now.
+
+**Install:**
+
+1. Copy the template and fill in your absolute repo path:
+   ```bash
+   sed "s|__REPO_ROOT__|$(pwd)|g" com.planning-intelligence.weekly-ingestion.plist.template \
+     > ~/Library/LaunchAgents/com.planning-intelligence.weekly-ingestion.plist
+   ```
+2. Load it:
+   ```bash
+   launchctl load ~/Library/LaunchAgents/com.planning-intelligence.weekly-ingestion.plist
+   ```
+
+**Verify without waiting a week:**
+
+```bash
+launchctl start com.planning-intelligence.weekly-ingestion
+tail -f logs/ingestion/$(date +%F).log
+```
+
+**Uninstall:**
+
+```bash
+launchctl unload ~/Library/LaunchAgents/com.planning-intelligence.weekly-ingestion.plist
+rm ~/Library/LaunchAgents/com.planning-intelligence.weekly-ingestion.plist
+```
+
 ## Web dashboard
 
 A minimal local dashboard for browsing ingested planning applications.

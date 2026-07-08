@@ -12,3 +12,4 @@ postgres-data/
 .coverage
 .DS_Store
 .claude/worktrees/
+logs/
