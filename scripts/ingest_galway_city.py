@@ -47,7 +47,7 @@ def run_city_ingestion(dry_run: bool = False) -> dict:
     session = SessionLocal()
     try:
         region_config = load_region_config(CONFIG_PATH)
-        scraper = GalwayCityScraper(region_config=region_config, temp_dir=Path("/tmp/galway_city_ingest"))
+        scraper = GalwayCityScraper(region_config=region_config, temp_dir=Path("data/galway/city/raw"))
 
         links = scraper.discover()
         skipped = 0

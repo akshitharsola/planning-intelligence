@@ -161,3 +161,25 @@ def test_file_with_one_bad_row_is_not_marked_ingested_and_retries():
             session.close()
     finally:
         _cleanup()
+
+
+def test_run_city_ingestion_uses_persistent_raw_dir():
+    from scripts.ingest_galway_city import run_city_ingestion
+    import scripts.ingest_galway_city as mod
+
+    captured = {}
+
+    class _CapturingScraper:
+        def __init__(self, region_config, temp_dir):
+            captured["temp_dir"] = temp_dir
+
+        def discover(self):
+            return []
+
+        def acquire(self, items):
+            return []
+
+    with patch.object(mod, "GalwayCityScraper", _CapturingScraper):
+        run_city_ingestion()
+
+    assert captured["temp_dir"] == Path("data/galway/city/raw")

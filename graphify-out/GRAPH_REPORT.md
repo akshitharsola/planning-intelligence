@@ -1,12 +1,12 @@
-# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-08)
+# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/weekly-city-scheduler  (2026-07-08)
 
 ## Corpus Check
-- 91 files · ~86,116 words
+- 91 files · ~86,226 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 367 nodes · 560 edges · 59 communities detected
-- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 182 edges (avg confidence: 0.75)
+- 368 nodes · 562 edges · 59 communities detected
+- Extraction: 67% EXTRACTED · 33% INFERRED · 0% AMBIGUOUS · INFERRED: 183 edges (avg confidence: 0.75)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -71,8 +71,8 @@
 - [[_COMMUNITY_Community 58|Community 58]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `normalize_county_row()` - 18 edges
-2. `run_city_ingestion()` - 17 edges
+1. `run_city_ingestion()` - 18 edges
+2. `normalize_county_row()` - 18 edges
 3. `normalize_row()` - 17 edges
 4. `answer_question()` - 15 edges
 5. `run_county_ingestion()` - 14 edges
@@ -114,7 +114,7 @@ Nodes (21): Returns {"answer": str, "filters": dict, "applications": list, "tota
 
 ### Community 4 - "Community 4"
 Cohesion: 0.15
-Nodes (17): load_region_config(), Load a `config/<county>/<region>.yaml` region config file., main(), _match_source_type(), Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve, Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d, run_city_ingestion(), is_file_ingested() (+9 more)
+Nodes (18): load_region_config(), Load a `config/<county>/<region>.yaml` region config file., main(), _match_source_type(), Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve, Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d, run_city_ingestion(), is_file_ingested() (+10 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.11
@@ -158,11 +158,11 @@ Nodes (2): create applications and events  Revision ID: 0001 Revises: Create Dat
 
 ### Community 15 - "Community 15"
 Cohesion: 0.5
-Nodes (0): 
+Nodes (2): ApplicationEventCreate, test_application_event_create()
 
 ### Community 16 - "Community 16"
 Cohesion: 0.5
-Nodes (2): ApplicationEventCreate, test_application_event_create()
+Nodes (0): 
 
 ### Community 17 - "Community 17"
 Cohesion: 0.5
@@ -416,15 +416,15 @@ Nodes (0):
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `normalize_row()` connect `Community 0` to `Community 12`, `Community 4`, `Community 5`?**
-  _High betweenness centrality (0.301) - this node is a cross-community bridge._
+  _High betweenness centrality (0.302) - this node is a cross-community bridge._
 - **Why does `search()` connect `Community 9` to `Community 8`, `Community 2`, `Community 12`?**
   _High betweenness centrality (0.262) - this node is a cross-community bridge._
 - **Why does `extract_location()` connect `Community 12` to `Community 0`?**
   _High betweenness centrality (0.257) - this node is a cross-community bridge._
+- **Are the 15 inferred relationships involving `run_city_ingestion()` (e.g. with `test_first_run_ingests_all_rows_and_marks_file()` and `test_second_run_skips_already_ingested_file()`) actually correct?**
+  _`run_city_ingestion()` has 15 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 14 inferred relationships involving `normalize_county_row()` (e.g. with `test_normalize_county_row_received()` and `test_normalize_county_row_granted()`) actually correct?**
   _`normalize_county_row()` has 14 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 14 inferred relationships involving `run_city_ingestion()` (e.g. with `test_first_run_ingests_all_rows_and_marks_file()` and `test_second_run_skips_already_ingested_file()`) actually correct?**
-  _`run_city_ingestion()` has 14 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 13 inferred relationships involving `normalize_row()` (e.g. with `test_normalize_row_received_maps_to_application_received_event()` and `test_normalize_row_granted_sets_decision_fields()`) actually correct?**
   _`normalize_row()` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 11 inferred relationships involving `answer_question()` (e.g. with `test_answer_question_extracts_filters_and_summarizes()` and `test_answer_question_unfiltered_search_when_llm_extracts_no_filters()`) actually correct?**

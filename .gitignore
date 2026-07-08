@@ -4,6 +4,8 @@ __pycache__/
 .env
 data/*/*/temp/*
 !data/*/*/temp/.gitkeep
+data/*/*/raw/*
+!data/*/*/raw/.gitkeep
 postgres-data/
 *.egg-info/
 .pytest_cache/
