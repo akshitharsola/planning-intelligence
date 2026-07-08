@@ -1,7 +1,7 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-08)
 
 ## Corpus Check
-- 91 files · ~84,217 words
+- 91 files · ~86,116 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
