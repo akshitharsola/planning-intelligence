@@ -13,6 +13,20 @@
     <button type="submit">Ask</button>
   </form>
 
+  <section id="chat-examples">
+    <p><small>
+      Try:
+      <a href="#" class="example-question">What's new in Oranmore?</a> &middot;
+      <a href="#" class="example-question">Show granted applications in Tuam</a> &middot;
+      <a href="#" class="example-question">Rejected applications from last month</a> &middot;
+      <a href="#" class="example-question">What's the status of application 26/20?</a>
+    </small></p>
+    <p><small>
+      For status questions, use one of these exact words for best results:
+      Granted, Refused, Withdrawn, Invalid, Received, Further Info.
+    </small></p>
+  </section>
+
   {% if result %}
   <section id="chat-answer">
     <h2>Answer</h2>
@@ -58,5 +72,14 @@
   {% elif submitted %}
   <p>No question asked.</p>
   {% endif %}
+
+  <script>
+    document.querySelectorAll(".example-question").forEach(function (link) {
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        document.querySelector('input[name="question"]').value = link.textContent;
+      });
+    });
+  </script>
 </body>
 </html>

@@ -81,12 +81,7 @@ def test_answer_question_extracts_filters_and_summarizes():
     try:
         session = SessionLocal()
         try:
-            client = FakeLLMClient(
-                replies=[
-                    '{"q": "chattestville"}',
-                    "There is one new dwelling permission granted in Chattestville.",
-                ]
-            )
+            client = FakeLLMClient(replies=['{"q": "chattestville"}'])
             result = answer_question(session, "What's new in Chattestville?", client=client)
         finally:
             session.close()
@@ -94,8 +89,8 @@ def test_answer_question_extracts_filters_and_summarizes():
         assert result["total"] == 1
         assert result["applications"][0].application_ref == f"{PREFIX}/0001"
         assert result["filters"] == {"q": "chattestville"}
-        assert "Chattestville" in result["answer"]
-        assert len(client.calls) == 2
+        assert f"{PREFIX}/0001" in result["answer"]
+        assert len(client.calls) == 1
     finally:
         _cleanup()
 
@@ -109,14 +104,14 @@ def test_answer_question_unfiltered_search_when_llm_extracts_no_filters():
             # LLM reachable, but genuinely finds no confident filters for a vague
             # question -> a real (if broad) unfiltered search is the correct,
             # intentional result, NOT the "unavailable" outage message.
-            client = FakeLLMClient(replies=["{}", "Showing all applications."])
+            client = FakeLLMClient(replies=["{}"])
             result = answer_question(session, "Show me everything", client=client)
         finally:
             session.close()
 
         assert result["filters"] == {}
         assert result["total"] >= 1
-        assert result["answer"] == "Showing all applications."
+        assert "Found" in result["answer"]
     finally:
         _cleanup()
 
@@ -155,9 +150,35 @@ def test_answer_question_no_matches_returns_no_match_message():
             session.close()
 
         assert result["total"] == 0
-        assert result["answer"] == "No applications matched your question."
+        assert "Galway City and County" in result["answer"]
         # summarize() must short-circuit on zero results without a second LLM call
         assert len(client.calls) == 1
+    finally:
+        _cleanup()
+
+
+def test_answer_question_distinguishes_narrowed_filters_from_out_of_coverage():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            # The seeded row is in Chattestville with status "Granted" -- asking
+            # for "Refused" ones returns zero rows, but Chattestville itself IS
+            # covered, so the answer must NOT claim the place is out of pilot
+            # coverage (that was the bug: a real place + a too-narrow status/date
+            # filter produced the same generic "not in this dataset" message as
+            # a genuinely unsupported place like Dublin).
+            client = FakeLLMClient(
+                replies=['{"planning_status_current": "Refused", "q": "chattestville"}']
+            )
+            result = answer_question(session, "Rejected applications in Chattestville", client=client)
+        finally:
+            session.close()
+
+        assert result["total"] == 0
+        assert "Galway City and County" not in result["answer"]
+        assert "combination of filters" in result["answer"]
     finally:
         _cleanup()
 
@@ -171,7 +192,6 @@ def test_answer_question_ignores_unknown_filter_keys_from_llm():
             client = FakeLLMClient(
                 replies=[
                     '{"q": "chattestville", "delete_all": true, "sql": "DROP TABLE applications"}',
-                    "One match found.",
                 ]
             )
             result = answer_question(session, "What's new in Chattestville?", client=client)
@@ -191,10 +211,7 @@ def test_answer_question_drops_hallucinated_application_type():
         session = SessionLocal()
         try:
             client = FakeLLMClient(
-                replies=[
-                    '{"application_type": "NOTREALTYPE", "q": "chattestville"}',
-                    "There is one new dwelling permission granted in Chattestville.",
-                ]
+                replies=['{"application_type": "NOTREALTYPE", "q": "chattestville"}']
             )
             result = answer_question(session, "What's new in Chattestville?", client=client)
         finally:
@@ -217,10 +234,7 @@ def test_answer_question_keeps_valid_application_type():
         session = SessionLocal()
         try:
             client = FakeLLMClient(
-                replies=[
-                    '{"application_type": "Permission", "q": "chattestville"}',
-                    "There is one new dwelling permission granted in Chattestville.",
-                ]
+                replies=['{"application_type": "Permission", "q": "chattestville"}']
             )
             result = answer_question(session, "What's new in Chattestville?", client=client)
         finally:
@@ -233,7 +247,59 @@ def test_answer_question_keeps_valid_application_type():
         _cleanup()
 
 
-def test_answer_question_drops_hallucinated_planning_status():
+def test_answer_question_drops_status_guess_when_question_names_an_application_ref():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            # The question only asks for a ref's status, it doesn't state one --
+            # a status guess here is exactly the pattern observed to hallucinate
+            # in the wild, so it must be dropped even though "Granted" is a real
+            # allowed value (the enum check alone wouldn't catch this).
+            client = FakeLLMClient(
+                replies=['{"planning_status_current": "Granted", "q": "26/20"}']
+            )
+            result = answer_question(session, "What's the status of application 26/20?", client=client)
+        finally:
+            session.close()
+
+        assert "planning_status_current" not in result["filters"]
+        assert result["filters"]["q"] == "26/20"
+    finally:
+        _cleanup()
+
+
+def test_answer_question_drops_authority_guessed_from_place_name_alone():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            # Live testing found qwen2.5:3b silently guessing "Galway City
+            # Council" from a place name like "Tuam" even though the prompt
+            # says never to do that -- the guess is a REAL enum value so the
+            # enum check alone doesn't catch it, and it silently drops ~99% of
+            # true matches (549 rows -> 1) with no error, no "no match"
+            # message. The question below never names a council explicitly.
+            client = FakeLLMClient(
+                replies=[
+                    '{"planning_authority": "Galway City Council", '
+                    '"planning_status_current": "Granted", "q": "chattestville"}'
+                ]
+            )
+            result = answer_question(session, "Show granted applications in Chattestville", client=client)
+        finally:
+            session.close()
+
+        assert "planning_authority" not in result["filters"]
+        assert result["filters"]["q"] == "chattestville"
+        assert result["total"] == 1
+    finally:
+        _cleanup()
+
+
+def test_answer_question_keeps_authority_when_question_names_it_explicitly():
     _cleanup()
     _seed()
     try:
@@ -241,9 +307,31 @@ def test_answer_question_drops_hallucinated_planning_status():
         try:
             client = FakeLLMClient(
                 replies=[
-                    '{"planning_status_current": "Unknown", "q": "chattestville"}',
-                    "There is one new dwelling permission granted in Chattestville.",
+                    '{"planning_authority": "Galway City Council", "q": "chattestville"}'
                 ]
+            )
+            result = answer_question(
+                session,
+                "Show applications in Chattestville from Galway City Council",
+                client=client,
+            )
+        finally:
+            session.close()
+
+        assert result["filters"]["planning_authority"] == "Galway City Council"
+        assert result["total"] == 1
+    finally:
+        _cleanup()
+
+
+def test_answer_question_drops_hallucinated_planning_status():
+    _cleanup()
+    _seed()
+    try:
+        session = SessionLocal()
+        try:
+            client = FakeLLMClient(
+                replies=['{"planning_status_current": "Unknown", "q": "chattestville"}']
             )
             result = answer_question(session, "What's the status in Chattestville?", client=client)
         finally:
