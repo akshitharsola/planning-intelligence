@@ -1,7 +1,7 @@
-# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/weekly-city-scheduler  (2026-07-08)
+# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-09)
 
 ## Corpus Check
-- 96 files · ~87,907 words
+- 96 files · ~88,283 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
