@@ -251,31 +251,38 @@ review by querying the live DHLGH endpoint and comparing against our own
   slash), while our own City `application_ref` (scraped from council PDF
   file numbers) is `YY/NNN` or `YY/NNNNN`, e.g. `23/194`, `24/60030`.
   These are **not directly comparable strings**.
-- The DHLGH number appears to decode as `YY` + zero-padded sequence
-  (`26` + `60243` → `26/60243`), consistent with our own `application_ref`
-  values that already use the `YY/60NNN` shape for 2026 City records.
 - **Confirmed collision, not hypothetical**: the literal string `2660243`
   already exists in our own `applications` table today — as a **Galway
   County** record ("Tonagarraun, Corrandulla, Co. Galway", received
   2026-02-17), a completely different case from DHLGH's `2660243` under
   Galway City Council ("7 Lower Canal Road, Galway", received 2026-07-08).
   A naive string-equality join on `application_ref` alone, without also
-  requiring `planning_authority` to match and without correcting for the
-  slash-insertion transform, would silently merge two unrelated
-  applications. This is proof, not speculation, that identity resolution
-  needs a deliberate, tested procedure before any consumer treats DHLGH
-  and `applications` rows as the same record.
+  requiring `planning_authority` to match, would silently merge two
+  unrelated applications.
+- **The "insert a slash after 2 digits" transform floated in an earlier
+  draft of this section is not reliable and must not be assumed.**
+  Checked against real County data: our own `applications` table has
+  County refs of visibly different shapes in the same result set —
+  `163`, `1611` (older, pre-2020ish, no year prefix apparent), `26170`
+  (5 digits), and `2661119` (7 digits) all appear as distinct County
+  `application_ref` values within days of each other in 2026. DHLGH's own
+  County `ApplicationNumber` values include both `26170` (matches our
+  5-digit shape exactly, unslashed) and `2661138`-style 7-digit values in
+  the same query result. City and County do not share one predictable
+  digit-count-to-format rule, and neither does a single county's own
+  history over time. This is proof that identity resolution needs a
+  deliberate, tested procedure — and that the normalization rule itself,
+  not just the matching ladder around it, must be derived from real
+  fixtures rather than assumed from a handful of samples.
 
 **Deterministic matching ladder** (each rung attempted only if the
 previous one fails to find a unique match; a rung that returns more than
 one candidate is treated as no match, not a match, and logged):
 
-1. `planning_authority` (exact) + `application_ref` (normalized: DHLGH's
-   `ApplicationNumber` transformed to `YY/NNN(NN)` by inserting the slash
-   after the 2-digit year prefix, then compared to our `application_ref`).
-2. `planning_authority` + normalized address match (lowercased,
-   punctuation-stripped, whitespace-collapsed comparison between DHLGH's
-   `DevelopmentAddress` and our `site_address`).
+1. `planning_authority` (exact) + `application_ref` (normalized via the
+   `normalize_application_ref()` helper defined below).
+2. `planning_authority` + normalized address match (via the
+   `normalize_address()` helper defined below).
 3. `planning_authority` + geometry proximity, where both sides have
    coordinates (DHLGH polygon centroid vs. our — currently absent —
    `site_geometry`; only usable once/if a source populates our side too).
@@ -284,12 +291,77 @@ one candidate is treated as no match, not a match, and logged):
    and `applications.development_description`) as a last resort,
    surfaced for manual review rather than auto-merged.
 
-**This design does not implement the ladder.** It documents it so the
-follow-up validation pass (tracked as a separate task, not silently
-folded into this ingestion work) has a concrete, testable procedure
-instead of an ad hoc one. The validation pass's job is to run the ladder
-against the full Galway overlap and report, per rung, how many DHLGH rows
-matched — not to perform any merge or write to `applications`.
+**This design does not implement the ladder or run the validation pass.**
+It documents both, plus the two normalization helpers below, so the
+follow-up validation-pass task (tracked separately, not folded into this
+ingestion work) has a concrete, testable starting point instead of an ad
+hoc one. The validation pass's job is to run the ladder against the full
+Galway overlap and report, per rung, how many DHLGH rows matched — not to
+perform any merge or write to `applications`.
+
+### 9.1 `normalize_application_ref()` — first-class tested component
+
+Per reviewer feedback, this is **not** a one-line regex assumed correct.
+Given the confirmed evidence in this section that ref formats vary by
+authority, by era within the same authority, and possibly by source, this
+helper's own job is split into two honestly-scoped parts:
+
+- A **rule-based transform** for shapes we can already demonstrate from
+  real data (e.g. `YY` + sequence → `YY/NNNNN`, confirmed to match some
+  current City refs), implemented as a small pure function with **no
+  network or DB access**, so it is trivially unit-testable in isolation.
+- An explicit **"could not normalize" outcome** (not an exception, not a
+  silent pass-through) for any input that doesn't match a known rule —
+  the caller (the future validation pass) is required to log these and
+  fall through to rung 2 of the ladder rather than guess.
+
+Required unit test fixtures, built from real refs pulled from our own
+`applications` table and the live DHLGH endpoint during this design's
+review (not synthetic examples):
+
+| Input (`ApplicationNumber`) | Authority | Expected output | Basis |
+|---|---|---|---|
+| `2660243` | Galway City Council | `26/60243` | City 2026 refs use `YY/60NNN` (verified: `24/60030`, `23/60030` exist in our own table) |
+| `26170` | Galway County Council | **cannot normalize — pass through unnormalized as `26170`** | Confirmed both our own table and DHLGH itself use this 5-digit shape for County; no year/slash structure to insert |
+| `2661119` | Galway County Council | **cannot normalize** (flag as ambiguous) | Same authority, same rough time period as `26170` above, but 7 digits — proves County does not have one stable ref shape, so this helper must not force a rule onto it |
+| `163` | Galway County Council | **cannot normalize** | Pre-2020ish short numeric refs with no discernible year prefix, seen in our own 2016 data |
+| `24/60030` | Galway City Council | `24/60030` (already normalized; identity) | Confirms the function is idempotent on inputs already in our own `application_ref` shape |
+
+The test suite must assert on this exact table (or its evolved version, if
+more fixtures are found before the validation-pass task starts) — not on
+invented examples — precisely because the point of this component is to
+encode what we've actually verified, not what seems plausible.
+
+### 9.2 `normalize_address()` — canonical recipe
+
+For rung 2 to be deterministic and reproducible (reviewer's second
+request), the recipe is fixed as an ordered sequence of steps, applied
+identically to both `DevelopmentAddress` (DHLGH) and `site_address`
+(ours):
+
+1. Lowercase the full string.
+2. Strip all punctuation except internal hyphens in place names (e.g.
+   keep "cul-de-sac"-style names intact; drop commas, periods, apostrophes
+   elsewhere).
+3. Collapse repeated whitespace to a single space; trim leading/trailing
+   whitespace.
+4. Normalize known abbreviation variants to one canonical form via a
+   fixed lookup table, e.g. `co.` / `co` / `county` → `county`, `rd` →
+   `road`, `st` → `street` — table to be built from real observed
+   variants in the Galway address strings (already visible in samples
+   collected during this review: "Co. Galway", "Co Galway", "County
+   Galway" all appear as variants of the same thing).
+5. Drop trailing standalone `"galway"` / `"co. galway"` / `"county
+   galway"` tokens if the rest of the string is non-empty (both sources
+   redundantly append the county name to nearly every address; keeping it
+   would bias every comparison toward false positives since almost all
+   Galway addresses would partially match on that token alone).
+
+Two normalized addresses are considered a match only if they are
+**exactly equal** after this recipe — rung 2 is deliberately not fuzzy;
+fuzzy comparison is reserved for rung 4, using the existing trigram
+indexes, specifically so the two rungs have different, clearly-understood
+precision/recall trade-offs rather than one blurry in-between heuristic.
 
 **Trial-period exit criteria** (also reviewer-requested, to make "is
 DHLGH worth keeping" measurable rather than a vibe check), computed after
@@ -319,8 +391,14 @@ the validation pass runs:
   authorities' consumers, not just ours, so it's less likely to change
   silently than a single council's ad-hoc PDF format, but the field list
   should still be spot-checked periodically.
-- **`ApplicationNumber` normalization is a hypothesis, not yet proven at
-  scale** — the `YY` + sequence decoding in section 9 matches the small
-  sample checked during spec review but has not been validated against
-  the full ~22,000-row overlap. The validation pass task must treat this
-  transform itself as something to verify, not assume.
+- **`ApplicationNumber` normalization only covers some observed shapes,
+  by design** — section 9.1's fixture table already shows City's `YY/60NNN`
+  refs are normalizable but several real County ref shapes (`26170`,
+  `2661119`, `163`) are not, from evidence gathered in this review, not
+  assumption. The open risk is scale, not correctness-in-principle: the
+  validation pass may surface additional shapes neither this design nor
+  its fixtures anticipated, in which case `normalize_application_ref()`
+  gets new fixtures and rules added incrementally — it must never be
+  extended by loosening rung 1 to accept low-confidence guesses, since
+  that reintroduces the exact silent-merge risk this section exists to
+  prevent.
