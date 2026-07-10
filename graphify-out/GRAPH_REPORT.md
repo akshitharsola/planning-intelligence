@@ -1,12 +1,12 @@
-# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-09)
+# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-10)
 
 ## Corpus Check
-- 96 files · ~90,440 words
+- 97 files · ~92,695 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 398 nodes · 622 edges · 63 communities detected
-- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 201 edges (avg confidence: 0.74)
+- 403 nodes · 640 edges · 64 communities detected
+- Extraction: 67% EXTRACTED · 33% INFERRED · 0% AMBIGUOUS · INFERRED: 213 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -73,30 +73,31 @@
 - [[_COMMUNITY_Community 60|Community 60]]
 - [[_COMMUNITY_Community 61|Community 61]]
 - [[_COMMUNITY_Community 62|Community 62]]
+- [[_COMMUNITY_Community 63|Community 63]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `answer_question()` - 19 edges
 2. `run_city_ingestion()` - 18 edges
 3. `normalize_county_row()` - 18 edges
-4. `normalize_row()` - 17 edges
+4. `normalize_row()` - 18 edges
 5. `LLMClient` - 17 edges
 6. `FakeLLMClient` - 15 edges
 7. `run_county_ingestion()` - 14 edges
 8. `ApplicationCreate` - 14 edges
-9. `_cleanup()` - 13 edges
-10. `search()` - 13 edges
+9. `GalwayCityScraper` - 14 edges
+10. `_cleanup()` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `test_is_file_ingested_false_when_unset()` --calls--> `is_file_ingested()`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_ingestion_state.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/ingestion_state.py
+- `Chunked backfill runner for Galway City: processes the discovered PDF backlog in` --uses--> `GalwayCityScraper`  [INFERRED]
+  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/backfill_galway_city_chunked.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py
 - `Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve` --uses--> `GalwayCityScraper`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py
 - `Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d` --uses--> `GalwayCityScraper`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py
 - `Galway County ingestion CLI: discover -> normalize -> resolve -> publish against` --uses--> `GalwayCountyScraper`  [INFERRED]
   /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_county.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/county/scraper.py
-- `chat_ask()` --calls--> `answer_question()`  [INFERRED]
-  /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/worktrees/web-dashboard/src/web/main.py → /Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/chat_service.py
 
 ## Communities
 
@@ -113,48 +114,48 @@ Cohesion: 0.1
 Nodes (19): ABC, BaseSource, _build_session(), GalwayCityScraper, GalwayCountyScraper, _make_dl_url(), _normalise_week(), _query_page() (+11 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.27
-Nodes (19): answer_question(), Returns {"answer": str, "filters": dict, "applications": list, "total": int}., _cleanup(), FakeLLMClient, RaisingLLMClient, Scripted client: returns queued replies in order, one per .chat() call., _seed(), test_answer_question_distinguishes_narrowed_filters_from_out_of_coverage() (+11 more)
+Cohesion: 0.12
+Nodes (23): main(), _match_source_type(), Chunked backfill runner for Galway City: processes the discovered PDF backlog in, run_batch(), load_region_config(), Load a `config/<county>/<region>.yaml` region config file., main(), _match_source_type() (+15 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.11
-Nodes (14): Application, ApplicationEvent, Base, Base, DeclarativeBase, get_metrics_snapshot(), Minimal ingestion KPIs: rows ingested per run, per-region parser error counts/ra, record_ingestion_run() (+6 more)
+Cohesion: 0.27
+Nodes (19): answer_question(), Returns {"answer": str, "filters": dict, "applications": list, "total": int}., _cleanup(), FakeLLMClient, RaisingLLMClient, Scripted client: returns queued replies in order, one per .chat() call., _seed(), test_answer_question_distinguishes_narrowed_filters_from_out_of_coverage() (+11 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.19
 Nodes (17): main(), Galway County ingestion CLI: discover -> normalize -> resolve -> publish against, run_county_ingestion(), get_watermark(), Persisted incremental-ingestion state: County's OBJECTID watermark and City's pe, set_watermark(), _cleanup(), _fake_records() (+9 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.16
-Nodes (17): load_region_config(), Load a `config/<county>/<region>.yaml` region config file., main(), _match_source_type(), Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve, Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d, run_city_ingestion(), is_file_ingested() (+9 more)
-
-### Community 7 - "Community 7"
 Cohesion: 0.18
 Nodes (18): _clean_cells(), extract_planning_table(), _extract_rows(), _is_boilerplate(), _is_duplicate_header(), _looks_like_header(), _map_column(), _norm() (+10 more)
 
-### Community 8 - "Community 8"
+### Community 7 - "Community 7"
 Cohesion: 0.16
 Nodes (12): extract_json(), get_llm_client(), HostedApiClient, OllamaClient, Pluggable LLM backend for the chat feature. LLM_BACKEND env var selects the impl, OpenAI-compatible chat completions endpoint (opt-in via LLM_BACKEND=hosted_api)., Best-effort JSON extraction from a model reply that may include     surrounding, test_extract_json_invalid_returns_none() (+4 more)
 
-### Community 9 - "Community 9"
+### Community 8 - "Community 8"
 Cohesion: 0.3
 Nodes (15): get_by_natural_key(), search(), application_detail(), _cleanup(), _insert(), _seed(), test_get_by_natural_key_found(), test_get_by_natural_key_not_found_returns_none() (+7 more)
 
-### Community 10 - "Community 10"
+### Community 9 - "Community 9"
 Cohesion: 0.14
 Nodes (3): _cleanup_detail(), _seed_detail(), test_detail_page_shows_all_expected_fields()
 
-### Community 11 - "Community 11"
+### Community 10 - "Community 10"
 Cohesion: 0.12
 Nodes (15): Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}. (+7 more)
+
+### Community 11 - "Community 11"
+Cohesion: 0.22
+Nodes (8): is_galway_city(), is_galway_county(), derive_market_entities(), Market-entity derivation registry. Metro derivation is deliberately NOT wired in, FakeApplication, test_galway_city_council_maps_to_galway_city(), test_galway_county_council_maps_to_galway_county(), test_unknown_authority_maps_to_empty_list()
 
 ### Community 12 - "Community 12"
 Cohesion: 0.31
 Nodes (11): cleanup_stale_raw_files(), main(), _prune_empty_dirs(), Deletes staged Galway City PDFs from data/galway/city/raw/ once they are older t, _make_file(), test_deletes_ingested_file_older_than_30_days(), test_does_not_delete_file_younger_than_30_days(), test_does_not_delete_stale_file_that_was_never_ingested() (+3 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.22
-Nodes (8): is_galway_city(), is_galway_county(), derive_market_entities(), Market-entity derivation registry. Metro derivation is deliberately NOT wired in, FakeApplication, test_galway_city_council_maps_to_galway_city(), test_galway_county_council_maps_to_galway_county(), test_unknown_authority_maps_to_empty_list()
+Cohesion: 0.21
+Nodes (8): Application, ApplicationEvent, Base, Base, DeclarativeBase, Resolve stage: dedup applications by the natural key (planning_authority + appli, resolve_and_upsert(), test_normalize_resolve_publish_roundtrip()
 
 ### Community 14 - "Community 14"
 Cohesion: 0.31
@@ -162,35 +163,35 @@ Nodes (8): _extract_address(), _extract_area(), _extract_eircode(), extract_loca
 
 ### Community 15 - "Community 15"
 Cohesion: 0.4
-Nodes (0): 
+Nodes (4): get_metrics_snapshot(), Minimal ingestion KPIs: rows ingested per run, per-region parser error counts/ra, record_ingestion_run(), test_record_ingestion_run_increments_counters()
 
 ### Community 16 - "Community 16"
 Cohesion: 0.4
-Nodes (2): create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-, # NOTE: a GIST spatial index on applications.site_geometry is created
+Nodes (0): 
 
 ### Community 17 - "Community 17"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.4
+Nodes (2): create applications and events  Revision ID: 0001 Revises: Create Date: 2026-06-, # NOTE: a GIST spatial index on applications.site_geometry is created
 
 ### Community 18 - "Community 18"
 Cohesion: 0.5
-Nodes (1): add search indexes  Revision ID: 0003 Revises: 0002 Create Date: 2026-07-04 00:0
+Nodes (0): 
 
 ### Community 19 - "Community 19"
 Cohesion: 0.5
-Nodes (1): create ingestion_state and ingested_files  Revision ID: 0002 Revises: 0001 Creat
+Nodes (1): add search indexes  Revision ID: 0003 Revises: 0002 Create Date: 2026-07-04 00:0
 
 ### Community 20 - "Community 20"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 0.5
+Nodes (1): create ingestion_state and ingested_files  Revision ID: 0002 Revises: 0001 Creat
 
 ### Community 21 - "Community 21"
 Cohesion: 0.67
-Nodes (1): # TODO: commuter-belt polygons pending — see docs/source-inventory.md and
+Nodes (0): 
 
 ### Community 22 - "Community 22"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.67
+Nodes (1): # TODO: commuter-belt polygons pending — see docs/source-inventory.md and
 
 ### Community 23 - "Community 23"
 Cohesion: 1.0
@@ -338,34 +339,36 @@ Nodes (0):
 
 ### Community 59 - "Community 59"
 Cohesion: 1.0
-Nodes (1): Return a list of dicts describing available remote items         (e.g. PDF links
+Nodes (0): 
 
 ### Community 60 - "Community 60"
 Cohesion: 1.0
-Nodes (1): Download the given items into self.temp_dir, return local paths.
+Nodes (1): Return a list of dicts describing available remote items         (e.g. PDF links
 
 ### Community 61 - "Community 61"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Download the given items into self.temp_dir, return local paths.
 
 ### Community 62 - "Community 62"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 63 - "Community 63"
 Cohesion: 1.0
 Nodes (0): 
 
 ## Knowledge Gaps
 - **35 isolated node(s):** `A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful`, `Scripted client: returns queued replies in order, one per .chat() call.`, `Deletes staged Galway City PDFs from data/galway/city/raw/ once they are older t`, `Galway City weekly-list PDF parser — first concrete implementation of the pdf_ta`, `Open a PDF and extract all table rows as a list of dicts keyed by     column_map` (+30 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 22`** (2 nodes): `get_database_url()`, `settings.py`
+- **Thin community `Community 23`** (2 nodes): `get_database_url()`, `settings.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 23`** (2 nodes): `_reset_metrics_counters()`, `conftest.py`
+- **Thin community `Community 24`** (2 nodes): `_reset_metrics_counters()`, `conftest.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 24`** (2 nodes): `test_application_has_natural_key_constraint()`, `test_application_natural_key.py`
+- **Thin community `Community 25`** (2 nodes): `test_application_has_natural_key_constraint()`, `test_application_natural_key.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 25`** (2 nodes): `main()`, `scaffold_tree.py`
+- **Thin community `Community 26`** (2 nodes): `main()`, `scaffold_tree.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (2 nodes): `renderBarChart()`, `app.js`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (1 nodes): `__init__.py`
+- **Thin community `Community 27`** (2 nodes): `renderBarChart()`, `app.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 28`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -407,9 +410,9 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 47`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (1 nodes): `session.py`
+- **Thin community `Community 48`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (1 nodes): `__init__.py`
+- **Thin community `Community 49`** (1 nodes): `session.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 50`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -429,29 +432,31 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 58`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (1 nodes): `Return a list of dicts describing available remote items         (e.g. PDF links`
+- **Thin community `Community 59`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (1 nodes): `Download the given items into self.temp_dir, return local paths.`
+- **Thin community `Community 60`** (1 nodes): `Return a list of dicts describing available remote items         (e.g. PDF links`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 61`** (1 nodes): `__init__.py`
+- **Thin community `Community 61`** (1 nodes): `Download the given items into self.temp_dir, return local paths.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 62`** (1 nodes): `__init__.py`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 63`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `normalize_row()` connect `Community 0` to `Community 4`, `Community 6`, `Community 14`?**
-  _High betweenness centrality (0.312) - this node is a cross-community bridge._
-- **Why does `search()` connect `Community 9` to `Community 1`, `Community 3`, `Community 14`?**
+- **Why does `normalize_row()` connect `Community 0` to `Community 3`, `Community 13`, `Community 14`?**
+  _High betweenness centrality (0.315) - this node is a cross-community bridge._
+- **Why does `search()` connect `Community 8` to `Community 1`, `Community 4`, `Community 14`?**
   _High betweenness centrality (0.276) - this node is a cross-community bridge._
 - **Why does `extract_location()` connect `Community 14` to `Community 0`?**
-  _High betweenness centrality (0.269) - this node is a cross-community bridge._
+  _High betweenness centrality (0.270) - this node is a cross-community bridge._
 - **Are the 15 inferred relationships involving `answer_question()` (e.g. with `test_answer_question_extracts_filters_and_summarizes()` and `test_answer_question_unfiltered_search_when_llm_extracts_no_filters()`) actually correct?**
   _`answer_question()` has 15 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 15 inferred relationships involving `run_city_ingestion()` (e.g. with `test_first_run_ingests_all_rows_and_marks_file()` and `test_second_run_skips_already_ingested_file()`) actually correct?**
   _`run_city_ingestion()` has 15 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 14 inferred relationships involving `normalize_county_row()` (e.g. with `test_normalize_county_row_received()` and `test_normalize_county_row_granted()`) actually correct?**
   _`normalize_county_row()` has 14 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 13 inferred relationships involving `normalize_row()` (e.g. with `test_normalize_row_received_maps_to_application_received_event()` and `test_normalize_row_granted_sets_decision_fields()`) actually correct?**
-  _`normalize_row()` has 13 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 14 inferred relationships involving `normalize_row()` (e.g. with `test_normalize_row_received_maps_to_application_received_event()` and `test_normalize_row_granted_sets_decision_fields()`) actually correct?**
+  _`normalize_row()` has 14 INFERRED edges - model-reasoned connections that need verification._
