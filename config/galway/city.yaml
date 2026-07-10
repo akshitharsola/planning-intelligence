@@ -2,7 +2,7 @@ source_entity: GALWAY_CITY_COUNCIL
 planning_authority: Galway City Council
 parser_family: pdf_table_lines
 base_url: "https://files.galwaycity.ie/gccplanninglists/"
-lookback_months: 3
+lookback_months: 120
 pdf_patterns:
   received:
     - "planning applications received"
