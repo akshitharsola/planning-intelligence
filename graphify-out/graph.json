@@ -1601,9 +1601,9 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/backfill_galway_city_chunked.py",
       "source_location": "L1",
-      "id": "backfill_galway_city_chunked_rationale_1",
       "community": 3,
-      "norm_label": "chunked backfill runner for galway city: processes the discovered pdf backlog in"
+      "norm_label": "chunked backfill runner for galway city: processes the discovered pdf backlog in",
+      "id": "backfill_galway_city_chunked_rationale_1"
     },
     {
       "label": "ingest_galway_city.py",
@@ -7780,9 +7780,9 @@
       "weight": 0.8,
       "_src": "backfill_galway_city_chunked_rationale_1",
       "_tgt": "scraper_galwaycityscraper",
+      "confidence_score": 0.5,
       "source": "backfill_galway_city_chunked_rationale_1",
-      "target": "scraper_galwaycityscraper",
-      "confidence_score": 0.5
+      "target": "scraper_galwaycityscraper"
     },
     {
       "relation": "contains",

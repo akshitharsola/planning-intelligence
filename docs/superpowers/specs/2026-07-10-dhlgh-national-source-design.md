@@ -47,10 +47,10 @@ nothing, and reverting to the original two-scraper setup requires no
 cleanup.
 
 Out of scope for this design:
-- Deduplicating/merging DHLGH rows against existing `applications` rows
-  (different `ApplicationNumber` formats are expected across sources —
-  no join key has been verified yet; a future comparison pass can decide
-  whether/how to merge).
+- Deduplicating/merging DHLGH rows against existing `applications` rows.
+  Section 9 documents a concrete matching ladder and exit criteria for a
+  separate validation-pass task, but that task is not part of this
+  ingestion work and this design does not implement or run it.
 - Eircode enrichment via any paid API (GeoDirectory) — separate future
   decision, not blocked by this work.
 - Backfilling other counties — this covers Galway City + County only,
@@ -240,7 +240,75 @@ the City PDF backfill. A single run is expected to complete quickly.
 - No live-network test against the real DHLGH endpoint in the automated
   suite (matches existing convention for County's own ArcGIS source).
 
-## 9. Risks
+## 9. Cross-source identity: matching ladder and validation pass
+
+This section responds to reviewer feedback: pending cross-source identity
+is not a footnote, it's a real, demonstrated risk. Verified during spec
+review by querying the live DHLGH endpoint and comparing against our own
+`applications` table:
+
+- DHLGH `ApplicationNumber` for Galway City looks like `2660243` (no
+  slash), while our own City `application_ref` (scraped from council PDF
+  file numbers) is `YY/NNN` or `YY/NNNNN`, e.g. `23/194`, `24/60030`.
+  These are **not directly comparable strings**.
+- The DHLGH number appears to decode as `YY` + zero-padded sequence
+  (`26` + `60243` → `26/60243`), consistent with our own `application_ref`
+  values that already use the `YY/60NNN` shape for 2026 City records.
+- **Confirmed collision, not hypothetical**: the literal string `2660243`
+  already exists in our own `applications` table today — as a **Galway
+  County** record ("Tonagarraun, Corrandulla, Co. Galway", received
+  2026-02-17), a completely different case from DHLGH's `2660243` under
+  Galway City Council ("7 Lower Canal Road, Galway", received 2026-07-08).
+  A naive string-equality join on `application_ref` alone, without also
+  requiring `planning_authority` to match and without correcting for the
+  slash-insertion transform, would silently merge two unrelated
+  applications. This is proof, not speculation, that identity resolution
+  needs a deliberate, tested procedure before any consumer treats DHLGH
+  and `applications` rows as the same record.
+
+**Deterministic matching ladder** (each rung attempted only if the
+previous one fails to find a unique match; a rung that returns more than
+one candidate is treated as no match, not a match, and logged):
+
+1. `planning_authority` (exact) + `application_ref` (normalized: DHLGH's
+   `ApplicationNumber` transformed to `YY/NNN(NN)` by inserting the slash
+   after the 2-digit year prefix, then compared to our `application_ref`).
+2. `planning_authority` + normalized address match (lowercased,
+   punctuation-stripped, whitespace-collapsed comparison between DHLGH's
+   `DevelopmentAddress` and our `site_address`).
+3. `planning_authority` + geometry proximity, where both sides have
+   coordinates (DHLGH polygon centroid vs. our — currently absent —
+   `site_geometry`; only usable once/if a source populates our side too).
+4. Fuzzy text match (trigram similarity, reusing the existing
+   `gin_trgm_ops` indexes already present on `applications.site_address`
+   and `applications.development_description`) as a last resort,
+   surfaced for manual review rather than auto-merged.
+
+**This design does not implement the ladder.** It documents it so the
+follow-up validation pass (tracked as a separate task, not silently
+folded into this ingestion work) has a concrete, testable procedure
+instead of an ad hoc one. The validation pass's job is to run the ladder
+against the full Galway overlap and report, per rung, how many DHLGH rows
+matched — not to perform any merge or write to `applications`.
+
+**Trial-period exit criteria** (also reviewer-requested, to make "is
+DHLGH worth keeping" measurable rather than a vibe check), computed after
+the validation pass runs:
+
+- **Coverage rate**: DHLGH row count vs. our existing row count, per
+  authority (already known from section 1: DHLGH's 3,397 City / 18,649
+  County vs. our 527 City / 20,375 County — City coverage is a clear win,
+  County is roughly comparable and worth re-checking after normalization).
+- **Match rate**: percentage of our existing `applications` rows that
+  find a unique match in `dhlgh_applications` via the ladder above, broken
+  down by which rung resolved each match.
+- **Field quality**: percentage of `dhlgh_applications` rows with a
+  non-null `site_address`, and separately with non-null `site_geometry`
+  (both already know to be materially better than our current sources per
+  section 1, but should be measured on the full ingested set, not the
+  15-row samples used during spec review).
+
+## 10. Other risks
 
 - **OBJECTID watermark stability** — same unverified-but-adopted
   assumption already accepted for County's scraper (documented in
@@ -251,7 +319,8 @@ the City PDF backfill. A single run is expected to complete quickly.
   authorities' consumers, not just ours, so it's less likely to change
   silently than a single council's ad-hoc PDF format, but the field list
   should still be spot-checked periodically.
-- **No verified join key to existing `applications` table yet** — explicit
-  non-goal per section 2. `ApplicationNumber` formats have not been
-  compared across sources; that comparison is future work, not assumed
-  here.
+- **`ApplicationNumber` normalization is a hypothesis, not yet proven at
+  scale** — the `YY` + sequence decoding in section 9 matches the small
+  sample checked during spec review but has not been validated against
+  the full ~22,000-row overlap. The validation pass task must treat this
+  transform itself as something to verify, not assume.
