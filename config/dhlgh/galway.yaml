@@ -1,0 +1,41 @@
+source_entity: DHLGH_NATIONAL
+planning_authorities:
+  - "Galway City Council"
+  - "Galway County Council"
+
+# Public, no-auth national ArcGIS Feature Service maintained by DHLGH,
+# covering all 31 local authorities — filtered here to Galway City +
+# County only (see discover()'s `where` clause). Confirmed live via
+# direct REST query; see
+# docs/superpowers/specs/2026-07-10-dhlgh-national-source-design.md.
+arcgis_query_url: "https://services.arcgis.com/NzlPQPKn5QF9v2US/arcgis/rest/services/IrishPlanningApplications/FeatureServer/1/query"
+watermark_field: "OBJECTID"
+page_size: 1000
+out_fields:
+  - OBJECTID
+  - PlanningAuthority
+  - ApplicationNumber
+  - DevelopmentDescription
+  - DevelopmentAddress
+  - DevelopmentPostcode
+  - ITMEasting
+  - ITMNorthing
+  - ApplicationStatus
+  - ApplicationType
+  - Decision
+  - ReceivedDate
+  - WithdrawnDate
+  - DecisionDate
+  - DecisionDueDate
+  - GrantDate
+  - ExpiryDate
+  - AppealRefNumber
+  - AppealStatus
+  - AppealDecision
+  - AppealDecisionDate
+  - AppealSubmittedDate
+  - FIRequestDate
+  - FIRecDate
+  - LinkAppDetails
+  - SiteId
+returnGeometry: true

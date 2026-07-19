@@ -9,7 +9,9 @@ from sqlalchemy.orm import Session
 
 from src.core.models.application import Application
 from src.core.models.application_event import ApplicationEvent
+from src.core.models.dhlgh_application import DHLGHApplication
 from src.core.schemas.application import ApplicationCreate
+from src.core.schemas.dhlgh_application import DHLGHApplicationCreate
 
 
 def resolve_and_upsert(session: Session, app_create: ApplicationCreate) -> Application:
@@ -40,4 +42,32 @@ def resolve_and_upsert(session: Session, app_create: ApplicationCreate) -> Appli
         raw_payload_json=app_create.raw_payload_json,
     )
     session.add(event)
+    return application
+
+
+def resolve_and_upsert_dhlgh(
+    session: Session, app_create: DHLGHApplicationCreate
+) -> DHLGHApplication:
+    """Dedup DHLGH rows by (planning_authority, application_ref) against
+    dhlgh_applications — same natural-key pattern as resolve_and_upsert()
+    above. No ApplicationEvent-equivalent emitted for this source (spec
+    section 5): DHLGH's own ApplicationStatus/Decision/appeal fields
+    already carry enough lifecycle state per row."""
+    existing = session.scalar(
+        select(DHLGHApplication).where(
+            DHLGHApplication.planning_authority == app_create.planning_authority,
+            DHLGHApplication.application_ref == app_create.application_ref,
+        )
+    )
+
+    if existing is None:
+        application = DHLGHApplication(**app_create.model_dump())
+        session.add(application)
+        session.flush()
+    else:
+        for field, value in app_create.model_dump().items():
+            setattr(existing, field, value)
+        application = existing
+        session.flush()
+
     return application
