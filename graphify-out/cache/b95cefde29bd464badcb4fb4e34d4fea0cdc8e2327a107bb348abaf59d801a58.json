@@ -1,0 +1,1 @@
+{"nodes": [{"id": "run_weekly_ingestion_sh", "label": "run_weekly_ingestion.sh wrapper", "file_type": "code", "source_file": "scripts/run_weekly_ingestion.sh", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}
