@@ -23,7 +23,7 @@ from typing import NamedTuple
 
 from geoalchemy2 import Geography
 from geoalchemy2.functions import ST_DWithin, ST_GeogFromText
-from sqlalchemy import cast, select
+from sqlalchemy import cast, func, select
 from sqlalchemy.orm import Session
 
 from src.core.models.application import Application
@@ -101,6 +101,33 @@ def rung3_geometry_match(
 
     if len(hits) == 1:
         return MatchResult(matched=True, rung=3, ambiguous=False)
+    if len(hits) > 1:
+        return MatchResult(matched=False, rung=None, ambiguous=True)
+    return MatchResult(matched=False, rung=None, ambiguous=False)
+
+
+def rung4_fuzzy_match(
+    session: Session,
+    dhlgh_address: str | None,
+    authority: str,
+    threshold: float = 0.6,
+) -> MatchResult:
+    """Last-resort fuzzy rung (spec section 9): matches here are surfaced
+    for manual review, never auto-applied. Callers must tag rung-4 results
+    distinctly from rungs 1-3 in any report they produce."""
+    if not dhlgh_address:
+        return MatchResult(matched=False, rung=None, ambiguous=False)
+
+    hits = session.scalars(
+        select(Application.id).where(
+            Application.planning_authority == authority,
+            Application.site_address.isnot(None),
+            func.similarity(Application.site_address, dhlgh_address) >= threshold,
+        )
+    ).all()
+
+    if len(hits) == 1:
+        return MatchResult(matched=True, rung=4, ambiguous=False)
     if len(hits) > 1:
         return MatchResult(matched=False, rung=None, ambiguous=True)
     return MatchResult(matched=False, rung=None, ambiguous=False)

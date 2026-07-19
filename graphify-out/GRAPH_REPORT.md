@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-19)
 
 ## Corpus Check
-- 115 files · ~123,154 words
+- 115 files · ~115,333 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 557 nodes · 737 edges · 114 communities detected
-- Extraction: 69% EXTRACTED · 31% INFERRED · 0% AMBIGUOUS · INFERRED: 231 edges (avg confidence: 0.77)
+- 564 nodes · 750 edges · 114 communities detected
+- Extraction: 69% EXTRACTED · 31% INFERRED · 0% AMBIGUOUS · INFERRED: 235 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -134,8 +134,8 @@
 6. `_cleanup()` - 13 edges
 7. `_seed()` - 12 edges
 8. `run_dhlgh_ingestion()` - 12 edges
-9. `normalize_county_row()` - 12 edges
-10. `run_county_ingestion()` - 11 edges
+9. `MatchCandidate` - 12 edges
+10. `normalize_county_row()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Application SQLAlchemy model` --conceptually_related_to--> `DHLGH National Planning Dataset — New Independent Source Design`  [INFERRED]
@@ -176,16 +176,16 @@ Cohesion: 0.13
 Nodes (24): BaseSource, main(), DHLGH ingestion CLI: discover -> normalize_dhlgh_row -> resolve_and_upsert_dhlgh, run_dhlgh_ingestion(), _build_session(), DHLGHScraper, _query_page(), Galway County Council planning register scraper — built fresh, no duffy preceden (+16 more)
 
 ### Community 4 - "Community 4"
+Cohesion: 0.14
+Nodes (28): MatchCandidate, MatchResult, Cross-source identity matching ladder (spec section 9, docs/superpowers/specs/20, Last-resort fuzzy rung (spec section 9): matches here are surfaced     for manua, rung1_ref_match(), rung2_address_match(), rung3_geometry_match(), rung4_fuzzy_match() (+20 more)
+
+### Community 5 - "Community 5"
 Cohesion: 0.18
 Nodes (22): application_service.get_by_natural_key(), application_service.search(), _extract_address(), _extract_area(), _extract_eircode(), extract_location(), _looks_like_address(), Location extraction for Galway descriptions — ported from duffy's location_extra (+14 more)
 
-### Community 5 - "Community 5"
+### Community 6 - "Community 6"
 Cohesion: 0.14
 Nodes (22): normalize_county_row(), _expand_app_type(), _flag_yes(), normalize_row(), _parse_date(), Maps a raw parser row (dict, source-specific keys) into the canonical Applicatio, test_normalize_row_blank_source_type_flags_for_review(), test_normalize_row_granted_sets_decision_fields() (+14 more)
-
-### Community 6 - "Community 6"
-Cohesion: 0.19
-Nodes (21): MatchCandidate, MatchResult, Cross-source identity matching ladder (spec section 9, docs/superpowers/specs/20, rung1_ref_match(), rung2_address_match(), rung3_geometry_match(), NamedTuple, _make_application() (+13 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.16
@@ -616,7 +616,7 @@ Cohesion: 1.0
 Nodes (1): Rationale: table rendered via partial so it can be swapped to HTMX/fetch later
 
 ## Knowledge Gaps
-- **121 isolated node(s):** `Fixture table from spec section 9.1 (docs/superpowers/specs/2026-07-10-dhlgh-nat`, `A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful`, `Scripted client: returns queued replies in order, one per .chat() call.`, `scripts/ingest_galway_city.py (run_city_ingestion)`, `Galway County ingestion CLI: discover -> normalize -> resolve -> publish against` (+116 more)
+- **122 isolated node(s):** `Fixture table from spec section 9.1 (docs/superpowers/specs/2026-07-10-dhlgh-nat`, `A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful`, `Scripted client: returns queued replies in order, one per .chat() call.`, `scripts/ingest_galway_city.py (run_city_ingestion)`, `Galway County ingestion CLI: discover -> normalize -> resolve -> publish against` (+117 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **Thin community `Community 35`** (2 nodes): `get_database_url()`, `settings.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -780,12 +780,12 @@ Nodes (1): Rationale: table rendered via partial so it can be swapped to HTMX/fe
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `normalize_row()` connect `Community 5` to `Community 1`, `Community 4`?**
-  _High betweenness centrality (0.120) - this node is a cross-community bridge._
-- **Why does `extract_location()` connect `Community 4` to `Community 5`?**
-  _High betweenness centrality (0.108) - this node is a cross-community bridge._
-- **Why does `application_service.search()` connect `Community 4` to `Community 8`?**
-  _High betweenness centrality (0.107) - this node is a cross-community bridge._
+- **Why does `normalize_row()` connect `Community 6` to `Community 1`, `Community 5`?**
+  _High betweenness centrality (0.117) - this node is a cross-community bridge._
+- **Why does `extract_location()` connect `Community 5` to `Community 6`?**
+  _High betweenness centrality (0.105) - this node is a cross-community bridge._
+- **Why does `application_service.search()` connect `Community 5` to `Community 8`?**
+  _High betweenness centrality (0.104) - this node is a cross-community bridge._
 - **Are the 13 inferred relationships involving `normalize_dhlgh_row()` (e.g. with `test_normalize_dhlgh_row_basic_fields()` and `test_normalize_dhlgh_row_empty_postcode_is_not_an_error()`) actually correct?**
   _`normalize_dhlgh_row()` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 14 inferred relationships involving `LLMClient` (e.g. with `Natural-language Q&A over the applications table. Read-only: the LLM only extrac` and `Returns {"answer": str, "filters": dict, "applications": list, "total": int}.`) actually correct?**

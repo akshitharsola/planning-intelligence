@@ -8,6 +8,7 @@ from src.core.matching.ladder import (
     rung1_ref_match,
     rung2_address_match,
     rung3_geometry_match,
+    rung4_fuzzy_match,
 )
 from src.core.models.application import Application
 
@@ -203,5 +204,70 @@ def test_rung3_no_match_when_no_candidates_have_geometry():
             "Galway County Council",
         )
         assert result.matched is False
+    finally:
+        session.close()
+
+
+def _make_application_with_address(session, application_ref, address):
+    app = Application(
+        id=uuid.uuid4(),
+        planning_authority="Galway County Council",
+        source_entity="GALWAY_COUNTY",
+        application_ref=application_ref,
+        applicant_name="Test",
+        site_address=address,
+        development_description="Test",
+        application_type="Permission",
+        planning_status_current="Received",
+        date_received="2026-01-01",
+        source_system="test",
+        source_file="test",
+    )
+    session.add(app)
+    return app
+
+
+def test_rung4_matches_similar_address_above_threshold():
+    # NOTE: uses a synthetic townland name ("Zzyxwtown"), not a real Galway
+    # address, deliberately. A live-data check found that real addresses
+    # like "Ardgaineen, Claregalway" already have 5+ genuinely distinct
+    # historical applications in the seeded applications table that pass
+    # similarity() >= 0.6 against each other (confirmed via direct query),
+    # so any real placename here would make this a flaky/ambiguous-by-luck
+    # test rather than an isolated check of rung 4's own logic.
+    session = SessionLocal()
+    try:
+        session.execute(sa.text("DELETE FROM applications WHERE application_ref LIKE 'FUZZYTEST/%'"))
+        _make_application_with_address(session, "FUZZYTEST/001", "Zzyxwtown Claregalway Co Galway")
+        session.commit()
+
+        result = rung4_fuzzy_match(
+            session, "Zzyxwtown, Claregalway, Co. Galway", "Galway County Council"
+        )
+        assert result.matched is True
+        assert result.rung == 4
+    finally:
+        session.execute(sa.text("DELETE FROM applications WHERE application_ref LIKE 'FUZZYTEST/%'"))
+        session.commit()
+        session.close()
+
+
+def test_rung4_no_match_when_no_candidates_pass_threshold():
+    session = SessionLocal()
+    try:
+        result = rung4_fuzzy_match(
+            session, "Completely unrelated string xyzzy", "Galway County Council"
+        )
+        assert result.matched is False
+    finally:
+        session.close()
+
+
+def test_rung4_no_match_when_dhlgh_address_is_none():
+    session = SessionLocal()
+    try:
+        result = rung4_fuzzy_match(session, None, "Galway County Council")
+        assert result.matched is False
+        assert result.ambiguous is False
     finally:
         session.close()
