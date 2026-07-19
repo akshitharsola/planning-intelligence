@@ -21,8 +21,9 @@ intentional.
 
 from typing import NamedTuple
 
+from geoalchemy2 import Geography
 from geoalchemy2.functions import ST_DWithin, ST_GeogFromText
-from sqlalchemy import select
+from sqlalchemy import cast, select
 from sqlalchemy.orm import Session
 
 from src.core.models.application import Application
@@ -91,7 +92,7 @@ def rung3_geometry_match(
             Application.planning_authority == authority,
             Application.site_geometry.isnot(None),
             ST_DWithin(
-                ST_GeogFromText(Application.site_geometry.ST_AsText()),
+                cast(Application.site_geometry, Geography),
                 ST_GeogFromText(dhlgh_geom_wkt),
                 proximity_meters,
             ),

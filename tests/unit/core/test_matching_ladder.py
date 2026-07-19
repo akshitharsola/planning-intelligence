@@ -157,6 +157,29 @@ def test_rung3_matches_point_within_proximity_radius():
         session.close()
 
 
+def test_rung3_ambiguous_when_two_candidates_within_radius():
+    session = SessionLocal()
+    try:
+        session.execute(sa.text("DELETE FROM applications WHERE application_ref LIKE 'GEOMTEST/%'"))
+        # Two distinct applications a few meters apart, both within the
+        # default 25m proximity radius of the query point below.
+        _make_application(session, "GEOMTEST/002", -9.0568, 53.2707)
+        _make_application(session, "GEOMTEST/003", -9.05682, 53.27072)
+        session.commit()
+
+        result = rung3_geometry_match(
+            session,
+            "SRID=4326;POINT(-9.05678 53.27071)",
+            "Galway County Council",
+        )
+        assert result.matched is False
+        assert result.ambiguous is True
+    finally:
+        session.execute(sa.text("DELETE FROM applications WHERE application_ref LIKE 'GEOMTEST/%'"))
+        session.commit()
+        session.close()
+
+
 def test_rung3_no_match_when_no_geometry_on_dhlgh_side():
     session = SessionLocal()
     try:
