@@ -14,6 +14,7 @@ candidates and persisting/reporting results.
 
 from typing import NamedTuple
 
+from src.core.normalization.address import normalize_address
 from src.core.normalization.application_ref import normalize_application_ref
 
 
@@ -39,6 +40,26 @@ def rung1_ref_match(
 
     if len(hits) == 1:
         return MatchResult(matched=True, rung=1, ambiguous=False)
+    if len(hits) > 1:
+        return MatchResult(matched=False, rung=None, ambiguous=True)
+    return MatchResult(matched=False, rung=None, ambiguous=False)
+
+
+def rung2_address_match(
+    dhlgh_address: str | None, candidates: list[MatchCandidate]
+) -> MatchResult:
+    if not dhlgh_address:
+        return MatchResult(matched=False, rung=None, ambiguous=False)
+
+    target = normalize_address(dhlgh_address)
+
+    hits = [
+        c for c in candidates
+        if c.site_address and normalize_address(c.site_address) == target
+    ]
+
+    if len(hits) == 1:
+        return MatchResult(matched=True, rung=2, ambiguous=False)
     if len(hits) > 1:
         return MatchResult(matched=False, rung=None, ambiguous=True)
     return MatchResult(matched=False, rung=None, ambiguous=False)
