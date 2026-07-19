@@ -1,4 +1,15 @@
-from src.core.matching.ladder import MatchCandidate, rung1_ref_match, rung2_address_match
+import uuid
+
+import sqlalchemy as sa
+
+from src.core.db.session import SessionLocal
+from src.core.matching.ladder import (
+    MatchCandidate,
+    rung1_ref_match,
+    rung2_address_match,
+    rung3_geometry_match,
+)
+from src.core.models.application import Application
 
 
 def test_rung1_matches_unique_exact_county_ref():
@@ -103,3 +114,71 @@ def test_rung2_no_match_when_dhlgh_address_is_none():
     result = rung2_address_match(None, candidates)
     assert result.matched is False
     assert result.ambiguous is False
+
+
+def _make_application(session, application_ref, lon, lat):
+    app = Application(
+        id=uuid.uuid4(),
+        planning_authority="Galway County Council",
+        source_entity="GALWAY_COUNTY",
+        application_ref=application_ref,
+        applicant_name="Test",
+        site_address="Test address",
+        development_description="Test",
+        application_type="Permission",
+        planning_status_current="Received",
+        date_received="2026-01-01",
+        source_system="test",
+        source_file="test",
+        site_geometry=f"SRID=4326;POINT({lon} {lat})",
+    )
+    session.add(app)
+    return app
+
+
+def test_rung3_matches_point_within_proximity_radius():
+    session = SessionLocal()
+    try:
+        session.execute(sa.text("DELETE FROM applications WHERE application_ref LIKE 'GEOMTEST/%'"))
+        _make_application(session, "GEOMTEST/001", -9.0568, 53.2707)
+        session.commit()
+
+        # A point ~5 meters away from the seeded row (well within 25m).
+        result = rung3_geometry_match(
+            session,
+            "SRID=4326;POINT(-9.05675 53.27074)",
+            "Galway County Council",
+        )
+        assert result.matched is True
+        assert result.rung == 3
+    finally:
+        session.execute(sa.text("DELETE FROM applications WHERE application_ref LIKE 'GEOMTEST/%'"))
+        session.commit()
+        session.close()
+
+
+def test_rung3_no_match_when_no_geometry_on_dhlgh_side():
+    session = SessionLocal()
+    try:
+        result = rung3_geometry_match(session, None, "Galway County Council")
+        assert result.matched is False
+        assert result.ambiguous is False
+    finally:
+        session.close()
+
+
+def test_rung3_no_match_when_no_candidates_have_geometry():
+    # Reflects real current state: applications.site_geometry is 0%
+    # populated (confirmed live: 0 of 20,902 rows), so this rung must
+    # cleanly report no-match rather than error when the whole table has
+    # no geometry to compare against.
+    session = SessionLocal()
+    try:
+        result = rung3_geometry_match(
+            session,
+            "SRID=4326;POINT(-9.0568 53.2707)",
+            "Galway County Council",
+        )
+        assert result.matched is False
+    finally:
+        session.close()

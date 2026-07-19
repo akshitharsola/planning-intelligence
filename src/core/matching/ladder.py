@@ -6,14 +6,26 @@ planning_authority, tries each rung in order and stops at the first rung
 that finds a UNIQUE match. A rung returning more than one candidate is
 ambiguous, not a match, and the caller falls through to the next rung.
 
-This module does not touch the database or write to `applications` — it
-operates on plain MatchCandidate values so it stays trivially unit
+Rungs 1 and 2 do not touch the database or write to `applications` — they
+operate on plain MatchCandidate values so they stay trivially unit
 testable. Callers (the validation-pass CLI) are responsible for loading
 candidates and persisting/reporting results.
+
+Rung 3 (geometry proximity) is the exception: it queries the DB directly
+via a SQLAlchemy `Session` rather than taking pre-loaded candidates,
+because PostGIS distance computation is far cheaper done in SQL (using
+spatial functions) than by pulling every geometry into Python and
+computing distances there. This asymmetry versus rungs 1-2 is
+intentional.
 """
 
 from typing import NamedTuple
 
+from geoalchemy2.functions import ST_DWithin, ST_GeogFromText
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from src.core.models.application import Application
 from src.core.normalization.address import normalize_address
 from src.core.normalization.application_ref import normalize_application_ref
 
@@ -60,6 +72,34 @@ def rung2_address_match(
 
     if len(hits) == 1:
         return MatchResult(matched=True, rung=2, ambiguous=False)
+    if len(hits) > 1:
+        return MatchResult(matched=False, rung=None, ambiguous=True)
+    return MatchResult(matched=False, rung=None, ambiguous=False)
+
+
+def rung3_geometry_match(
+    session: Session,
+    dhlgh_geom_wkt: str | None,
+    authority: str,
+    proximity_meters: float = 25.0,
+) -> MatchResult:
+    if not dhlgh_geom_wkt:
+        return MatchResult(matched=False, rung=None, ambiguous=False)
+
+    hits = session.scalars(
+        select(Application.id).where(
+            Application.planning_authority == authority,
+            Application.site_geometry.isnot(None),
+            ST_DWithin(
+                ST_GeogFromText(Application.site_geometry.ST_AsText()),
+                ST_GeogFromText(dhlgh_geom_wkt),
+                proximity_meters,
+            ),
+        )
+    ).all()
+
+    if len(hits) == 1:
+        return MatchResult(matched=True, rung=3, ambiguous=False)
     if len(hits) > 1:
         return MatchResult(matched=False, rung=None, ambiguous=True)
     return MatchResult(matched=False, rung=None, ambiguous=False)
