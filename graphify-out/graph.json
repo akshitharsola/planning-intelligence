@@ -2380,9 +2380,9 @@
       "file_type": "rationale",
       "source_file": "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/validate_dhlgh_matching.py",
       "source_location": "L1",
-      "id": "validate_dhlgh_matching_rationale_1",
       "community": 2,
-      "norm_label": "dhlgh cross-source identity matching validation pass (spec section 9, docs/super"
+      "norm_label": "dhlgh cross-source identity matching validation pass (spec section 9, docs/super",
+      "id": "validate_dhlgh_matching_rationale_1"
     },
     {
       "label": "scaffold_tree.py",
@@ -11612,9 +11612,9 @@
       "weight": 0.8,
       "_src": "validate_dhlgh_matching_rationale_1",
       "_tgt": "ladder_matchcandidate",
+      "confidence_score": 0.5,
       "source": "validate_dhlgh_matching_rationale_1",
-      "target": "ladder_matchcandidate",
-      "confidence_score": 0.5
+      "target": "ladder_matchcandidate"
     },
     {
       "relation": "uses",
@@ -11624,9 +11624,9 @@
       "weight": 0.8,
       "_src": "validate_dhlgh_matching_rationale_1",
       "_tgt": "dhlgh_application_dhlghapplication",
+      "confidence_score": 0.5,
       "source": "validate_dhlgh_matching_rationale_1",
-      "target": "dhlgh_application_dhlghapplication",
-      "confidence_score": 0.5
+      "target": "dhlgh_application_dhlghapplication"
     },
     {
       "relation": "contains",

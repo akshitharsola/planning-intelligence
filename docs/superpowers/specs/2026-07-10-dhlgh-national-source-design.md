@@ -402,3 +402,86 @@ the validation pass runs:
   extended by loosening rung 1 to accept low-confidence guesses, since
   that reintroduces the exact silent-merge risk this section exists to
   prevent.
+
+## 11. Validation pass results (2026-07-24)
+
+Ran `scripts/validate_dhlgh_matching.py` (Task 6) against the live,
+fully-ingested dataset. Full project test suite (166 tests) passed with
+no regressions immediately before this run.
+
+```python
+{
+    'total_dhlgh_rows': 22075,
+    'by_rung': {
+        'no_match': 2502,
+        'ambiguous': 2709,
+        'rung_2': 1574,
+        'rung_4_manual_review': 410,
+        'rung_1': 14880,
+    },
+    'coverage': {
+        'Galway City Council': {'dhlgh_count': 3401, 'our_count': 527},
+        'Galway County Council': {'dhlgh_count': 18674, 'our_count': 20375},
+    },
+    'field_quality': {
+        'dhlgh_site_address_non_null_pct': 100.0,
+        'dhlgh_site_geometry_non_null_pct': 100.0,
+    },
+}
+```
+
+**Interpretation.**
+
+Of the 22,075 DHLGH rows, 14,880 (67.4%) matched at rung 1 (exact
+`application_ref`, normalized), a further 1,574 (7.1%) matched at rung 2
+(normalized address) after rung 1 failed, and 410 (1.9%) surfaced at rung
+4 (fuzzy trigram) for manual review only — never auto-applied, per
+section 9's design. 2,709 rows (12.3%) hit a rung that returned more than
+one candidate and were correctly treated as ambiguous rather than
+force-matched, and 2,502 (11.3%) found no candidate at any rung. Combined
+resolved rate (rung 1 + rung 2, i.e. matches confident enough to use
+without manual review) is 74.5% of all DHLGH rows. Note this is the
+DHLGH-side match rate (how many DHLGH rows found a match in our
+`applications` table); section 9.2's trial exit criteria framed "match
+rate" the other way round (percentage of *our* `applications` rows that
+find a match in DHLGH) — the two are related but not identical given the
+count mismatch below, and a future pass could compute the inverse
+direction if that number becomes decision-relevant.
+
+**Rung 3 (geometry proximity) produced zero matches, as expected and
+predicted by this section before the run**: a live query against
+`applications` confirms `site_geometry` is populated on 0 of 20,902
+Galway City/County rows. Rung 3 has no usable candidates until some
+future source populates our side; this is not a bug in the ladder, and
+the `by_rung` dict correctly omits a `rung_3` key entirely (a
+`defaultdict` — rungs with zero occurrences never get a key rather than
+appearing as `0`) rather than reporting a fabricated zero.
+
+**Coverage vs. the section 9.2 estimates** made during spec review (DHLGH
+3,397 City / 18,649 County vs. our 527 City / 20,375 County): the live
+run shows 3,401 City / 18,674 County, close to the earlier estimate with
+minor drift attributable to ongoing DHLGH ingestion between spec review
+(2026-07-12) and this run (2026-07-24). City coverage remains the clear
+win called out in section 1 (DHLGH has ~6.5x more City rows than we do);
+County coverage is roughly comparable in raw count (18,674 vs. 20,375)
+but the match-rate breakdown above shows most County overlap resolves
+cleanly at rung 1, consistent with County `application_ref` values being
+more directly comparable between the two sources than City's format
+mismatch (section 9's original motivating example).
+
+**Field quality**: 100.0% of DHLGH rows have both non-null `site_address`
+and non-null `site_geometry`, matching section 1's claim that DHLGH's
+field quality is materially better than our current sources on both
+dimensions, now confirmed on the full ingested set rather than the
+15-row sample used during spec review.
+
+**On the 12.3% ambiguous rate**: this is a substantial minority and worth
+flagging as an open question rather than a settled result — it means
+roughly 1 in 8 DHLGH rows currently have multiple same-authority
+candidates matching by ref or address, none of which the ladder will
+auto-resolve (correctly, per the "ambiguous is not a match" rule in
+section 9's ladder definition). No investigation of *why* the ambiguity
+rate is this high (e.g. common duplicate patterns in the underlying data)
+was done as part of this task; that remains open for a follow-up if the
+ambiguous bucket needs to shrink before any downstream use of DHLGH
+matches.
