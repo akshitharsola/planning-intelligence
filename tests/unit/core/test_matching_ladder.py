@@ -271,3 +271,87 @@ def test_rung4_no_match_when_dhlgh_address_is_none():
         assert result.ambiguous is False
     finally:
         session.close()
+
+
+from src.core.matching.ladder import run_ladder
+
+
+def test_run_ladder_stops_at_rung1_when_ref_matches():
+    session = SessionLocal()
+    try:
+        candidates = [
+            MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None),
+        ]
+        result = run_ladder(
+            session,
+            dhlgh_ref="17792",
+            dhlgh_address="Some other address entirely",
+            dhlgh_geom_wkt=None,
+            authority="Galway County Council",
+            candidates=candidates,
+        )
+        assert result.matched is True
+        assert result.rung == 1
+    finally:
+        session.close()
+
+
+def test_run_ladder_falls_through_to_rung2_when_ref_fails():
+    session = SessionLocal()
+    try:
+        candidates = [
+            MatchCandidate(application_ref="99999", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None),
+        ]
+        result = run_ladder(
+            session,
+            dhlgh_ref="00000",
+            dhlgh_address="Ardgaineen, Galway",
+            dhlgh_geom_wkt=None,
+            authority="Galway County Council",
+            candidates=candidates,
+        )
+        assert result.matched is True
+        assert result.rung == 2
+    finally:
+        session.close()
+
+
+def test_run_ladder_reports_no_match_when_all_rungs_fail():
+    session = SessionLocal()
+    try:
+        candidates = [
+            MatchCandidate(application_ref="99999", site_address="Totally different", site_geometry_wkt=None),
+        ]
+        result = run_ladder(
+            session,
+            dhlgh_ref="00000",
+            dhlgh_address="Nothing alike",
+            dhlgh_geom_wkt=None,
+            authority="Galway County Council",
+            candidates=candidates,
+        )
+        assert result.matched is False
+        assert result.rung is None
+    finally:
+        session.close()
+
+
+def test_run_ladder_stops_on_ambiguous_rung_without_trying_later_rungs():
+    session = SessionLocal()
+    try:
+        candidates = [
+            MatchCandidate(application_ref="17792", site_address="A", site_geometry_wkt=None),
+            MatchCandidate(application_ref="17792", site_address="B", site_geometry_wkt=None),
+        ]
+        result = run_ladder(
+            session,
+            dhlgh_ref="17792",
+            dhlgh_address="A",
+            dhlgh_geom_wkt=None,
+            authority="Galway County Council",
+            candidates=candidates,
+        )
+        assert result.matched is False
+        assert result.ambiguous is True
+    finally:
+        session.close()

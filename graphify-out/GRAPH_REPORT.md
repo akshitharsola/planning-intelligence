@@ -1,12 +1,12 @@
-# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-19)
+# Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-24)
 
 ## Corpus Check
-- 115 files · ~115,333 words
+- 115 files · ~115,549 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 564 nodes · 750 edges · 114 communities detected
-- Extraction: 69% EXTRACTED · 31% INFERRED · 0% AMBIGUOUS · INFERRED: 235 edges (avg confidence: 0.77)
+- 569 nodes · 767 edges · 114 communities detected
+- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 243 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -128,13 +128,13 @@
 ## God Nodes (most connected - your core abstractions)
 1. `normalize_dhlgh_row()` - 18 edges
 2. `LLMClient` - 17 edges
-3. `FakeLLMClient` - 15 edges
-4. `normalize_row()` - 15 edges
-5. `chat_service.answer_question()` - 14 edges
-6. `_cleanup()` - 13 edges
-7. `_seed()` - 12 edges
-8. `run_dhlgh_ingestion()` - 12 edges
-9. `MatchCandidate` - 12 edges
+3. `MatchCandidate` - 16 edges
+4. `FakeLLMClient` - 15 edges
+5. `normalize_row()` - 15 edges
+6. `chat_service.answer_question()` - 14 edges
+7. `_cleanup()` - 13 edges
+8. `_seed()` - 12 edges
+9. `run_dhlgh_ingestion()` - 12 edges
 10. `normalize_county_row()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -168,16 +168,16 @@ Cohesion: 0.08
 Nodes (29): main(), _match_source_type(), Chunked backfill runner for Galway City: processes the discovered PDF backlog in, run_batch(), GalwayCityScraper, main(), Galway County ingestion CLI: discover -> normalize -> resolve -> publish against, run_county_ingestion() (+21 more)
 
 ### Community 2 - "Community 2"
+Cohesion: 0.13
+Nodes (33): MatchCandidate, MatchResult, Cross-source identity matching ladder (spec section 9, docs/superpowers/specs/20, Last-resort fuzzy rung (spec section 9): matches here are surfaced     for manua, run_ladder(), rung1_ref_match(), rung2_address_match(), rung3_geometry_match() (+25 more)
+
+### Community 3 - "Community 3"
 Cohesion: 0.1
 Nodes (28): Base, Base, BaseModel, DeclarativeBase, DHLGHApplication, DHLGHApplicationCreate, _arcgis_date(), _clean_float() (+20 more)
 
-### Community 3 - "Community 3"
+### Community 4 - "Community 4"
 Cohesion: 0.13
 Nodes (24): BaseSource, main(), DHLGH ingestion CLI: discover -> normalize_dhlgh_row -> resolve_and_upsert_dhlgh, run_dhlgh_ingestion(), _build_session(), DHLGHScraper, _query_page(), Galway County Council planning register scraper — built fresh, no duffy preceden (+16 more)
-
-### Community 4 - "Community 4"
-Cohesion: 0.14
-Nodes (28): MatchCandidate, MatchResult, Cross-source identity matching ladder (spec section 9, docs/superpowers/specs/20, Last-resort fuzzy rung (spec section 9): matches here are surfaced     for manua, rung1_ref_match(), rung2_address_match(), rung3_geometry_match(), rung4_fuzzy_match() (+20 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.18
@@ -781,16 +781,16 @@ Nodes (1): Rationale: table rendered via partial so it can be swapped to HTMX/fe
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `normalize_row()` connect `Community 6` to `Community 1`, `Community 5`?**
-  _High betweenness centrality (0.117) - this node is a cross-community bridge._
+  _High betweenness centrality (0.115) - this node is a cross-community bridge._
 - **Why does `extract_location()` connect `Community 5` to `Community 6`?**
-  _High betweenness centrality (0.105) - this node is a cross-community bridge._
+  _High betweenness centrality (0.103) - this node is a cross-community bridge._
 - **Why does `application_service.search()` connect `Community 5` to `Community 8`?**
-  _High betweenness centrality (0.104) - this node is a cross-community bridge._
+  _High betweenness centrality (0.102) - this node is a cross-community bridge._
 - **Are the 13 inferred relationships involving `normalize_dhlgh_row()` (e.g. with `test_normalize_dhlgh_row_basic_fields()` and `test_normalize_dhlgh_row_empty_postcode_is_not_an_error()`) actually correct?**
   _`normalize_dhlgh_row()` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 14 inferred relationships involving `LLMClient` (e.g. with `Natural-language Q&A over the applications table. Read-only: the LLM only extrac` and `Returns {"answer": str, "filters": dict, "applications": list, "total": int}.`) actually correct?**
   _`LLMClient` has 14 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 14 inferred relationships involving `MatchCandidate` (e.g. with `# NOTE: uses a synthetic townland name ("Zzyxwtown"), not a real Galway` and `test_rung1_matches_unique_exact_county_ref()`) actually correct?**
+  _`MatchCandidate` has 14 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 11 inferred relationships involving `normalize_row()` (e.g. with `test_normalize_row_received_maps_to_application_received_event()` and `test_normalize_row_granted_sets_decision_fields()`) actually correct?**
   _`normalize_row()` has 11 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 14 inferred relationships involving `chat_service.answer_question()` (e.g. with `test_answer_question_extracts_filters_and_summarizes()` and `test_answer_question_unfiltered_search_when_llm_extracts_no_filters()`) actually correct?**
-  _`chat_service.answer_question()` has 14 INFERRED edges - model-reasoned connections that need verification._

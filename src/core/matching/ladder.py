@@ -131,3 +131,27 @@ def rung4_fuzzy_match(
     if len(hits) > 1:
         return MatchResult(matched=False, rung=None, ambiguous=True)
     return MatchResult(matched=False, rung=None, ambiguous=False)
+
+
+def run_ladder(
+    session: Session,
+    dhlgh_ref: str,
+    dhlgh_address: str | None,
+    dhlgh_geom_wkt: str | None,
+    authority: str,
+    candidates: list[MatchCandidate],
+) -> MatchResult:
+    rung1 = rung1_ref_match(dhlgh_ref, authority, candidates)
+    if rung1.matched or rung1.ambiguous:
+        return rung1
+
+    rung2 = rung2_address_match(dhlgh_address, candidates)
+    if rung2.matched or rung2.ambiguous:
+        return rung2
+
+    rung3 = rung3_geometry_match(session, dhlgh_geom_wkt, authority)
+    if rung3.matched or rung3.ambiguous:
+        return rung3
+
+    rung4 = rung4_fuzzy_match(session, dhlgh_address, authority)
+    return rung4
