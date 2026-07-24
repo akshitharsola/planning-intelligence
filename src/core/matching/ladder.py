@@ -19,6 +19,7 @@ computing distances there. This asymmetry versus rungs 1-2 is
 intentional.
 """
 
+import logging
 from typing import NamedTuple
 
 from geoalchemy2 import Geography
@@ -29,6 +30,8 @@ from sqlalchemy.orm import Session
 from src.core.models.application import Application
 from src.core.normalization.address import normalize_address
 from src.core.normalization.application_ref import normalize_application_ref
+
+logger = logging.getLogger(__name__)
 
 
 class MatchCandidate(NamedTuple):
@@ -143,15 +146,19 @@ def run_ladder(
 ) -> MatchResult:
     rung1 = rung1_ref_match(dhlgh_ref, authority, candidates)
     if rung1.matched or rung1.ambiguous:
+        logger.info("run_ladder: resolved at rung 1 (matched=%s, ambiguous=%s)", rung1.matched, rung1.ambiguous)
         return rung1
 
     rung2 = rung2_address_match(dhlgh_address, candidates)
     if rung2.matched or rung2.ambiguous:
+        logger.info("run_ladder: resolved at rung 2 (matched=%s, ambiguous=%s)", rung2.matched, rung2.ambiguous)
         return rung2
 
     rung3 = rung3_geometry_match(session, dhlgh_geom_wkt, authority)
     if rung3.matched or rung3.ambiguous:
+        logger.info("run_ladder: resolved at rung 3 (matched=%s, ambiguous=%s)", rung3.matched, rung3.ambiguous)
         return rung3
 
     rung4 = rung4_fuzzy_match(session, dhlgh_address, authority)
+    logger.info("run_ladder: resolved at rung 4 (matched=%s, ambiguous=%s)", rung4.matched, rung4.ambiguous)
     return rung4

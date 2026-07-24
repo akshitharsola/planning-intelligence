@@ -1,11 +1,11 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-24)
 
 ## Corpus Check
-- 115 files · ~115,549 words
+- 115 files · ~116,077 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 569 nodes · 767 edges · 114 communities detected
+- 570 nodes · 767 edges · 115 communities detected
 - Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 243 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
@@ -124,6 +124,7 @@
 - [[_COMMUNITY_Community 111|Community 111]]
 - [[_COMMUNITY_Community 112|Community 112]]
 - [[_COMMUNITY_Community 113|Community 113]]
+- [[_COMMUNITY_Community 114|Community 114]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `normalize_dhlgh_row()` - 18 edges
@@ -529,51 +530,51 @@ Nodes (0):
 
 ### Community 92 - "Community 92"
 Cohesion: 1.0
-Nodes (1): Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve
+Nodes (1): Last-resort fuzzy rung (spec section 9): matches here are surfaced     for manua
 
 ### Community 93 - "Community 93"
 Cohesion: 1.0
-Nodes (1): Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d
+Nodes (1): Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve
 
 ### Community 94 - "Community 94"
 Cohesion: 1.0
-Nodes (1): Deletes staged Galway City PDFs from data/galway/city/raw/ once they are older t
+Nodes (1): Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d
 
 ### Community 95 - "Community 95"
 Cohesion: 1.0
-Nodes (1): Persisted incremental-ingestion state: County's OBJECTID watermark and City's pe
+Nodes (1): Deletes staged Galway City PDFs from data/galway/city/raw/ once they are older t
 
 ### Community 96 - "Community 96"
 Cohesion: 1.0
-Nodes (1): County normalization maps Galway County Council's ArcGIS Feature Service attribu
+Nodes (1): Persisted incremental-ingestion state: County's OBJECTID watermark and City's pe
 
 ### Community 97 - "Community 97"
 Cohesion: 1.0
-Nodes (1): ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.
+Nodes (1): County normalization maps Galway County Council's ArcGIS Feature Service attribu
 
 ### Community 98 - "Community 98"
 Cohesion: 1.0
-Nodes (1): add search indexes  Revision ID: 0003 Revises: 0002 Create Date: 2026-07-04 00:0
+Nodes (1): ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.
 
 ### Community 99 - "Community 99"
 Cohesion: 1.0
-Nodes (1): Load a `config/<county>/<region>.yaml` region config file.
+Nodes (1): add search indexes  Revision ID: 0003 Revises: 0002 Create Date: 2026-07-04 00:0
 
 ### Community 100 - "Community 100"
 Cohesion: 1.0
-Nodes (1): Interface every region's source module implements.
+Nodes (1): Load a `config/<county>/<region>.yaml` region config file.
 
 ### Community 101 - "Community 101"
 Cohesion: 1.0
-Nodes (1): Return a list of dicts describing available remote items         (e.g. PDF links
+Nodes (1): Interface every region's source module implements.
 
 ### Community 102 - "Community 102"
 Cohesion: 1.0
-Nodes (1): Download the given items into self.temp_dir, return local paths.
+Nodes (1): Return a list of dicts describing available remote items         (e.g. PDF links
 
 ### Community 103 - "Community 103"
 Cohesion: 1.0
-Nodes (1): Reject rows that don't look like real planning applications.      Guards against
+Nodes (1): Download the given items into self.temp_dir, return local paths.
 
 ### Community 104 - "Community 104"
 Cohesion: 1.0
@@ -581,42 +582,46 @@ Nodes (1): Reject rows that don't look like real planning applications.      Gua
 
 ### Community 105 - "Community 105"
 Cohesion: 1.0
-Nodes (1): ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.
+Nodes (1): Reject rows that don't look like real planning applications.      Guards against
 
 ### Community 106 - "Community 106"
 Cohesion: 1.0
-Nodes (1): No-Merge/No-Write-to-applications Constraint
+Nodes (1): ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.
 
 ### Community 107 - "Community 107"
 Cohesion: 1.0
-Nodes (1): Rationale: charts are global, not filter-aware (v1 simplicity)
+Nodes (1): No-Merge/No-Write-to-applications Constraint
 
 ### Community 108 - "Community 108"
 Cohesion: 1.0
-Nodes (1): Rationale: filter inputs are plain text, not dropdowns, in v1
+Nodes (1): Rationale: charts are global, not filter-aware (v1 simplicity)
 
 ### Community 109 - "Community 109"
 Cohesion: 1.0
-Nodes (1): Rationale: :path converter verified safe for slash-bearing application_ref
+Nodes (1): Rationale: filter inputs are plain text, not dropdowns, in v1
 
 ### Community 110 - "Community 110"
 Cohesion: 1.0
-Nodes (1): Rationale: only delete stale files confirmed ingested, never data loss
+Nodes (1): Rationale: :path converter verified safe for slash-bearing application_ref
 
 ### Community 111 - "Community 111"
 Cohesion: 1.0
-Nodes (1): Rationale: mark file ingested only if every row succeeded (self-healing retry)
+Nodes (1): Rationale: only delete stale files confirmed ingested, never data loss
 
 ### Community 112 - "Community 112"
 Cohesion: 1.0
-Nodes (1): Rationale: separate DHLGHApplicationCreate schema, not reuse of ApplicationCreate
+Nodes (1): Rationale: mark file ingested only if every row succeeded (self-healing retry)
 
 ### Community 113 - "Community 113"
+Cohesion: 1.0
+Nodes (1): Rationale: separate DHLGHApplicationCreate schema, not reuse of ApplicationCreate
+
+### Community 114 - "Community 114"
 Cohesion: 1.0
 Nodes (1): Rationale: table rendered via partial so it can be swapped to HTMX/fetch later
 
 ## Knowledge Gaps
-- **122 isolated node(s):** `Fixture table from spec section 9.1 (docs/superpowers/specs/2026-07-10-dhlgh-nat`, `A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful`, `Scripted client: returns queued replies in order, one per .chat() call.`, `scripts/ingest_galway_city.py (run_city_ingestion)`, `Galway County ingestion CLI: discover -> normalize -> resolve -> publish against` (+117 more)
+- **123 isolated node(s):** `Fixture table from spec section 9.1 (docs/superpowers/specs/2026-07-10-dhlgh-nat`, `A mid-batch failure (OBJECTID 3002) must not block 3003 (a later,     successful`, `Scripted client: returns queued replies in order, one per .chat() call.`, `scripts/ingest_galway_city.py (run_city_ingestion)`, `Galway County ingestion CLI: discover -> normalize -> resolve -> publish against` (+118 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **Thin community `Community 35`** (2 nodes): `get_database_url()`, `settings.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -732,49 +737,51 @@ Nodes (1): Rationale: table rendered via partial so it can be swapped to HTMX/fe
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 91`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 92`** (1 nodes): `Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve`
+- **Thin community `Community 92`** (1 nodes): `Last-resort fuzzy rung (spec section 9): matches here are surfaced     for manua`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 93`** (1 nodes): `Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d`
+- **Thin community `Community 93`** (1 nodes): `Galway City ingestion CLI: discover -> acquire -> parse -> normalize -> resolve`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 94`** (1 nodes): `Deletes staged Galway City PDFs from data/galway/city/raw/ once they are older t`
+- **Thin community `Community 94`** (1 nodes): `Re-derive which pdf_patterns key matched this filename.      GalwayCityScraper.d`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 95`** (1 nodes): `Persisted incremental-ingestion state: County's OBJECTID watermark and City's pe`
+- **Thin community `Community 95`** (1 nodes): `Deletes staged Galway City PDFs from data/galway/city/raw/ once they are older t`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 96`** (1 nodes): `County normalization maps Galway County Council's ArcGIS Feature Service attribu`
+- **Thin community `Community 96`** (1 nodes): `Persisted incremental-ingestion state: County's OBJECTID watermark and City's pe`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 97`** (1 nodes): `ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.`
+- **Thin community `Community 97`** (1 nodes): `County normalization maps Galway County Council's ArcGIS Feature Service attribu`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 98`** (1 nodes): `add search indexes  Revision ID: 0003 Revises: 0002 Create Date: 2026-07-04 00:0`
+- **Thin community `Community 98`** (1 nodes): `ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 99`** (1 nodes): `Load a `config/<county>/<region>.yaml` region config file.`
+- **Thin community `Community 99`** (1 nodes): `add search indexes  Revision ID: 0003 Revises: 0002 Create Date: 2026-07-04 00:0`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 100`** (1 nodes): `Interface every region's source module implements.`
+- **Thin community `Community 100`** (1 nodes): `Load a `config/<county>/<region>.yaml` region config file.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 101`** (1 nodes): `Return a list of dicts describing available remote items         (e.g. PDF links`
+- **Thin community `Community 101`** (1 nodes): `Interface every region's source module implements.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 102`** (1 nodes): `Download the given items into self.temp_dir, return local paths.`
+- **Thin community `Community 102`** (1 nodes): `Return a list of dicts describing available remote items         (e.g. PDF links`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 103`** (1 nodes): `Reject rows that don't look like real planning applications.      Guards against`
+- **Thin community `Community 103`** (1 nodes): `Download the given items into self.temp_dir, return local paths.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 104`** (1 nodes): `Reject rows that don't look like real planning applications.      Guards against`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 105`** (1 nodes): `ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.`
+- **Thin community `Community 105`** (1 nodes): `Reject rows that don't look like real planning applications.      Guards against`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 106`** (1 nodes): `No-Merge/No-Write-to-applications Constraint`
+- **Thin community `Community 106`** (1 nodes): `ArcGIS dates here are DD/MM/YYYY strings; reject null-sentinel values.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 107`** (1 nodes): `Rationale: charts are global, not filter-aware (v1 simplicity)`
+- **Thin community `Community 107`** (1 nodes): `No-Merge/No-Write-to-applications Constraint`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 108`** (1 nodes): `Rationale: filter inputs are plain text, not dropdowns, in v1`
+- **Thin community `Community 108`** (1 nodes): `Rationale: charts are global, not filter-aware (v1 simplicity)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 109`** (1 nodes): `Rationale: :path converter verified safe for slash-bearing application_ref`
+- **Thin community `Community 109`** (1 nodes): `Rationale: filter inputs are plain text, not dropdowns, in v1`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 110`** (1 nodes): `Rationale: only delete stale files confirmed ingested, never data loss`
+- **Thin community `Community 110`** (1 nodes): `Rationale: :path converter verified safe for slash-bearing application_ref`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 111`** (1 nodes): `Rationale: mark file ingested only if every row succeeded (self-healing retry)`
+- **Thin community `Community 111`** (1 nodes): `Rationale: only delete stale files confirmed ingested, never data loss`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 112`** (1 nodes): `Rationale: separate DHLGHApplicationCreate schema, not reuse of ApplicationCreate`
+- **Thin community `Community 112`** (1 nodes): `Rationale: mark file ingested only if every row succeeded (self-healing retry)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 113`** (1 nodes): `Rationale: table rendered via partial so it can be swapped to HTMX/fetch later`
+- **Thin community `Community 113`** (1 nodes): `Rationale: separate DHLGHApplicationCreate schema, not reuse of ApplicationCreate`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 114`** (1 nodes): `Rationale: table rendered via partial so it can be swapped to HTMX/fetch later`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
