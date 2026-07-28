@@ -134,12 +134,33 @@ def test_rung4_fuzzy_match_never_appears_in_plan():
     session = SessionLocal()
     try:
         _cleanup(session)
-        # Create an application with a site address that is NOT a normalized
-        # address match but IS similar enough for rung-4 fuzzy matching.
-        # E.g. "123 Main Street" vs "123 Main St" has high trigram similarity
-        # (>= 0.6) but different normalized forms.
-        session.add(Application(**_base_application_kwargs(site_address="123 Main Street, Galway")))
-        session.add(DHLGHApplication(**_base_dhlgh_kwargs(site_address="123 Main St, Galway")))
+        # Distinct application_refs so rung 1 cannot match. site_address is
+        # non-null on both sides (rung 4's own query requires a non-null
+        # Application.site_address to be reachable at all - see
+        # rung4_fuzzy_match in src/core/matching/ladder.py) but the two
+        # addresses normalize identically, so rung 2 also cannot match: only
+        # rung 4 (trigram fuzzy) can resolve this pair. "123 Maim Street" vs
+        # "123 Main Street" has trigram similarity ~0.84, above the rung-4
+        # threshold (0.6), but normalize_address() does not fix the typo, so
+        # the normalized forms differ - confirmed this pair resolves at rung
+        # 4 via a direct run_ladder probe against real Postgres.
+        #
+        # site_geometry is null on our side and non-null on DHLGH's side, so
+        # it is the actual discriminator here: a bug that let rung 4 write
+        # would populate site_geometry (since site_address is already
+        # non-null and blocked by the overwrite-null-only guard on its own).
+        # Confirmed via mutation testing (disabling both the outer rung
+        # filter and _find_matched_candidate's rung restriction) that this
+        # test fails - a site_geometry entry appears in the plan - when rung
+        # 4 is wrongly allowed to write, before trusting this assertion.
+        session.add(Application(**_base_application_kwargs(
+            site_address="123 Maim Street, Galway", site_geometry=None,
+        )))
+        session.add(DHLGHApplication(**_base_dhlgh_kwargs(
+            application_ref="ENRICHTEST/999",
+            site_address="123 Main Street, Galway",
+            site_geometry="SRID=4326;POINT(-9.05 53.27)",
+        )))
         session.commit()
 
         plan = build_enrichment_plan(session, authority_filter="Galway County Council", ref_prefix="ENRICHTEST/")
