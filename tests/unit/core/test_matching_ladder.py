@@ -18,8 +18,8 @@ def test_rung1_matches_unique_exact_county_ref():
     # applications and dhlgh_applications both have planning_authority
     # "Galway County Council", application_ref "17792".
     candidates = [
-        MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None),
-        MatchCandidate(application_ref="20651", site_address="Ardgaineen , Claregalway", site_geometry_wkt=None),
+        MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None, application_id=uuid.uuid4()),
+        MatchCandidate(application_ref="20651", site_address="Ardgaineen , Claregalway", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung1_ref_match("17792", "Galway County Council", candidates)
     assert result.matched is True
@@ -29,7 +29,7 @@ def test_rung1_matches_unique_exact_county_ref():
 
 def test_rung1_no_match_when_ref_absent():
     candidates = [
-        MatchCandidate(application_ref="20651", site_address="Ardgaineen , Claregalway", site_geometry_wkt=None),
+        MatchCandidate(application_ref="20651", site_address="Ardgaineen , Claregalway", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung1_ref_match("99999", "Galway County Council", candidates)
     assert result.matched is False
@@ -41,8 +41,8 @@ def test_rung1_ambiguous_when_ref_appears_twice():
     # ever bypassed — the ladder must not assume it can't happen and must
     # treat >1 candidate as ambiguous, not as a match.
     candidates = [
-        MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None),
-        MatchCandidate(application_ref="17792", site_address="Duplicate entry", site_geometry_wkt=None),
+        MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None, application_id=uuid.uuid4()),
+        MatchCandidate(application_ref="17792", site_address="Duplicate entry", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung1_ref_match("17792", "Galway County Council", candidates)
     assert result.matched is False
@@ -55,7 +55,7 @@ def test_rung1_normalizes_city_dhlgh_ref_before_comparing():
     # which is the shape our own applications.application_ref already uses
     # (confirmed: 525/527 City refs match ^\d{2}/\d+$).
     candidates = [
-        MatchCandidate(application_ref="26/60243", site_address="7 Lower Canal Road, Galway", site_geometry_wkt=None),
+        MatchCandidate(application_ref="26/60243", site_address="7 Lower Canal Road, Galway", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung1_ref_match("2660243", "Galway City Council", candidates)
     assert result.matched is True
@@ -69,7 +69,7 @@ def test_rung1_no_match_when_ref_cannot_normalize_and_no_raw_equal():
     # here it also has no equal candidate, so it's a clean no-match, not
     # an error.
     candidates = [
-        MatchCandidate(application_ref="26170", site_address="", site_geometry_wkt=None),
+        MatchCandidate(application_ref="26170", site_address="", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung1_ref_match("2661119", "Galway County Council", candidates)
     assert result.matched is False
@@ -82,7 +82,7 @@ def test_rung2_matches_unique_address_after_normalization():
     # DevelopmentAddress uses the same variants inconsistently. Both
     # normalize to "ardgaineen".
     candidates = [
-        MatchCandidate(application_ref="X", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None),
+        MatchCandidate(application_ref="X", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung2_address_match("Ardgaineen, Galway", candidates)
     assert result.matched is True
@@ -91,7 +91,7 @@ def test_rung2_matches_unique_address_after_normalization():
 
 def test_rung2_no_match_when_addresses_differ():
     candidates = [
-        MatchCandidate(application_ref="X", site_address="Townparks, Co. Galway", site_geometry_wkt=None),
+        MatchCandidate(application_ref="X", site_address="Townparks, Co. Galway", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung2_address_match("Ardgaineen, Galway", candidates)
     assert result.matched is False
@@ -100,8 +100,8 @@ def test_rung2_no_match_when_addresses_differ():
 
 def test_rung2_ambiguous_when_two_candidates_share_normalized_address():
     candidates = [
-        MatchCandidate(application_ref="X", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None),
-        MatchCandidate(application_ref="Y", site_address="Ardgaineen Co Galway", site_geometry_wkt=None),
+        MatchCandidate(application_ref="X", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None, application_id=uuid.uuid4()),
+        MatchCandidate(application_ref="Y", site_address="Ardgaineen Co Galway", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung2_address_match("Ardgaineen, Galway", candidates)
     assert result.matched is False
@@ -110,7 +110,7 @@ def test_rung2_ambiguous_when_two_candidates_share_normalized_address():
 
 def test_rung2_no_match_when_dhlgh_address_is_none():
     candidates = [
-        MatchCandidate(application_ref="X", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None),
+        MatchCandidate(application_ref="X", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None, application_id=uuid.uuid4()),
     ]
     result = rung2_address_match(None, candidates)
     assert result.matched is False
@@ -280,7 +280,7 @@ def test_run_ladder_stops_at_rung1_when_ref_matches():
     session = SessionLocal()
     try:
         candidates = [
-            MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None),
+            MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None, application_id=uuid.uuid4()),
         ]
         result = run_ladder(
             session,
@@ -300,7 +300,7 @@ def test_run_ladder_falls_through_to_rung2_when_ref_fails():
     session = SessionLocal()
     try:
         candidates = [
-            MatchCandidate(application_ref="99999", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None),
+            MatchCandidate(application_ref="99999", site_address="Ardgaineen, Co. Galway", site_geometry_wkt=None, application_id=uuid.uuid4()),
         ]
         result = run_ladder(
             session,
@@ -320,7 +320,7 @@ def test_run_ladder_reports_no_match_when_all_rungs_fail():
     session = SessionLocal()
     try:
         candidates = [
-            MatchCandidate(application_ref="99999", site_address="Totally different", site_geometry_wkt=None),
+            MatchCandidate(application_ref="99999", site_address="Totally different", site_geometry_wkt=None, application_id=uuid.uuid4()),
         ]
         result = run_ladder(
             session,
@@ -340,8 +340,8 @@ def test_run_ladder_stops_on_ambiguous_rung_without_trying_later_rungs():
     session = SessionLocal()
     try:
         candidates = [
-            MatchCandidate(application_ref="17792", site_address="A", site_geometry_wkt=None),
-            MatchCandidate(application_ref="17792", site_address="B", site_geometry_wkt=None),
+            MatchCandidate(application_ref="17792", site_address="A", site_geometry_wkt=None, application_id=uuid.uuid4()),
+            MatchCandidate(application_ref="17792", site_address="B", site_geometry_wkt=None, application_id=uuid.uuid4()),
         ]
         result = run_ladder(
             session,
@@ -355,3 +355,19 @@ def test_run_ladder_stops_on_ambiguous_rung_without_trying_later_rungs():
         assert result.ambiguous is True
     finally:
         session.close()
+
+
+def test_rung1_match_candidate_carries_application_id_for_caller_lookup():
+    target_id = uuid.uuid4()
+    candidates = [
+        MatchCandidate(application_ref="17792", site_address="Cahernamona ,", site_geometry_wkt=None, application_id=target_id),
+        MatchCandidate(application_ref="20651", site_address="Ardgaineen , Claregalway", site_geometry_wkt=None, application_id=uuid.uuid4()),
+    ]
+    result = rung1_ref_match("17792", "Galway County Council", candidates)
+    assert result.matched is True
+    # rung1_ref_match itself doesn't return the id (MatchResult is unchanged) —
+    # this test documents that the caller must re-filter candidates by the
+    # same predicate to recover which one matched, which Task 2 does.
+    matches = [c for c in candidates if c.application_ref == "17792"]
+    assert len(matches) == 1
+    assert matches[0].application_id == target_id

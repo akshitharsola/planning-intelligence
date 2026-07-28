@@ -20,6 +20,7 @@ intentional.
 """
 
 import logging
+import uuid
 from typing import NamedTuple
 
 from geoalchemy2 import Geography
@@ -38,6 +39,7 @@ class MatchCandidate(NamedTuple):
     application_ref: str
     site_address: str | None
     site_geometry_wkt: str | None
+    application_id: uuid.UUID
 
 
 class MatchResult(NamedTuple):

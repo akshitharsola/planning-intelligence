@@ -51,6 +51,7 @@ def build_validation_report(
                 application_ref=row.application_ref,
                 site_address=row.site_address,
                 site_geometry_wkt=None,
+                application_id=row.id,
             )
             for row in our_rows
         ]
