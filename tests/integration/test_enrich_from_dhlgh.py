@@ -138,7 +138,7 @@ def test_rung4_fuzzy_match_never_appears_in_plan():
         # non-null on both sides (rung 4's own query requires a non-null
         # Application.site_address to be reachable at all - see
         # rung4_fuzzy_match in src/core/matching/ladder.py) but the two
-        # addresses normalize identically, so rung 2 also cannot match: only
+        # addresses normalize differently, so rung 2 also cannot match: only
         # rung 4 (trigram fuzzy) can resolve this pair. "123 Maim Street" vs
         # "123 Main Street" has trigram similarity ~0.84, above the rung-4
         # threshold (0.6), but normalize_address() does not fix the typo, so
