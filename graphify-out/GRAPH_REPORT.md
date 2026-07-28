@@ -1,12 +1,12 @@
 # Graph Report - /Users/akshitharsola/Documents/AiAgentic/planning-intelligence  (2026-07-28)
 
 ## Corpus Check
-- 117 files · ~121,985 words
+- 120 files · ~124,666 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 578 nodes · 781 edges · 116 communities detected
-- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 251 edges (avg confidence: 0.77)
+- 600 nodes · 835 edges · 116 communities detected
+- Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 267 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -128,7 +128,7 @@
 - [[_COMMUNITY_Community 115|Community 115]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `MatchCandidate` - 19 edges
+1. `MatchCandidate` - 22 edges
 2. `normalize_dhlgh_row()` - 18 edges
 3. `LLMClient` - 17 edges
 4. `FakeLLMClient` - 15 edges
@@ -166,48 +166,48 @@ Cohesion: 0.05
 Nodes (43): Task 1: Reject Blank/Missing file_number, Task 2: Unrecognized source_type Fallback (STATUS_UNRECOGNIZED), DHLGH Cross-Source Identity Matching Ladder Plan, An Bord Pleanála Case Files, Eircode/Address Backfill Research Prompt, An Post GeoDirectory API, Canonical Data Model, Ingestion Pipeline (Discover/Acquire/Extract/Normalize/Resolve/Market) (+35 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.08
-Nodes (29): main(), _match_source_type(), Chunked backfill runner for Galway City: processes the discovered PDF backlog in, run_batch(), GalwayCityScraper, main(), Galway County ingestion CLI: discover -> normalize -> resolve -> publish against, run_county_ingestion() (+21 more)
+Cohesion: 0.09
+Nodes (28): Base, Base, DeclarativeBase, DHLGHApplication, build_enrichment_plan(), _find_matched_candidate(), DHLGH enrichment backfill (spec docs/superpowers/specs/2026-07-28-dhlgh-enrichme, Re-applies the same equality predicate the winning rung used, to     recover whi (+20 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.12
 Nodes (36): MatchCandidate, MatchResult, Cross-source identity matching ladder (spec section 9, docs/superpowers/specs/20, Last-resort fuzzy rung (spec section 9): matches here are surfaced     for manua, run_ladder(), rung1_ref_match(), rung2_address_match(), rung3_geometry_match() (+28 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.09
-Nodes (30): Base, Base, BaseModel, DeclarativeBase, DHLGHApplication, DHLGHApplicationCreate, _arcgis_date(), _clean_float() (+22 more)
+Cohesion: 0.08
+Nodes (29): main(), _match_source_type(), Chunked backfill runner for Galway City: processes the discovered PDF backlog in, run_batch(), GalwayCityScraper, main(), Galway County ingestion CLI: discover -> normalize -> resolve -> publish against, run_county_ingestion() (+21 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.13
-Nodes (24): BaseSource, main(), DHLGH ingestion CLI: discover -> normalize_dhlgh_row -> resolve_and_upsert_dhlgh, run_dhlgh_ingestion(), _build_session(), DHLGHScraper, _query_page(), Galway County Council planning register scraper — built fresh, no duffy preceden (+16 more)
+Cohesion: 0.06
+Nodes (31): chat_service._extract_filters(), Natural-language Q&A over the applications table. Read-only: the LLM only extrac, Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}. (+23 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.14
-Nodes (22): normalize_county_row(), _expand_app_type(), _flag_yes(), normalize_row(), _parse_date(), Maps a raw parser row (dict, source-specific keys) into the canonical Applicatio, test_normalize_row_blank_source_type_flags_for_review(), test_normalize_row_granted_sets_decision_fields() (+14 more)
+Cohesion: 0.13
+Nodes (24): BaseSource, main(), DHLGH ingestion CLI: discover -> normalize_dhlgh_row -> resolve_and_upsert_dhlgh, run_dhlgh_ingestion(), _build_session(), DHLGHScraper, _query_page(), Galway County Council planning register scraper — built fresh, no duffy preceden (+16 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.18
 Nodes (22): application_service.get_by_natural_key(), application_service.search(), _extract_address(), _extract_area(), _extract_eircode(), extract_location(), _looks_like_address(), Location extraction for Galway descriptions — ported from duffy's location_extra (+14 more)
 
 ### Community 7 - "Community 7"
+Cohesion: 0.14
+Nodes (22): normalize_county_row(), _expand_app_type(), _flag_yes(), normalize_row(), _parse_date(), Maps a raw parser row (dict, source-specific keys) into the canonical Applicatio, test_normalize_row_blank_source_type_flags_for_review(), test_normalize_row_granted_sets_decision_fields() (+14 more)
+
+### Community 8 - "Community 8"
 Cohesion: 0.16
 Nodes (15): cleanup_stale_raw_files(), is_file_ingested(), _make_file(), test_deletes_ingested_file_older_than_30_days(), test_does_not_delete_file_younger_than_30_days(), test_does_not_delete_stale_file_that_was_never_ingested(), test_dry_run_does_not_delete(), test_missing_raw_dir_returns_empty_result() (+7 more)
 
-### Community 8 - "Community 8"
+### Community 9 - "Community 9"
 Cohesion: 0.29
 Nodes (18): chat_service.answer_question(), _cleanup(), FakeLLMClient, RaisingLLMClient, Scripted client: returns queued replies in order, one per .chat() call., _seed(), test_answer_question_distinguishes_narrowed_filters_from_out_of_coverage(), test_answer_question_drops_authority_guessed_from_place_name_alone() (+10 more)
 
-### Community 9 - "Community 9"
-Cohesion: 0.14
-Nodes (14): chat_service._extract_filters(), dashboard_service.get_status_breakdown(), extract_json(), get_llm_client(), HostedApiClient, OllamaClient, Pluggable LLM backend for the chat feature. LLM_BACKEND env var selects the impl, OpenAI-compatible chat completions endpoint (opt-in via LLM_BACKEND=hosted_api). (+6 more)
-
 ### Community 10 - "Community 10"
-Cohesion: 0.18
-Nodes (18): _clean_cells(), extract_planning_table(), _extract_rows(), _is_boilerplate(), _is_duplicate_header(), _looks_like_header(), _map_column(), _norm() (+10 more)
+Cohesion: 0.17
+Nodes (18): BaseModel, DHLGHApplicationCreate, _arcgis_date(), _clean_float(), _clean_str(), normalize_dhlgh_row(), DHLGH normalization maps the national ArcGIS Feature Service's `attributes` dict, Converts an Esri JSON polygon (`{"rings": [[[x, y], ...], ...]}`)     into EWKT (+10 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.11
-Nodes (17): Natural-language Q&A over the applications table. Read-only: the LLM only extrac, Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}., Returns {"answer": str, "filters": dict, "applications": list, "total": int}. (+9 more)
+Cohesion: 0.18
+Nodes (18): _clean_cells(), extract_planning_table(), _extract_rows(), _is_boilerplate(), _is_duplicate_header(), _looks_like_header(), _map_column(), _norm() (+10 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.14
@@ -794,14 +794,14 @@ Nodes (1): Rationale: table rendered via partial so it can be swapped to HTMX/fe
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `normalize_row()` connect `Community 5` to `Community 1`, `Community 6`?**
-  _High betweenness centrality (0.154) - this node is a cross-community bridge._
-- **Why does `extract_location()` connect `Community 6` to `Community 5`?**
-  _High betweenness centrality (0.138) - this node is a cross-community bridge._
-- **Why does `application_service.search()` connect `Community 6` to `Community 8`?**
-  _High betweenness centrality (0.133) - this node is a cross-community bridge._
-- **Are the 17 inferred relationships involving `MatchCandidate` (e.g. with `# NOTE: uses a synthetic townland name ("Zzyxwtown"), not a real Galway` and `DHLGH cross-source identity matching validation pass (spec section 9, docs/super`) actually correct?**
-  _`MatchCandidate` has 17 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `normalize_row()` connect `Community 7` to `Community 3`, `Community 6`?**
+  _High betweenness centrality (0.156) - this node is a cross-community bridge._
+- **Why does `extract_location()` connect `Community 6` to `Community 7`?**
+  _High betweenness centrality (0.140) - this node is a cross-community bridge._
+- **Why does `DHLGHApplication` connect `Community 1` to `Community 2`?**
+  _High betweenness centrality (0.139) - this node is a cross-community bridge._
+- **Are the 20 inferred relationships involving `MatchCandidate` (e.g. with `# NOTE: uses a synthetic townland name ("Zzyxwtown"), not a real Galway` and `DHLGH enrichment backfill (spec docs/superpowers/specs/2026-07-28-dhlgh-enrichme`) actually correct?**
+  _`MatchCandidate` has 20 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 13 inferred relationships involving `normalize_dhlgh_row()` (e.g. with `test_normalize_dhlgh_row_basic_fields()` and `test_normalize_dhlgh_row_empty_postcode_is_not_an_error()`) actually correct?**
   _`normalize_dhlgh_row()` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 14 inferred relationships involving `LLMClient` (e.g. with `Natural-language Q&A over the applications table. Read-only: the LLM only extrac` and `Returns {"answer": str, "filters": dict, "applications": list, "total": int}.`) actually correct?**
