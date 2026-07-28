@@ -100,7 +100,30 @@ def build_enrichment_plan(
                     "rung": result.rung,
                 })
 
-    return plan
+    return _drop_conflicting_targets(plan)
+
+
+def _drop_conflicting_targets(plan: list[dict]) -> list[dict]:
+    """Distinct DHLGH rows can each independently resolve to the same
+    applications row/field (e.g. several DHLGH records sharing a
+    duplicate address). Applying more than one such write would let list
+    order silently pick a winner, so any (application_id, field) target
+    that appears more than once in the plan is dropped entirely rather
+    than guessing which source is correct."""
+    counts: dict[tuple[uuid.UUID, str], int] = {}
+    for item in plan:
+        key = (item["application_id"], item["field"])
+        counts[key] = counts.get(key, 0) + 1
+
+    conflicts = {key for key, count in counts.items() if count > 1}
+    if conflicts:
+        logger.warning(
+            "Dropping %d planned update(s) across %d (application_id, field) targets with conflicting DHLGH sources",
+            sum(counts[key] for key in conflicts),
+            len(conflicts),
+        )
+
+    return [item for item in plan if (item["application_id"], item["field"]) not in conflicts]
 
 
 def _find_matched_candidate(rung: int, dhlgh_row, candidates: list[MatchCandidate]) -> MatchCandidate | None:

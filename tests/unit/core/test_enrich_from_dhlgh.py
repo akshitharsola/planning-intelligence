@@ -82,3 +82,20 @@ def test_ambiguous_match_produces_no_planned_update():
     plan = build_enrichment_plan(session, authority_filter="Galway County Council")
 
     assert plan == []
+
+
+def test_two_distinct_dhlgh_rows_matching_same_application_field_are_both_dropped():
+    # Two DHLGH rows with different refs but the same normalized address
+    # each independently resolve to the same single applications row at
+    # rung 2. Applying both would let list order silently pick a winner
+    # (a real bug found in manual verification) - both must be dropped
+    # instead of one clobbering the other.
+    app_id = uuid.uuid4()
+    app = FakeApplication(app_id, "23/60037", "Quarry Road Menlo Galway", None, "Galway City Council")
+    dhlgh1 = FakeDHLGH("1711", "Quarry Road Menlo Galway", "geom-a", "Galway City Council")
+    dhlgh2 = FakeDHLGH("20142", "Quarry Road Menlo Galway", "geom-b", "Galway City Council")
+
+    session = _make_session_with_rows([app], [dhlgh1, dhlgh2])
+    plan = build_enrichment_plan(session, authority_filter="Galway City Council")
+
+    assert plan == []
