@@ -152,6 +152,12 @@ def apply_enrichment_plan(session: Session, plan: list[dict]) -> int:
     updated = 0
     for item in plan:
         app_row = session.get(Application, item["application_id"])
+        if app_row is None:
+            logger.warning(
+                "Skipping planned update for application_id=%s: row no longer exists",
+                item["application_id"],
+            )
+            continue
         setattr(app_row, item["field"], item["new_value"])
         updated += 1
     session.commit()
