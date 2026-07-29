@@ -676,3 +676,58 @@ Append a short "Results" section to this plan file (`docs/superpowers/plans/2026
 git add docs/superpowers/plans/2026-07-28-dhlgh-enrichment-backfill.md
 git commit -m "docs: record DHLGH enrichment backfill live run results"
 ```
+
+---
+
+## Results
+
+**First live run (buggy, later rolled back):** applied 16,454 updates. Manual
+spot-check of `application_ref='23/60037'` found its stored `site_geometry`
+did not match the DHLGH source it was sampled against. Root cause: 11
+distinct DHLGH rows shared the same normalized address as this application,
+each independently resolving at rung 2, and `apply_enrichment_plan`'s
+list-order application let the last one silently win. All 16,393 affected
+rows were rolled back to `NULL` (confirmed via `src/pipelines/resolve.py`
+that no other code path writes `applications.site_geometry`, so the blanket
+reset was exact). Fixed by adding `_drop_conflicting_targets` to
+`build_enrichment_plan` (commit `c925c6b`): any `(application_id, field)`
+target with more than one competing plan entry is dropped entirely rather
+than letting apply order pick a winner.
+
+**Second live run (with the fix), against the same ~39k-row Galway dataset:**
+
+- Dry-run planned **16,370 updates**, all for `site_geometry` (none for
+  `site_address`, since address coverage was already largely populated).
+  By rung: **14,871 at rung 1**, **1,499 at rung 2**.
+- `_drop_conflicting_targets` dropped **84 planned updates across 23
+  `(application_id, field)` targets** with conflicting DHLGH sources —
+  exactly the class of bug found in the first run, now caught before any
+  write. This is 84 fewer planned updates than the pre-fix run
+  (16,454 → 16,370), matching the logged drop count precisely.
+- Applied: **16,370 updates** (log: `Applied 16370 updates.`).
+
+**Spot-checks after the fix:**
+
+- Rung-1 sample `23/60044`: confirmed enriched `site_geometry` matches its
+  DHLGH source (`2360044`) after accounting for `normalize_application_ref`
+  normalization (`23/60044` → `2360044`).
+- Rung-2 samples `23/119` (`<-> DHLGH 23119`) and `25/6` (`<-> DHLGH 256`):
+  both confirmed clean — unique on both sides of the match, no competing
+  DHLGH row targeting the same `(application_id, field)`, geometry matches
+  source. One earlier rung-2 candidate (`25/60107`) was found to still have
+  a second, independent DHLGH row (`2560107`) resolving to the same
+  application at rung 1 — correctly caught and dropped by
+  `_drop_conflicting_targets`, confirming the fix's collision handling
+  extends beyond the original bug scenario.
+
+**UI verification:** started the app (`uv run uvicorn src.web.main:app
+--port 8010`) with Ollama running. Chat endpoint (`POST /chat`) correctly
+parsed a natural-language query for `23/119` and returned a matching
+results table. The application detail page
+(`/applications/Galway%20City%20Council/23/119`) renders the enriched
+`site_address` field. The detail page has no map/geometry rendering path in
+its template (no `map`/`leaflet`/`lat`/`lon`/`geojson` markup), so
+`site_geometry` enrichment is verified at the DB level only
+(`rung2check.log`), consistent with the rest of the UI never surfacing raw
+geometry.
+```
