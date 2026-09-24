@@ -21,7 +21,7 @@ GALWAY_AREAS = [
     "galway city", "galway", "co. galway",
 ]
 
-_EIRCODE_RE = re.compile(r"\bH\d{2}\s*[A-Z0-9]{4}\b", re.IGNORECASE)
+_EIRCODE_RE = re.compile(r"\bH\d[A-Z\d] ?[A-Z0-9]{4}\b", re.IGNORECASE)
 _AT_RE = re.compile(
     r"\b(?:at|on lands at|located at|situate at|situate[d]? at|at lands at)\s+",
     re.IGNORECASE,
@@ -34,15 +34,16 @@ def extract_location(description: str) -> dict:
     return {
         "area": _extract_area(description),
         "address": _extract_address(description),
-        "eircode": _extract_eircode(description),
+        "eircode": extract_eircode(description),
     }
 
 
-def _extract_eircode(text: str) -> str:
+def extract_eircode(text: str) -> str:
+    if not text:
+        return ""
     m = _EIRCODE_RE.search(text)
     if m:
-        raw = m.group(0).upper().replace(" ", "")
-        return raw[:3] + " " + raw[3:]
+        return m.group(0).upper().replace(" ", "")
     return ""
 
 
