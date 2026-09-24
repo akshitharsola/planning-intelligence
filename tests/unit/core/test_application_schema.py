@@ -34,3 +34,36 @@ def test_application_create_rejects_missing_application_ref():
             source_system="Galway City Weekly Lists PDF",
             source_file="x.pdf",
         )
+
+
+def test_application_create_accepts_eircode():
+    app = ApplicationCreate(
+        planning_authority="Galway City Council",
+        source_entity="GALWAY_CITY_COUNCIL",
+        application_ref="24/0001",
+        applicant_name="Test Applicant",
+        development_description="test",
+        application_type="PERMISSION",
+        planning_status_current="Received",
+        date_received="2026-01-01",
+        source_system="test",
+        source_file="test.pdf",
+        eircode="H91WE0R",
+    )
+    assert app.eircode == "H91WE0R"
+
+
+def test_application_create_eircode_defaults_to_none():
+    app = ApplicationCreate(
+        planning_authority="Galway City Council",
+        source_entity="GALWAY_CITY_COUNCIL",
+        application_ref="24/0002",
+        applicant_name="Test Applicant",
+        development_description="test",
+        application_type="PERMISSION",
+        planning_status_current="Received",
+        date_received="2026-01-01",
+        source_system="test",
+        source_file="test.pdf",
+    )
+    assert app.eircode is None

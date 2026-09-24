@@ -26,6 +26,7 @@ class Application(Base):
     site_locality: Mapped[str | None] = mapped_column(String, nullable=True)
     site_county: Mapped[str | None] = mapped_column(String, nullable=True)
     site_geometry = mapped_column(Geometry(geometry_type="GEOMETRY", srid=4326), nullable=True)
+    eircode: Mapped[str | None] = mapped_column(String, nullable=True)
     development_description: Mapped[str] = mapped_column(String, nullable=False)
     application_type: Mapped[str] = mapped_column(String, nullable=False)
 

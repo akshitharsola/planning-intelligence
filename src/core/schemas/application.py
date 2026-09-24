@@ -22,6 +22,7 @@ class ApplicationCreate(BaseModel):
     site_locality: Optional[str] = None
     site_county: Optional[str] = None
     site_geometry: Optional[str] = None  # WKT, parsed to geometry at the DB layer
+    eircode: Optional[str] = None
     development_description: str
     application_type: str
 
