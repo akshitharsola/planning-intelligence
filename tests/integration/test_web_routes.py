@@ -117,14 +117,14 @@ def _seed_detail():
                     protected_structure_flag, eia_eis_flag, official_detail_url,
                     official_documents_url, source_system, source_file,
                     source_ingested_at, other_regulatory_flags, raw_payload_json,
-                    commuter_belt_flag
+                    commuter_belt_flag, eircode
                 ) VALUES (
                     gen_random_uuid(), 'Galway City Council', 'GALWAY_CITY_COUNCIL',
                     :ref, 'Carol Example', '5 Test Lane', 'Galway City', 'Galway',
                     'Test detail page development', 'Permission', 'Granted',
                     :received, :due, :decided, true, false, false,
                     'https://example.test/detail', 'https://example.test/docs',
-                    'TEST', 'test.pdf', now(), '{}', '{}', false
+                    'TEST', 'test.pdf', now(), '{}', '{}', false, 'H91WE0R'
                 )
                 """
             ),
@@ -153,6 +153,7 @@ def test_detail_page_shows_all_expected_fields():
             "Granted", "2026-01-10", "2026-03-10", "2026-03-01",
             "TEST", "test.pdf", "https://example.test/detail",
             "https://example.test/docs",
+            "H91 WE0R",
         ]:
             assert expected in body
     finally:

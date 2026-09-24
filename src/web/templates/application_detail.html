@@ -14,6 +14,7 @@
     <tr><th>Site address</th><td>{{ application.site_address }}</td></tr>
     <tr><th>Site locality</th><td>{{ application.site_locality }}</td></tr>
     <tr><th>Site county</th><td>{{ application.site_county }}</td></tr>
+    <tr><th>Eircode</th><td>{% if application.eircode %}{{ application.eircode[:3] }} {{ application.eircode[3:] }}{% else %}Not available{% endif %}</td></tr>
     <tr><th>Description</th><td>{{ application.development_description }}</td></tr>
     <tr><th>Application type</th><td>{{ application.application_type }}</td></tr>
     <tr><th>Current status</th><td>{{ application.planning_status_current }}</td></tr>
