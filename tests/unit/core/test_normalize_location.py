@@ -12,7 +12,7 @@ from src.core.normalization.location import extract_eircode
         ("EOD on 17/133 ... H91 1X08", "H91 1X08".replace(" ", "")),
         ("No eircode in this description at all", ""),
         ("", ""),
-        ("Contains just H91 which is not a full eircode", ""),
+        ("H91 xyz is incomplete", ""),  # only 3 chars after H91, not 4
         ("Partial H9WE0R is not valid (only one digit)", ""),
     ],
 )

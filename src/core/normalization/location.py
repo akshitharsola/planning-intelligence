@@ -21,7 +21,7 @@ GALWAY_AREAS = [
     "galway city", "galway", "co. galway",
 ]
 
-_EIRCODE_RE = re.compile(r"\bH\d[A-Z\d] ?[A-Z0-9]{4}\b", re.IGNORECASE)
+_EIRCODE_RE = re.compile(r"H\d[A-Z\d] ?[A-Z0-9]{4}", re.IGNORECASE)
 _AT_RE = re.compile(
     r"\b(?:at|on lands at|located at|situate at|situate[d]? at|at lands at)\s+",
     re.IGNORECASE,
