@@ -63,3 +63,14 @@ def test_applications_has_trigram_indexes_for_ilike_search():
     assert "applicant_name" in trigram_columns
     assert "site_address" in trigram_columns
     assert "development_description" in trigram_columns
+
+
+def test_eircode_column_exists_and_is_indexed():
+    inspector = inspect(engine)
+    columns = {c["name"] for c in inspector.get_columns("applications")}
+    assert "eircode" in columns
+
+    indexes = inspector.get_indexes("applications")
+    index_columns = {tuple(idx["column_names"]) for idx in indexes}
+    assert ("eircode",) in index_columns
+
