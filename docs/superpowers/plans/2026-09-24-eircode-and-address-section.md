@@ -16,7 +16,9 @@ match, normalized/no-space form) and teach `chat_service`'s LLM extraction
 prompt to recognize an Eircode-shaped token in the user's question and route
 it to that filter instead of dropping it into the free-text `q` search
 (which we proved is fragile against spacing variance). Surface `eircode` and
-`site_address` in the application detail page and the search results table.
+`site_address` in the application detail page. (The search results table
+deliberately does not gain an eircode column — see File Structure below —
+this line originally overstated that scope; the detail page is correct.)
 
 **Tech Stack:** Python 3.13, SQLAlchemy 2.0 + Alembic, PostgreSQL/PostGIS
 (via `imresamu/postgis:16-3.4` in `docker-compose.yml`), FastAPI + Jinja2
