@@ -13,3 +13,4 @@ postgres-data/
 .DS_Store
 .claude/worktrees/
 logs/
+graphify-out/.graphify_python

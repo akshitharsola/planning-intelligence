@@ -96,8 +96,18 @@ def _flag_yes(val: str) -> bool:
     return str(val).strip().upper() in ("Y", "YES", "TRUE", "1")
 
 
+_APP_TYPE_CODES = {
+    "P": "PERMISSION",
+    "R": "RETENTION",
+    "O": "OUTLINE PERMISSION",
+    "E": "EXTENSION OF DURATION",
+    "C": "PERMISSION CONSEQUENT",
+}
+
+
 def _expand_app_type(code: str) -> str:
-    return {"P": "Permission", "R": "Retention", "O": "Outline"}.get(code.strip().upper(), code or "Permission")
+    cleaned = code.strip().upper()
+    return _APP_TYPE_CODES.get(cleaned, cleaned or "PERMISSION")
 
 
 def _parse_date(value):

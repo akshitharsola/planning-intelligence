@@ -32,16 +32,26 @@ def resolve_and_upsert(session: Session, app_create: ApplicationCreate) -> Appli
         application = existing
         session.flush()
 
-    event = ApplicationEvent(
-        application_id=application.id,
-        application_ref=app_create.application_ref,
-        planning_authority=app_create.planning_authority,
-        event_type=app_create.status_event_type or "APPLICATION_RECEIVED",
-        event_date=app_create.date_received,
-        source_file=app_create.source_file,
-        raw_payload_json=app_create.raw_payload_json,
+    event_type = app_create.status_event_type or "APPLICATION_RECEIVED"
+    duplicate_event = session.scalar(
+        select(ApplicationEvent).where(
+            ApplicationEvent.application_id == application.id,
+            ApplicationEvent.event_type == event_type,
+            ApplicationEvent.event_date == app_create.date_received,
+            ApplicationEvent.source_file == app_create.source_file,
+        )
     )
-    session.add(event)
+    if duplicate_event is None:
+        event = ApplicationEvent(
+            application_id=application.id,
+            application_ref=app_create.application_ref,
+            planning_authority=app_create.planning_authority,
+            event_type=event_type,
+            event_date=app_create.date_received,
+            source_file=app_create.source_file,
+            raw_payload_json=app_create.raw_payload_json,
+        )
+        session.add(event)
     return application
 
 

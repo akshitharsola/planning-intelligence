@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgis/postgis:16-3.4
+    image: imresamu/postgis:16-3.4
     environment:
       POSTGRES_USER: planning
       POSTGRES_PASSWORD: planning

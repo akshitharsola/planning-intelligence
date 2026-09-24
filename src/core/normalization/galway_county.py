@@ -48,7 +48,7 @@ def normalize_county_row(raw_row: dict, region_config: dict, source_file: str) -
         site_locality=None,
         site_county="Galway",
         development_description=description,
-        application_type=_clean_str(raw_row.get("ApplicationType")) or "Permission",
+        application_type=(_clean_str(raw_row.get("ApplicationType")) or "Permission").upper(),
         planning_status_current=status,
         status_event_type=event_type,
         date_received=date_received,

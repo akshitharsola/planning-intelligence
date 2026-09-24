@@ -26,6 +26,35 @@ def test_normalize_row_received_maps_to_application_received_event():
     assert app.site_locality == "Mervue"
     assert app.further_information_flag is False
     assert app.eia_eis_flag is False
+    assert app.application_type == "PERMISSION"
+
+
+@pytest.mark.parametrize(
+    "code,expected",
+    [
+        ("P", "PERMISSION"),
+        ("p", "PERMISSION"),
+        ("R", "RETENTION"),
+        ("O", "OUTLINE PERMISSION"),
+        ("E", "EXTENSION OF DURATION"),
+        ("C", "PERMISSION CONSEQUENT"),
+        ("", "PERMISSION"),
+    ],
+)
+def test_normalize_row_application_type_matches_county_vocabulary(code, expected):
+    # Canonical categories must match County's uppercase vocabulary
+    # (src/core/normalization/galway_county.py) so cross-source grouping
+    # doesn't split identical categories by case, e.g. "Permission" vs
+    # "PERMISSION".
+    raw_row = {
+        "file_number": "24/0001",
+        "applicant": "Test Applicant",
+        "app_type": code,
+        "description": "test",
+    }
+    app = normalize_row(raw_row, source_type="received", region_config=REGION_CONFIG,
+                        source_file="test.pdf")
+    assert app.application_type == expected
 
 
 def test_normalize_row_granted_sets_decision_fields():

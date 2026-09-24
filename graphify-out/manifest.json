@@ -1,149 +1,1733 @@
 {
-  "config/__init__.py": 1782571119.4283686,
-  "config/settings.py": 1782571140.814163,
-  "tests/conftest.py": 1782656499.1541395,
-  "tests/__init__.py": 1783501787.2768292,
-  "tests/unit/__init__.py": 1783501787.2773867,
-  "tests/unit/parsers/test_galway_city_pdf_lines.py": 1783018878.2400353,
-  "tests/unit/core/__init__.py": 1782920910.312309,
-  "tests/unit/core/test_application_natural_key.py": 1782656499.1550398,
-  "tests/unit/core/test_normalize_address.py": 1783844378.9182627,
-  "tests/unit/core/test_application_schema.py": 1782656499.1561775,
-  "tests/unit/core/test_matching_ladder.py": 1784462769.7008975,
-  "tests/unit/core/test_normalize_application_ref.py": 1783844357.4611003,
-  "tests/unit/core/test_application_event_schema.py": 1782656499.1548104,
-  "tests/unit/core/test_ingestion_state.py": 1782920910.3126874,
-  "tests/unit/normalization/test_location.py": 1782656499.156977,
-  "tests/unit/pipelines/test_normalize_galway_city.py": 1783250958.5760186,
-  "tests/unit/pipelines/test_normalize_galway_county.py": 1783250140.3386943,
-  "tests/unit/pipelines/__init__.py": 1782656499.1579473,
-  "tests/unit/pipelines/test_discover_galway_city.py": 1782656499.1584208,
-  "tests/unit/pipelines/test_normalize_dhlgh.py": 1783844401.9313655,
-  "tests/unit/markets/test_galway_markets.py": 1782656499.1565065,
-  "tests/unit/scripts/__init__.py": 1783501787.2774944,
-  "tests/unit/scripts/test_cleanup_stale_raw_files.py": 1783501787.2777808,
-  "tests/unit/sources/__init__.py": 1782656499.1592479,
-  "tests/unit/sources/test_dhlgh_scraper.py": 1783844508.446042,
-  "tests/unit/sources/test_galway_city_scraper.py": 1782656499.159578,
-  "tests/unit/sources/test_galway_county_scraper.py": 1782920910.3134112,
-  "tests/unit/skills/test_onboard_council_skill_files.py": 1782656499.1591907,
-  "tests/unit/monitoring/test_metrics.py": 1782656499.1567845,
-  "tests/unit/services/__init__.py": 1783250140.3388186,
-  "tests/unit/services/test_llm_client.py": 1783250140.3392944,
-  "tests/unit/services/test_chat_extraction_prompt.py": 1783250140.3391192,
-  "tests/integration/test_dhlgh_pipeline_end_to_end.py": 1783844483.2858255,
-  "tests/integration/test_ingest_galway_county.py": 1782920910.3122525,
-  "tests/integration/test_web_routes.py": 1783250140.3379312,
-  "tests/integration/test_ingest_dhlgh.py": 1783844497.0458937,
-  "tests/integration/test_galway_city_pipeline_end_to_end.py": 1782656499.154348,
-  "tests/integration/test_ingest_galway_city.py": 1783501787.2773473,
-  "tests/integration/test_chat_service.py": 1783631173.4041195,
-  "tests/integration/test_migration_applies.py": 1783250140.3376076,
-  "tests/integration/test_application_service.py": 1783269052.444128,
-  "tests/integration/test_dashboard_service.py": 1783250140.336947,
-  "scripts/backfill_galway_city_chunked.py": 1783711400.200537,
-  "scripts/ingest_galway_city.py": 1783501787.2765625,
-  "scripts/__init__.py": 1782920910.3091717,
-  "scripts/scaffold_tree.py": 1782571113.6907082,
-  "scripts/ingest_dhlgh.py": 1783844331.4870188,
-  "scripts/cleanup_stale_raw_files.py": 1783501787.275972,
-  "scripts/ingest_galway_county.py": 1782920910.3104427,
-  "src/__init__.py": 1782571119.4255683,
-  "src/parsers/__init__.py": 1782571119.4265902,
-  "src/parsers/pdf_ocr/__init__.py": 1782571119.4270048,
-  "src/parsers/pdf_text_fallback/__init__.py": 1782571119.4267929,
-  "src/parsers/docx_state_machine/__init__.py": 1782571119.4269083,
-  "src/parsers/pdf_lines/__init__.py": 1782571119.4266987,
-  "src/parsers/pdf_lines/galway_city.py": 1783018839.9092953,
-  "src/core/ingestion_state.py": 1782920910.3108788,
-  "src/core/__init__.py": 1782571119.4256804,
-  "src/core/matching/__init__.py": 1784461415.5338633,
-  "src/core/matching/ladder.py": 1784462789.7569659,
-  "src/core/normalization/address.py": 1783844370.646389,
-  "src/core/normalization/galway_county.py": 1783250140.331567,
-  "src/core/normalization/__init__.py": 1782571119.4262269,
-  "src/core/normalization/dhlgh.py": 1783844232.5177138,
-  "src/core/normalization/location.py": 1782656499.1494436,
-  "src/core/normalization/application_ref.py": 1783844350.6177344,
-  "src/core/geo/__init__.py": 1782571119.42647,
-  "src/core/lifecycle/__init__.py": 1782571119.4263506,
-  "src/core/models/application_event.py": 1782656499.1489468,
-  "src/core/models/__init__.py": 1782571119.4257872,
-  "src/core/models/application.py": 1782656499.1480768,
-  "src/core/models/dhlgh_application.py": 1783844137.496767,
-  "src/core/schemas/application_event.py": 1782656499.1501427,
-  "src/core/schemas/__init__.py": 1782571119.426005,
-  "src/core/schemas/application.py": 1782656499.1497848,
-  "src/core/schemas/dhlgh_application.py": 1783844179.4179738,
-  "src/core/db/session.py": 1782656499.1476057,
-  "src/core/db/__init__.py": 1782571119.4258966,
-  "src/core/db/base.py": 1782656499.1454215,
-  "src/core/db/migrations/env.py": 1783844149.2109513,
-  "src/core/db/migrations/versions/0003_add_search_indexes.py": 1783250140.33,
-  "src/core/db/migrations/versions/0001_create_applications_and_events.py": 1782656499.1473277,
-  "src/core/db/migrations/versions/0002_create_ingestion_state.py": 1782920910.310605,
-  "src/core/db/migrations/versions/0004_create_dhlgh_applications.py": 1783844162.5276837,
-  "src/web/__init__.py": 1783250140.3329647,
-  "src/web/main.py": 1783250140.3340898,
-  "src/web/static/app.js": 1783250140.3345866,
-  "src/pipelines/resolve.py": 1783844317.6862814,
-  "src/pipelines/normalize.py": 1783250958.574979,
-  "src/pipelines/discover.py": 1782656499.1519232,
-  "src/pipelines/__init__.py": 1782571119.4277837,
-  "src/pipelines/publish.py": 1782656499.1525047,
-  "src/markets/registry.py": 1782656499.1509473,
-  "src/markets/__init__.py": 1782571119.4279108,
-  "src/markets/galway/city.py": 1782656499.1503918,
-  "src/markets/galway/metro.py": 1782656499.1507652,
-  "src/markets/galway/__init__.py": 1782571119.428034,
-  "src/markets/galway/county.py": 1782656499.1505773,
-  "src/sources/__init__.py": 1782571119.4271276,
-  "src/sources/dhlgh/scraper.py": 1783844259.2880409,
-  "src/sources/dhlgh/__init__.py": 1783844102.000203,
-  "src/sources/galway/__init__.py": 1782571119.4273896,
-  "src/sources/galway/city/scraper.py": 1782656499.15367,
-  "src/sources/galway/city/__init__.py": 1782571119.427527,
-  "src/sources/galway/county/scraper.py": 1782920910.3113666,
-  "src/sources/galway/county/__init__.py": 1782571119.4276605,
-  "src/sources/base/__init__.py": 1782571119.4272795,
-  "src/sources/base/source.py": 1782656499.1530282,
-  "src/monitoring/metrics.py": 1782656499.1511474,
-  "src/monitoring/__init__.py": 1782571119.428253,
-  "src/services/chat_service.py": 1783631157.0632687,
-  "src/services/__init__.py": 1782571119.4281445,
-  "src/services/dashboard_service.py": 1783250140.33253,
-  "src/services/llm_client.py": 1783250140.3328505,
-  "src/services/application_service.py": 1783269079.1223955,
-  "README.md": 1783501787.269785,
-  "CLAUDE.md": 1782571174.9581463,
-  "docs/friend-ollama-setup.md": 1783545609.7082193,
-  "docs/known-problems.md": 1783019678.3025537,
-  "docs/jetson-ollama-setup.md": 1783013994.9851618,
-  "docs/foundation-development-plan.md": 1782571152.9526699,
-  "docs/schema.md": 1782571164.988932,
-  "docs/source-inventory.md": 1782656499.1267073,
-  "docs/strategy-report.md": 1782571152.9560976,
-  "docs/market-layering.md": 1782571169.3454673,
-  "docs/research/eircode_research_prompt.md": 1783717820.3930647,
-  "docs/superpowers/plans/2026-07-19-dhlgh-identity-matching-ladder.md": 1784461260.58585,
-  "docs/superpowers/plans/2026-07-04-galway-city-normalizer-gaps.md": 1783249830.1685164,
-  "docs/superpowers/plans/2026-06-30-ingestion-cli.md": 1782920910.3009744,
-  "docs/superpowers/plans/2026-07-05-city-normalizer-hardening.md": 1783250958.5650654,
-  "docs/superpowers/plans/2026-07-05-chat-search-filter-bugs.md": 1783269674.2205007,
-  "docs/superpowers/plans/2026-07-01-web-dashboard.md": 1782932054.4508774,
-  "docs/superpowers/plans/2026-07-04-county-stack-hardening.md": 1783179894.9532506,
-  "docs/superpowers/plans/2026-06-28-next-steps.md": 1782920910.3005586,
-  "docs/superpowers/plans/2026-07-08-weekly-scheduler-and-city-staging.md": 1783474333.8938603,
-  "docs/superpowers/plans/2026-06-26-foundation-implementation.md": 1782571083.568812,
-  "docs/superpowers/specs/2026-07-08-weekly-scheduler-and-staging-design.md": 1783467128.144689,
-  "docs/superpowers/specs/2026-06-26-foundation-design.md": 1782497713.3043785,
-  "docs/superpowers/specs/2026-06-30-ingestion-cli-design.md": 1782920910.3012114,
-  "docs/superpowers/specs/2026-07-10-dhlgh-national-source-design.md": 1783718870.7714138,
-  "docs/superpowers/specs/2026-07-01-web-dashboard-design.md": 1782931649.2880373,
-  "graphify-out/graph.html": 1784481146.856049,
-  "graphify-out/GRAPH_REPORT.md": 1784481136.7023332,
-  "src/web/templates/dashboard.html": 1783250140.335345,
-  "src/web/templates/application_detail.html": 1783250140.334952,
-  "src/web/templates/chat.html": 1783619393.521477,
-  "src/web/templates/partials/application_table.html": 1783250140.335659
+  "config/__init__.py": {
+    "mtime": 1782571119.4283686,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "config/settings.py": {
+    "mtime": 1782571140.814163,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/conftest.py": {
+    "mtime": 1782656499.1541395,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/__init__.py": {
+    "mtime": 1783501787.2768292,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/__init__.py": {
+    "mtime": 1783501787.2773867,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/parsers/test_galway_city_pdf_lines.py": {
+    "mtime": 1783018878.2400353,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/__init__.py": {
+    "mtime": 1782920910.312309,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_application_natural_key.py": {
+    "mtime": 1782656499.1550398,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_normalize_address.py": {
+    "mtime": 1783844378.9182627,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_application_schema.py": {
+    "mtime": 1782656499.1561775,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_matching_ladder.py": {
+    "mtime": 1784462769.7008975,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_normalize_application_ref.py": {
+    "mtime": 1783844357.4611003,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_application_event_schema.py": {
+    "mtime": 1782656499.1548104,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/core/test_ingestion_state.py": {
+    "mtime": 1782920910.3126874,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/normalization/test_location.py": {
+    "mtime": 1782656499.156977,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/pipelines/test_normalize_galway_city.py": {
+    "mtime": 1783250958.5760186,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/pipelines/test_normalize_galway_county.py": {
+    "mtime": 1783250140.3386943,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/pipelines/__init__.py": {
+    "mtime": 1782656499.1579473,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/pipelines/test_discover_galway_city.py": {
+    "mtime": 1782656499.1584208,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/pipelines/test_normalize_dhlgh.py": {
+    "mtime": 1783844401.9313655,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/markets/test_galway_markets.py": {
+    "mtime": 1782656499.1565065,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/scripts/__init__.py": {
+    "mtime": 1783501787.2774944,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/scripts/test_cleanup_stale_raw_files.py": {
+    "mtime": 1783501787.2777808,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/sources/__init__.py": {
+    "mtime": 1782656499.1592479,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/sources/test_dhlgh_scraper.py": {
+    "mtime": 1783844508.446042,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/sources/test_galway_city_scraper.py": {
+    "mtime": 1782656499.159578,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/sources/test_galway_county_scraper.py": {
+    "mtime": 1782920910.3134112,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/skills/test_onboard_council_skill_files.py": {
+    "mtime": 1782656499.1591907,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/monitoring/test_metrics.py": {
+    "mtime": 1782656499.1567845,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/services/__init__.py": {
+    "mtime": 1783250140.3388186,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/services/test_llm_client.py": {
+    "mtime": 1783250140.3392944,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/unit/services/test_chat_extraction_prompt.py": {
+    "mtime": 1783250140.3391192,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_dhlgh_pipeline_end_to_end.py": {
+    "mtime": 1783844483.2858255,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_ingest_galway_county.py": {
+    "mtime": 1782920910.3122525,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_web_routes.py": {
+    "mtime": 1783250140.3379312,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_ingest_dhlgh.py": {
+    "mtime": 1783844497.0458937,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_galway_city_pipeline_end_to_end.py": {
+    "mtime": 1782656499.154348,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_ingest_galway_city.py": {
+    "mtime": 1783501787.2773473,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_chat_service.py": {
+    "mtime": 1783631173.4041195,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_migration_applies.py": {
+    "mtime": 1783250140.3376076,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_application_service.py": {
+    "mtime": 1783269052.444128,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tests/integration/test_dashboard_service.py": {
+    "mtime": 1783250140.336947,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "scripts/backfill_galway_city_chunked.py": {
+    "mtime": 1783711400.200537,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "scripts/ingest_galway_city.py": {
+    "mtime": 1783501787.2765625,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "scripts/__init__.py": {
+    "mtime": 1782920910.3091717,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "scripts/scaffold_tree.py": {
+    "mtime": 1782571113.6907082,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "scripts/ingest_dhlgh.py": {
+    "mtime": 1783844331.4870188,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "scripts/cleanup_stale_raw_files.py": {
+    "mtime": 1783501787.275972,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "scripts/ingest_galway_county.py": {
+    "mtime": 1782920910.3104427,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/__init__.py": {
+    "mtime": 1782571119.4255683,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/parsers/__init__.py": {
+    "mtime": 1782571119.4265902,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/parsers/pdf_ocr/__init__.py": {
+    "mtime": 1782571119.4270048,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/parsers/pdf_text_fallback/__init__.py": {
+    "mtime": 1782571119.4267929,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/parsers/docx_state_machine/__init__.py": {
+    "mtime": 1782571119.4269083,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/parsers/pdf_lines/__init__.py": {
+    "mtime": 1782571119.4266987,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/parsers/pdf_lines/galway_city.py": {
+    "mtime": 1783018839.9092953,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/ingestion_state.py": {
+    "mtime": 1782920910.3108788,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/__init__.py": {
+    "mtime": 1782571119.4256804,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/matching/__init__.py": {
+    "mtime": 1784461415.5338633,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/matching/ladder.py": {
+    "mtime": 1784462789.7569659,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/normalization/address.py": {
+    "mtime": 1783844370.646389,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/normalization/galway_county.py": {
+    "mtime": 1783250140.331567,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/normalization/__init__.py": {
+    "mtime": 1782571119.4262269,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/normalization/dhlgh.py": {
+    "mtime": 1783844232.5177138,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/normalization/location.py": {
+    "mtime": 1782656499.1494436,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/normalization/application_ref.py": {
+    "mtime": 1783844350.6177344,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/geo/__init__.py": {
+    "mtime": 1782571119.42647,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/lifecycle/__init__.py": {
+    "mtime": 1782571119.4263506,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/models/application_event.py": {
+    "mtime": 1782656499.1489468,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/models/__init__.py": {
+    "mtime": 1782571119.4257872,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/models/application.py": {
+    "mtime": 1782656499.1480768,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/models/dhlgh_application.py": {
+    "mtime": 1783844137.496767,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/schemas/application_event.py": {
+    "mtime": 1782656499.1501427,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/schemas/__init__.py": {
+    "mtime": 1782571119.426005,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/schemas/application.py": {
+    "mtime": 1782656499.1497848,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/schemas/dhlgh_application.py": {
+    "mtime": 1783844179.4179738,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/session.py": {
+    "mtime": 1782656499.1476057,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/__init__.py": {
+    "mtime": 1782571119.4258966,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/base.py": {
+    "mtime": 1782656499.1454215,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/migrations/env.py": {
+    "mtime": 1783844149.2109513,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/migrations/versions/0003_add_search_indexes.py": {
+    "mtime": 1783250140.33,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/migrations/versions/0001_create_applications_and_events.py": {
+    "mtime": 1782656499.1473277,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/migrations/versions/0002_create_ingestion_state.py": {
+    "mtime": 1782920910.310605,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/core/db/migrations/versions/0004_create_dhlgh_applications.py": {
+    "mtime": 1783844162.5276837,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/web/__init__.py": {
+    "mtime": 1783250140.3329647,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/web/main.py": {
+    "mtime": 1783250140.3340898,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/web/static/app.js": {
+    "mtime": 1783250140.3345866,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/pipelines/resolve.py": {
+    "mtime": 1783844317.6862814,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/pipelines/normalize.py": {
+    "mtime": 1783250958.574979,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/pipelines/discover.py": {
+    "mtime": 1782656499.1519232,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/pipelines/__init__.py": {
+    "mtime": 1782571119.4277837,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/pipelines/publish.py": {
+    "mtime": 1782656499.1525047,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/markets/registry.py": {
+    "mtime": 1782656499.1509473,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/markets/__init__.py": {
+    "mtime": 1782571119.4279108,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/markets/galway/city.py": {
+    "mtime": 1782656499.1503918,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/markets/galway/metro.py": {
+    "mtime": 1782656499.1507652,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/markets/galway/__init__.py": {
+    "mtime": 1782571119.428034,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/markets/galway/county.py": {
+    "mtime": 1782656499.1505773,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/__init__.py": {
+    "mtime": 1782571119.4271276,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/dhlgh/scraper.py": {
+    "mtime": 1783844259.2880409,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/dhlgh/__init__.py": {
+    "mtime": 1783844102.000203,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/galway/__init__.py": {
+    "mtime": 1782571119.4273896,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/galway/city/scraper.py": {
+    "mtime": 1782656499.15367,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/galway/city/__init__.py": {
+    "mtime": 1782571119.427527,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/galway/county/scraper.py": {
+    "mtime": 1782920910.3113666,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/galway/county/__init__.py": {
+    "mtime": 1782571119.4276605,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/base/__init__.py": {
+    "mtime": 1782571119.4272795,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/sources/base/source.py": {
+    "mtime": 1782656499.1530282,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/monitoring/metrics.py": {
+    "mtime": 1782656499.1511474,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/monitoring/__init__.py": {
+    "mtime": 1782571119.428253,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/services/chat_service.py": {
+    "mtime": 1783631157.0632687,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/services/__init__.py": {
+    "mtime": 1782571119.4281445,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/services/dashboard_service.py": {
+    "mtime": 1783250140.33253,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/services/llm_client.py": {
+    "mtime": 1783250140.3328505,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/services/application_service.py": {
+    "mtime": 1783269079.1223955,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1783501787.269785,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1782571174.9581463,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/friend-ollama-setup.md": {
+    "mtime": 1783545609.7082193,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/known-problems.md": {
+    "mtime": 1783019678.3025537,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/jetson-ollama-setup.md": {
+    "mtime": 1783013994.9851618,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/foundation-development-plan.md": {
+    "mtime": 1782571152.9526699,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/schema.md": {
+    "mtime": 1782571164.988932,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/source-inventory.md": {
+    "mtime": 1782656499.1267073,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/strategy-report.md": {
+    "mtime": 1782571152.9560976,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/market-layering.md": {
+    "mtime": 1782571169.3454673,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/research/eircode_research_prompt.md": {
+    "mtime": 1783717820.3930647,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-19-dhlgh-identity-matching-ladder.md": {
+    "mtime": 1784461260.58585,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-04-galway-city-normalizer-gaps.md": {
+    "mtime": 1783249830.1685164,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-30-ingestion-cli.md": {
+    "mtime": 1782920910.3009744,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-05-city-normalizer-hardening.md": {
+    "mtime": 1783250958.5650654,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-05-chat-search-filter-bugs.md": {
+    "mtime": 1783269674.2205007,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-01-web-dashboard.md": {
+    "mtime": 1782932054.4508774,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-04-county-stack-hardening.md": {
+    "mtime": 1783179894.9532506,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-28-next-steps.md": {
+    "mtime": 1782920910.3005586,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-08-weekly-scheduler-and-city-staging.md": {
+    "mtime": 1783474333.8938603,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-26-foundation-implementation.md": {
+    "mtime": 1782571083.568812,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-07-08-weekly-scheduler-and-staging-design.md": {
+    "mtime": 1783467128.144689,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-26-foundation-design.md": {
+    "mtime": 1782497713.3043785,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-30-ingestion-cli-design.md": {
+    "mtime": 1782920910.3012114,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-07-10-dhlgh-national-source-design.md": {
+    "mtime": 1783718870.7714138,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-07-01-web-dashboard-design.md": {
+    "mtime": 1782931649.2880373,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "graphify-out/graph.html": {
+    "mtime": 1784481146.856049,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "graphify-out/GRAPH_REPORT.md": {
+    "mtime": 1784481136.7023332,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/web/templates/dashboard.html": {
+    "mtime": 1783250140.335345,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/web/templates/application_detail.html": {
+    "mtime": 1783250140.334952,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/web/templates/chat.html": {
+    "mtime": 1783619393.521477,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "src/web/templates/partials/application_table.html": {
+    "mtime": 1783250140.335659,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.githooks/pre-commit": {
+    "mtime": 1782571184.3240874,
+    "seen": 1790267180.792764,
+    "ast_hash": "08612954e6d6a4c231b1e375a696cae7",
+    "semantic_hash": "08612954e6d6a4c231b1e375a696cae7"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/__init__.py": {
+    "mtime": 1782571119.4283686,
+    "seen": 1790267180.792767,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/settings.py": {
+    "mtime": 1782571140.814163,
+    "seen": 1790267180.792768,
+    "ast_hash": "225155f1da2efbd202c23f783369d57c",
+    "semantic_hash": "225155f1da2efbd202c23f783369d57c"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/pyproject.toml": {
+    "mtime": 1783250140.3284712,
+    "seen": 1790267180.792768,
+    "ast_hash": "31705e2bbe89b9b49c75aa4f34b14999",
+    "semantic_hash": "31705e2bbe89b9b49c75aa4f34b14999"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/__init__.py": {
+    "mtime": 1782920910.3091717,
+    "seen": 1790267180.792769,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/backfill_galway_city_chunked.py": {
+    "mtime": 1783711400.200537,
+    "seen": 1790267180.7927701,
+    "ast_hash": "88d620dd6dfd5ebc45d7bb1fbd4ff0f7",
+    "semantic_hash": "88d620dd6dfd5ebc45d7bb1fbd4ff0f7"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/cleanup_stale_raw_files.py": {
+    "mtime": 1783501787.275972,
+    "seen": 1790267180.7927701,
+    "ast_hash": "85abce23c01b7ca83cd55639cb5cfb6f",
+    "semantic_hash": "85abce23c01b7ca83cd55639cb5cfb6f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/enrich_from_dhlgh.py": {
+    "mtime": 1785343435.5147247,
+    "seen": 1790267180.792771,
+    "ast_hash": "81af4efcf6e91b29ade48297e422d0db",
+    "semantic_hash": "81af4efcf6e91b29ade48297e422d0db"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_dhlgh.py": {
+    "mtime": 1783844331.4870188,
+    "seen": 1790267180.792772,
+    "ast_hash": "5509d0af44611a3fdb6634ea5e6cda18",
+    "semantic_hash": "5509d0af44611a3fdb6634ea5e6cda18"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_city.py": {
+    "mtime": 1783501787.2765625,
+    "seen": 1790267180.792772,
+    "ast_hash": "5c372fba1d204f8d37d2c5d7177adbb6",
+    "semantic_hash": "5c372fba1d204f8d37d2c5d7177adbb6"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/ingest_galway_county.py": {
+    "mtime": 1782920910.3104427,
+    "seen": 1790267180.792773,
+    "ast_hash": "6f121f003c744a39bdbd67eb6e879edd",
+    "semantic_hash": "6f121f003c744a39bdbd67eb6e879edd"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/run_weekly_ingestion.sh": {
+    "mtime": 1783501787.2767885,
+    "seen": 1790267180.792773,
+    "ast_hash": "cb4ae5c6509ec2125ad857bcbd5846d6",
+    "semantic_hash": "cb4ae5c6509ec2125ad857bcbd5846d6"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/scaffold_tree.py": {
+    "mtime": 1782571113.6907082,
+    "seen": 1790267180.792774,
+    "ast_hash": "448e8a7dc05a4b24903bdb1d15f6accf",
+    "semantic_hash": "448e8a7dc05a4b24903bdb1d15f6accf"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/start_stack.sh": {
+    "mtime": 1783545623.5801554,
+    "seen": 1790267180.792775,
+    "ast_hash": "5f8a82eac0f4a8369ae73aa637f89e5d",
+    "semantic_hash": "5f8a82eac0f4a8369ae73aa637f89e5d"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/scripts/validate_dhlgh_matching.py": {
+    "mtime": 1785253839.323896,
+    "seen": 1790267180.792775,
+    "ast_hash": "53aa0145865834358cf7f414cb2a832b",
+    "semantic_hash": "53aa0145865834358cf7f414cb2a832b"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/__init__.py": {
+    "mtime": 1782571119.4255683,
+    "seen": 1790267180.7927759,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/__init__.py": {
+    "mtime": 1782571119.4256804,
+    "seen": 1790267180.7927759,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/__init__.py": {
+    "mtime": 1782571119.4258966,
+    "seen": 1790267180.792777,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/base.py": {
+    "mtime": 1782656499.1454215,
+    "seen": 1790267180.792778,
+    "ast_hash": "16deb2759f7de2cf86f328dce6b2d38b",
+    "semantic_hash": "16deb2759f7de2cf86f328dce6b2d38b"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/env.py": {
+    "mtime": 1783844149.2109513,
+    "seen": 1790267180.792778,
+    "ast_hash": "e8ddd0782325c6b031537d7fc9e9869a",
+    "semantic_hash": "e8ddd0782325c6b031537d7fc9e9869a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0001_create_applications_and_events.py": {
+    "mtime": 1782656499.1473277,
+    "seen": 1790267180.792779,
+    "ast_hash": "f280a3026603163f3f7a6d07737f9314",
+    "semantic_hash": "f280a3026603163f3f7a6d07737f9314"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0002_create_ingestion_state.py": {
+    "mtime": 1782920910.310605,
+    "seen": 1790267180.792779,
+    "ast_hash": "d86ec19d9e1873fa876e892fdc8f93dc",
+    "semantic_hash": "d86ec19d9e1873fa876e892fdc8f93dc"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0003_add_search_indexes.py": {
+    "mtime": 1783250140.33,
+    "seen": 1790267180.79278,
+    "ast_hash": "1775a370847cdd1469010b8c097dac7f",
+    "semantic_hash": "1775a370847cdd1469010b8c097dac7f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/migrations/versions/0004_create_dhlgh_applications.py": {
+    "mtime": 1783844162.5276837,
+    "seen": 1790267180.79278,
+    "ast_hash": "73cd378fdc97fb0e234c68e2f9c7fdfe",
+    "semantic_hash": "73cd378fdc97fb0e234c68e2f9c7fdfe"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/db/session.py": {
+    "mtime": 1782656499.1476057,
+    "seen": 1790267180.792784,
+    "ast_hash": "fbd4b546b5d7a1a9cdc0a58effa0a504",
+    "semantic_hash": "fbd4b546b5d7a1a9cdc0a58effa0a504"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/geo/__init__.py": {
+    "mtime": 1782571119.42647,
+    "seen": 1790267180.792785,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/ingestion_state.py": {
+    "mtime": 1782920910.3108788,
+    "seen": 1790267180.792785,
+    "ast_hash": "1b77bfb8b8b9ed0a393d98b22d97120b",
+    "semantic_hash": "1b77bfb8b8b9ed0a393d98b22d97120b"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/lifecycle/__init__.py": {
+    "mtime": 1782571119.4263506,
+    "seen": 1790267180.792786,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/matching/__init__.py": {
+    "mtime": 1784461415.5338633,
+    "seen": 1790267180.792786,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/matching/ladder.py": {
+    "mtime": 1785253768.262568,
+    "seen": 1790267180.7927868,
+    "ast_hash": "f9a5928ef77c039162f360b9aaa8a4dd",
+    "semantic_hash": "f9a5928ef77c039162f360b9aaa8a4dd"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/__init__.py": {
+    "mtime": 1782571119.4257872,
+    "seen": 1790267180.7927868,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application.py": {
+    "mtime": 1782656499.1480768,
+    "seen": 1790267180.792788,
+    "ast_hash": "abbb34a0a9605a855c0cc0b1a8570d0a",
+    "semantic_hash": "abbb34a0a9605a855c0cc0b1a8570d0a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/application_event.py": {
+    "mtime": 1782656499.1489468,
+    "seen": 1790267180.792789,
+    "ast_hash": "6d12ccf7b1adcebe7db7421541bd60ce",
+    "semantic_hash": "6d12ccf7b1adcebe7db7421541bd60ce"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/models/dhlgh_application.py": {
+    "mtime": 1783844137.496767,
+    "seen": 1790267180.792789,
+    "ast_hash": "aa91d501bafeb914024758aa40bd7d98",
+    "semantic_hash": "aa91d501bafeb914024758aa40bd7d98"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/__init__.py": {
+    "mtime": 1782571119.4262269,
+    "seen": 1790267180.79279,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/address.py": {
+    "mtime": 1783844370.646389,
+    "seen": 1790267180.79279,
+    "ast_hash": "d492db144921020a05bedbe00387db82",
+    "semantic_hash": "d492db144921020a05bedbe00387db82"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/application_ref.py": {
+    "mtime": 1783844350.6177344,
+    "seen": 1790267180.7927911,
+    "ast_hash": "2fa7cd6538ccc9d01799d7a05d20ec43",
+    "semantic_hash": "2fa7cd6538ccc9d01799d7a05d20ec43"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/dhlgh.py": {
+    "mtime": 1783844232.5177138,
+    "seen": 1790267180.7927911,
+    "ast_hash": "1bac3371f9a92e9447947507542845f8",
+    "semantic_hash": "1bac3371f9a92e9447947507542845f8"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/galway_county.py": {
+    "mtime": 1790266492.9657412,
+    "seen": 1790267180.792792,
+    "ast_hash": "76b0f600e6c315b99ebffdb74b756995",
+    "semantic_hash": "76b0f600e6c315b99ebffdb74b756995"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/normalization/location.py": {
+    "mtime": 1782656499.1494436,
+    "seen": 1790267180.792792,
+    "ast_hash": "87ff0d86fb03f61e48245ab45d7d53da",
+    "semantic_hash": "87ff0d86fb03f61e48245ab45d7d53da"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/__init__.py": {
+    "mtime": 1782571119.426005,
+    "seen": 1790267180.792793,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application.py": {
+    "mtime": 1782656499.1497848,
+    "seen": 1790267180.792793,
+    "ast_hash": "dba7cb7823bb5ecb75407611e97d5c63",
+    "semantic_hash": "dba7cb7823bb5ecb75407611e97d5c63"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/application_event.py": {
+    "mtime": 1782656499.1501427,
+    "seen": 1790267180.7927942,
+    "ast_hash": "0c40e2cd73157e89f7a444fc8b47f8c9",
+    "semantic_hash": "0c40e2cd73157e89f7a444fc8b47f8c9"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/core/schemas/dhlgh_application.py": {
+    "mtime": 1783844179.4179738,
+    "seen": 1790267180.792795,
+    "ast_hash": "eabbea4fe3264f87a1b27357e653a236",
+    "semantic_hash": "eabbea4fe3264f87a1b27357e653a236"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/__init__.py": {
+    "mtime": 1782571119.4279108,
+    "seen": 1790267180.792795,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/__init__.py": {
+    "mtime": 1782571119.428034,
+    "seen": 1790267180.792796,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/city.py": {
+    "mtime": 1782656499.1503918,
+    "seen": 1790267180.792796,
+    "ast_hash": "ec318e2de26b40d7d119479612f57f76",
+    "semantic_hash": "ec318e2de26b40d7d119479612f57f76"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/county.py": {
+    "mtime": 1782656499.1505773,
+    "seen": 1790267180.7927969,
+    "ast_hash": "6e3d8df1165f6b0488c8b70fc59b3bca",
+    "semantic_hash": "6e3d8df1165f6b0488c8b70fc59b3bca"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/galway/metro.py": {
+    "mtime": 1782656499.1507652,
+    "seen": 1790267180.7927969,
+    "ast_hash": "c3f9c12c0ef8115715280e1b9d7dbd29",
+    "semantic_hash": "c3f9c12c0ef8115715280e1b9d7dbd29"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/markets/registry.py": {
+    "mtime": 1782656499.1509473,
+    "seen": 1790267180.792798,
+    "ast_hash": "c6f5cd15c0ebaaff00e605f019530160",
+    "semantic_hash": "c6f5cd15c0ebaaff00e605f019530160"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/monitoring/__init__.py": {
+    "mtime": 1782571119.428253,
+    "seen": 1790267180.792798,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/monitoring/metrics.py": {
+    "mtime": 1782656499.1511474,
+    "seen": 1790267180.792799,
+    "ast_hash": "0ce73dcd2a9407e40b3e880064f4034a",
+    "semantic_hash": "0ce73dcd2a9407e40b3e880064f4034a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/__init__.py": {
+    "mtime": 1782571119.4265902,
+    "seen": 1790267180.792799,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/docx_state_machine/__init__.py": {
+    "mtime": 1782571119.4269083,
+    "seen": 1790267180.7928,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/__init__.py": {
+    "mtime": 1782571119.4266987,
+    "seen": 1790267180.7928011,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_lines/galway_city.py": {
+    "mtime": 1783018839.9092953,
+    "seen": 1790267180.7928011,
+    "ast_hash": "9fdfa4350a1912e9789950f242c12ec0",
+    "semantic_hash": "9fdfa4350a1912e9789950f242c12ec0"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_ocr/__init__.py": {
+    "mtime": 1782571119.4270048,
+    "seen": 1790267180.792802,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/parsers/pdf_text_fallback/__init__.py": {
+    "mtime": 1782571119.4267929,
+    "seen": 1790267180.792802,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/__init__.py": {
+    "mtime": 1782571119.4277837,
+    "seen": 1790267180.792803,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/discover.py": {
+    "mtime": 1782656499.1519232,
+    "seen": 1790267180.792803,
+    "ast_hash": "ee4f5a4138a069943b20a5d6b47e3b6c",
+    "semantic_hash": "ee4f5a4138a069943b20a5d6b47e3b6c"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/normalize.py": {
+    "mtime": 1790266488.5016825,
+    "seen": 1790267180.792804,
+    "ast_hash": "e3b22e4fc31776fe9eaa0e56d6639ed0",
+    "semantic_hash": "e3b22e4fc31776fe9eaa0e56d6639ed0"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/publish.py": {
+    "mtime": 1782656499.1525047,
+    "seen": 1790267180.792804,
+    "ast_hash": "9e55a49d7f96f00aec47325271fe449f",
+    "semantic_hash": "9e55a49d7f96f00aec47325271fe449f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/pipelines/resolve.py": {
+    "mtime": 1790265913.0597844,
+    "seen": 1790267180.7928052,
+    "ast_hash": "1fd906f968d193f6e7362758d509d441",
+    "semantic_hash": "1fd906f968d193f6e7362758d509d441"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/__init__.py": {
+    "mtime": 1782571119.4281445,
+    "seen": 1790267180.7928052,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/application_service.py": {
+    "mtime": 1783269079.1223955,
+    "seen": 1790267180.792806,
+    "ast_hash": "34b9038f9bac187ca9026a34fe1de72b",
+    "semantic_hash": "34b9038f9bac187ca9026a34fe1de72b"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/chat_service.py": {
+    "mtime": 1783631157.0632687,
+    "seen": 1790267180.7928069,
+    "ast_hash": "3e83a94aca05a0c81bed6e645d94c49d",
+    "semantic_hash": "3e83a94aca05a0c81bed6e645d94c49d"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/dashboard_service.py": {
+    "mtime": 1783250140.33253,
+    "seen": 1790267180.7928069,
+    "ast_hash": "970e396e11b1138f19b090489688c97c",
+    "semantic_hash": "970e396e11b1138f19b090489688c97c"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/services/llm_client.py": {
+    "mtime": 1783250140.3328505,
+    "seen": 1790267180.7928078,
+    "ast_hash": "4460947fb23be067a86c4674d6e1a5ba",
+    "semantic_hash": "4460947fb23be067a86c4674d6e1a5ba"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/__init__.py": {
+    "mtime": 1782571119.4271276,
+    "seen": 1790267180.7928078,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/__init__.py": {
+    "mtime": 1782571119.4272795,
+    "seen": 1790267180.792809,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/base/source.py": {
+    "mtime": 1782656499.1530282,
+    "seen": 1790267180.792809,
+    "ast_hash": "f34269023d71bd53756edacaea6b2e79",
+    "semantic_hash": "f34269023d71bd53756edacaea6b2e79"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/dhlgh/__init__.py": {
+    "mtime": 1783844102.000203,
+    "seen": 1790267180.79281,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/dhlgh/scraper.py": {
+    "mtime": 1783844259.2880409,
+    "seen": 1790267180.79281,
+    "ast_hash": "3b3c1b4785f48571c01733f7d14afa28",
+    "semantic_hash": "3b3c1b4785f48571c01733f7d14afa28"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/__init__.py": {
+    "mtime": 1782571119.4273896,
+    "seen": 1790267180.792811,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/__init__.py": {
+    "mtime": 1782571119.427527,
+    "seen": 1790267180.792811,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/city/scraper.py": {
+    "mtime": 1782656499.15367,
+    "seen": 1790267180.792812,
+    "ast_hash": "a257617dccc03e11fe7e05e1042c88b3",
+    "semantic_hash": "a257617dccc03e11fe7e05e1042c88b3"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/county/__init__.py": {
+    "mtime": 1782571119.4276605,
+    "seen": 1790267180.792813,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/sources/galway/county/scraper.py": {
+    "mtime": 1782920910.3113666,
+    "seen": 1790267180.792813,
+    "ast_hash": "e46b0734bd838c80b15b69e3dc67845f",
+    "semantic_hash": "e46b0734bd838c80b15b69e3dc67845f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/web/__init__.py": {
+    "mtime": 1783250140.3329647,
+    "seen": 1790267180.792814,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/web/main.py": {
+    "mtime": 1783250140.3340898,
+    "seen": 1790267180.792814,
+    "ast_hash": "560483618519372518d273751e4b1076",
+    "semantic_hash": "560483618519372518d273751e4b1076"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/web/static/app.js": {
+    "mtime": 1783250140.3345866,
+    "seen": 1790267180.7928152,
+    "ast_hash": "2840be7e73097db4057896f0849d1fbb",
+    "semantic_hash": "2840be7e73097db4057896f0849d1fbb"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/__init__.py": {
+    "mtime": 1783501787.2768292,
+    "seen": 1790267180.7928152,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/conftest.py": {
+    "mtime": 1782656499.1541395,
+    "seen": 1790267180.7928162,
+    "ast_hash": "3e9b702fac7334391df22fd77c86a028",
+    "semantic_hash": "3e9b702fac7334391df22fd77c86a028"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_application_service.py": {
+    "mtime": 1783269052.444128,
+    "seen": 1790267180.7928169,
+    "ast_hash": "7a068db6b0635055058515feac4aa666",
+    "semantic_hash": "7a068db6b0635055058515feac4aa666"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_chat_service.py": {
+    "mtime": 1783631173.4041195,
+    "seen": 1790267180.7928169,
+    "ast_hash": "c823c3ba621c9d781d214d56f358fa3d",
+    "semantic_hash": "c823c3ba621c9d781d214d56f358fa3d"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_dashboard_service.py": {
+    "mtime": 1783250140.336947,
+    "seen": 1790267180.7928178,
+    "ast_hash": "1702f9afcd572312163c4d9d9f1fcb19",
+    "semantic_hash": "1702f9afcd572312163c4d9d9f1fcb19"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_dhlgh_pipeline_end_to_end.py": {
+    "mtime": 1783844483.2858255,
+    "seen": 1790267180.7928178,
+    "ast_hash": "249716321573d9c04ee1e6a46c9a7bfa",
+    "semantic_hash": "249716321573d9c04ee1e6a46c9a7bfa"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_enrich_from_dhlgh.py": {
+    "mtime": 1785276313.376658,
+    "seen": 1790267180.792819,
+    "ast_hash": "822e3a4e39a492584668069def37941c",
+    "semantic_hash": "822e3a4e39a492584668069def37941c"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_galway_city_pipeline_end_to_end.py": {
+    "mtime": 1782656499.154348,
+    "seen": 1790267180.792819,
+    "ast_hash": "929b145be16ca51880ab5db886ad8578",
+    "semantic_hash": "929b145be16ca51880ab5db886ad8578"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_dhlgh.py": {
+    "mtime": 1783844497.0458937,
+    "seen": 1790267180.79282,
+    "ast_hash": "7a9f1ba386738944ab979cc2dfa6f445",
+    "semantic_hash": "7a9f1ba386738944ab979cc2dfa6f445"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_city.py": {
+    "mtime": 1783501787.2773473,
+    "seen": 1790267180.79282,
+    "ast_hash": "fc6355444aa190fa16227c7c2ac6bf66",
+    "semantic_hash": "fc6355444aa190fa16227c7c2ac6bf66"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_ingest_galway_county.py": {
+    "mtime": 1782920910.3122525,
+    "seen": 1790267180.792821,
+    "ast_hash": "2d4febc76b750702b836b048260ad85b",
+    "semantic_hash": "2d4febc76b750702b836b048260ad85b"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_migration_applies.py": {
+    "mtime": 1783250140.3376076,
+    "seen": 1790267180.7928221,
+    "ast_hash": "de78fa377ec8c5409b0b86bc29ebb208",
+    "semantic_hash": "de78fa377ec8c5409b0b86bc29ebb208"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_validate_dhlgh_matching.py": {
+    "mtime": 1784920691.411674,
+    "seen": 1790267180.7928221,
+    "ast_hash": "fc1b5dcf5a0100d7f9e30a1c3e40db7a",
+    "semantic_hash": "fc1b5dcf5a0100d7f9e30a1c3e40db7a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/integration/test_web_routes.py": {
+    "mtime": 1783250140.3379312,
+    "seen": 1790267180.792823,
+    "ast_hash": "ff4c064a18f747bc9f3062961e79a029",
+    "semantic_hash": "ff4c064a18f747bc9f3062961e79a029"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/__init__.py": {
+    "mtime": 1783501787.2773867,
+    "seen": 1790267180.792823,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/__init__.py": {
+    "mtime": 1782920910.312309,
+    "seen": 1790267180.792824,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_event_schema.py": {
+    "mtime": 1782656499.1548104,
+    "seen": 1790267180.792824,
+    "ast_hash": "82d1e0da940a96615ae4d50fead4eb6d",
+    "semantic_hash": "82d1e0da940a96615ae4d50fead4eb6d"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_natural_key.py": {
+    "mtime": 1782656499.1550398,
+    "seen": 1790267180.792825,
+    "ast_hash": "0393700b465d979495898a86a0981f3f",
+    "semantic_hash": "0393700b465d979495898a86a0981f3f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_application_schema.py": {
+    "mtime": 1782656499.1561775,
+    "seen": 1790267180.792825,
+    "ast_hash": "230a15ffc9636b894c216dde766eeffc",
+    "semantic_hash": "230a15ffc9636b894c216dde766eeffc"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_enrich_from_dhlgh.py": {
+    "mtime": 1785278177.3973286,
+    "seen": 1790267180.7928262,
+    "ast_hash": "37382d3bd9a12a91da2ed9e4093cf8bd",
+    "semantic_hash": "37382d3bd9a12a91da2ed9e4093cf8bd"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_ingestion_state.py": {
+    "mtime": 1782920910.3126874,
+    "seen": 1790267180.7928262,
+    "ast_hash": "355fae099eabc6e5f563243d136e2309",
+    "semantic_hash": "355fae099eabc6e5f563243d136e2309"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_matching_ladder.py": {
+    "mtime": 1785253880.0738592,
+    "seen": 1790267180.792827,
+    "ast_hash": "f64b986af479afc8cb7b2cbdd8ca8f73",
+    "semantic_hash": "f64b986af479afc8cb7b2cbdd8ca8f73"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_normalize_address.py": {
+    "mtime": 1783844378.9182627,
+    "seen": 1790267180.792827,
+    "ast_hash": "fef0438e813fd6a3e2b682e00a5b18b7",
+    "semantic_hash": "fef0438e813fd6a3e2b682e00a5b18b7"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/core/test_normalize_application_ref.py": {
+    "mtime": 1783844357.4611003,
+    "seen": 1790267180.7928278,
+    "ast_hash": "55f403be29034253761f2769f6e2960f",
+    "semantic_hash": "55f403be29034253761f2769f6e2960f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/markets/test_galway_markets.py": {
+    "mtime": 1782656499.1565065,
+    "seen": 1790267180.792829,
+    "ast_hash": "729d8045ae3980ef3f04b5b349051d39",
+    "semantic_hash": "729d8045ae3980ef3f04b5b349051d39"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/monitoring/test_metrics.py": {
+    "mtime": 1782656499.1567845,
+    "seen": 1790267180.792829,
+    "ast_hash": "0416b1c540d9946092725ef67852d2bb",
+    "semantic_hash": "0416b1c540d9946092725ef67852d2bb"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/normalization/test_location.py": {
+    "mtime": 1782656499.156977,
+    "seen": 1790267180.79283,
+    "ast_hash": "59ec50b8f1a21351c75898c63da6c907",
+    "semantic_hash": "59ec50b8f1a21351c75898c63da6c907"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/parsers/test_galway_city_pdf_lines.py": {
+    "mtime": 1783018878.2400353,
+    "seen": 1790267180.79283,
+    "ast_hash": "97941018e1f5e3d6892ee4fbaa1011d0",
+    "semantic_hash": "97941018e1f5e3d6892ee4fbaa1011d0"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/__init__.py": {
+    "mtime": 1782656499.1579473,
+    "seen": 1790267180.792831,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_discover_galway_city.py": {
+    "mtime": 1782656499.1584208,
+    "seen": 1790267180.792831,
+    "ast_hash": "320c7b8865d3d1b815ce9cc488f364f1",
+    "semantic_hash": "320c7b8865d3d1b815ce9cc488f364f1"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_normalize_dhlgh.py": {
+    "mtime": 1783844401.9313655,
+    "seen": 1790267180.792832,
+    "ast_hash": "8d7b42aa6ce5b37de25b5892b47dab9f",
+    "semantic_hash": "8d7b42aa6ce5b37de25b5892b47dab9f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_normalize_galway_city.py": {
+    "mtime": 1790266516.040144,
+    "seen": 1790267180.792832,
+    "ast_hash": "7e4c8a125677744b5d0a7681f6c283c1",
+    "semantic_hash": "7e4c8a125677744b5d0a7681f6c283c1"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_normalize_galway_county.py": {
+    "mtime": 1790266524.8125827,
+    "seen": 1790267180.792833,
+    "ast_hash": "24fab977a02c69c9d9e28dc412d7c645",
+    "semantic_hash": "24fab977a02c69c9d9e28dc412d7c645"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/pipelines/test_resolve.py": {
+    "mtime": 1790265892.3089395,
+    "seen": 1790267180.792834,
+    "ast_hash": "75b0bf66edc3ae30222b9a1fdd1df9b9",
+    "semantic_hash": "75b0bf66edc3ae30222b9a1fdd1df9b9"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/scripts/__init__.py": {
+    "mtime": 1783501787.2774944,
+    "seen": 1790267180.792834,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/scripts/test_cleanup_stale_raw_files.py": {
+    "mtime": 1783501787.2777808,
+    "seen": 1790267180.792835,
+    "ast_hash": "c25fa787ad2631fc8f746527b059c257",
+    "semantic_hash": "c25fa787ad2631fc8f746527b059c257"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/services/__init__.py": {
+    "mtime": 1783250140.3388186,
+    "seen": 1790267180.792835,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/services/test_chat_extraction_prompt.py": {
+    "mtime": 1783250140.3391192,
+    "seen": 1790267180.7928362,
+    "ast_hash": "a8068ad23fa3af94ee17e6f1a5014a1c",
+    "semantic_hash": "a8068ad23fa3af94ee17e6f1a5014a1c"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/services/test_llm_client.py": {
+    "mtime": 1783250140.3392944,
+    "seen": 1790267180.7928362,
+    "ast_hash": "220d1a971fe7a9804c7786989dfa857e",
+    "semantic_hash": "220d1a971fe7a9804c7786989dfa857e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/skills/test_onboard_council_skill_files.py": {
+    "mtime": 1782656499.1591907,
+    "seen": 1790267180.7928371,
+    "ast_hash": "0f9ffe2e49c7f3210c84846fe504cf97",
+    "semantic_hash": "0f9ffe2e49c7f3210c84846fe504cf97"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/sources/__init__.py": {
+    "mtime": 1782656499.1592479,
+    "seen": 1790267180.7928371,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/sources/test_dhlgh_scraper.py": {
+    "mtime": 1783844508.446042,
+    "seen": 1790267180.7928379,
+    "ast_hash": "e223510f91c918900ffea8ac80c2f708",
+    "semantic_hash": "e223510f91c918900ffea8ac80c2f708"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/sources/test_galway_city_scraper.py": {
+    "mtime": 1782656499.159578,
+    "seen": 1790267180.7928388,
+    "ast_hash": "2b754898ffb8481a881f5356fa306cbc",
+    "semantic_hash": "2b754898ffb8481a881f5356fa306cbc"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/tests/unit/sources/test_galway_county_scraper.py": {
+    "mtime": 1782920910.3134112,
+    "seen": 1790267180.7928388,
+    "ast_hash": "1d86ada0d41105d41255f6dfcb49c17a",
+    "semantic_hash": "1d86ada0d41105d41255f6dfcb49c17a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/agents/parser-dev.md": {
+    "mtime": 1782656499.1237936,
+    "seen": 1790267180.79284,
+    "ast_hash": "623b706ee3825fdf75a92e2ceab84ae6",
+    "semantic_hash": "623b706ee3825fdf75a92e2ceab84ae6"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/agents/source-onboarding.md": {
+    "mtime": 1782656499.1241536,
+    "seen": 1790267180.79284,
+    "ast_hash": "38c9a6cc667e681a233e3f330b8fba99",
+    "semantic_hash": "38c9a6cc667e681a233e3f330b8fba99"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/.claude/skills/onboard-council/SKILL.md": {
+    "mtime": 1782656499.1250536,
+    "seen": 1790267180.792841,
+    "ast_hash": "c1ba1d342693fff1b0ab74461dd871d9",
+    "semantic_hash": "c1ba1d342693fff1b0ab74461dd871d9"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/CLAUDE.md": {
+    "mtime": 1782571174.9581463,
+    "seen": 1790267180.792841,
+    "ast_hash": "daa5f50ccea6715a2b42d7ec6e0bf711",
+    "semantic_hash": "daa5f50ccea6715a2b42d7ec6e0bf711"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/README.md": {
+    "mtime": 1783501787.269785,
+    "seen": 1790267180.792842,
+    "ast_hash": "09fde37f707eec33cc7280208d4d5754",
+    "semantic_hash": "09fde37f707eec33cc7280208d4d5754"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/dhlgh/galway.yaml": {
+    "mtime": 1783844094.2015536,
+    "seen": 1790267180.792843,
+    "ast_hash": "9cc192e473403d54b077cdf45c7c7011",
+    "semantic_hash": "9cc192e473403d54b077cdf45c7c7011"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/galway/city.yaml": {
+    "mtime": 1783711208.3182762,
+    "seen": 1790267180.792843,
+    "ast_hash": "c686d6662cbab4bd42f38021ca6bffea",
+    "semantic_hash": "c686d6662cbab4bd42f38021ca6bffea"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/galway/county.yaml": {
+    "mtime": 1782920910.2999403,
+    "seen": 1790267180.792844,
+    "ast_hash": "70c85a39135acbcf514cf8e695c02ef5",
+    "semantic_hash": "70c85a39135acbcf514cf8e695c02ef5"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/config/logging.yaml": {
+    "mtime": 1782571144.4880402,
+    "seen": 1790267180.792844,
+    "ast_hash": "c93b1829a4b6cc6f98d6d30e2ce29cec",
+    "semantic_hash": "c93b1829a4b6cc6f98d6d30e2ce29cec"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docker-compose.yml": {
+    "mtime": 1790265913.0596218,
+    "seen": 1790267180.792845,
+    "ast_hash": "6cbe5fb3a917d33dbb9969559962b4cf",
+    "semantic_hash": "6cbe5fb3a917d33dbb9969559962b4cf"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/TEST_AND_PUSH.md": {
+    "mtime": 1785343914.0377748,
+    "seen": 1790267180.792845,
+    "ast_hash": "9c1c47afb267b7d48f4b75e368963ffa",
+    "semantic_hash": "9c1c47afb267b7d48f4b75e368963ffa"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/foundation-development-plan.md": {
+    "mtime": 1782571152.9526699,
+    "seen": 1790267180.792846,
+    "ast_hash": "8afbae78206a1e2236b3bdcd154e8615",
+    "semantic_hash": "8afbae78206a1e2236b3bdcd154e8615"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/friend-ollama-setup.md": {
+    "mtime": 1783545609.7082193,
+    "seen": 1790267180.7928472,
+    "ast_hash": "39ffb8a9357c4747a3b138629069d23e",
+    "semantic_hash": "39ffb8a9357c4747a3b138629069d23e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/jetson-ollama-setup.md": {
+    "mtime": 1783013994.9851618,
+    "seen": 1790267180.7928472,
+    "ast_hash": "7b37e22179e679bd059881feff632464",
+    "semantic_hash": "7b37e22179e679bd059881feff632464"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/known-problems.md": {
+    "mtime": 1783019678.3025537,
+    "seen": 1790267180.7928479,
+    "ast_hash": "175cc9444d7f7f9c9d6e29fed69afcce",
+    "semantic_hash": "175cc9444d7f7f9c9d6e29fed69afcce"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/market-layering.md": {
+    "mtime": 1782571169.3454673,
+    "seen": 1790267180.7928479,
+    "ast_hash": "950d3aac642133e42fe7e5dc0d24f43a",
+    "semantic_hash": "950d3aac642133e42fe7e5dc0d24f43a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/research/eircode_research_prompt.md": {
+    "mtime": 1783717820.3930647,
+    "seen": 1790267180.7928488,
+    "ast_hash": "2b79887a7b1c4fdd3065211ceedf554a",
+    "semantic_hash": "2b79887a7b1c4fdd3065211ceedf554a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/schema.md": {
+    "mtime": 1782571164.988932,
+    "seen": 1790267180.7928488,
+    "ast_hash": "2630da82b8b2dc1f5cbf9d065c578387",
+    "semantic_hash": "2630da82b8b2dc1f5cbf9d065c578387"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/source-inventory.md": {
+    "mtime": 1782656499.1267073,
+    "seen": 1790267180.79285,
+    "ast_hash": "324dd04453f72bf123aca264b92c6330",
+    "semantic_hash": "324dd04453f72bf123aca264b92c6330"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/strategy-report.md": {
+    "mtime": 1782571152.9560976,
+    "seen": 1790267180.792851,
+    "ast_hash": "102497bd3447e9833776398fd93b8bca",
+    "semantic_hash": "102497bd3447e9833776398fd93b8bca"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-06-26-foundation-implementation.md": {
+    "mtime": 1782571083.568812,
+    "seen": 1790267180.792851,
+    "ast_hash": "55041bfb5242ce5c1dcd8b4795f9a4ac",
+    "semantic_hash": "55041bfb5242ce5c1dcd8b4795f9a4ac"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-06-28-next-steps.md": {
+    "mtime": 1782920910.3005586,
+    "seen": 1790267180.792852,
+    "ast_hash": "5f2d765361b39eca960544bbf6cd855b",
+    "semantic_hash": "5f2d765361b39eca960544bbf6cd855b"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-06-30-ingestion-cli.md": {
+    "mtime": 1782920910.3009744,
+    "seen": 1790267180.792852,
+    "ast_hash": "9f968263ed1268a79d2e139654111d40",
+    "semantic_hash": "9f968263ed1268a79d2e139654111d40"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-01-web-dashboard.md": {
+    "mtime": 1782932054.4508774,
+    "seen": 1790267180.7928529,
+    "ast_hash": "09b76a639f96e88d2fb3f70d71b4b038",
+    "semantic_hash": "09b76a639f96e88d2fb3f70d71b4b038"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-04-county-stack-hardening.md": {
+    "mtime": 1783179894.9532506,
+    "seen": 1790267180.7928529,
+    "ast_hash": "7ae2f392f874b3d0ec4dae79d78dc87e",
+    "semantic_hash": "7ae2f392f874b3d0ec4dae79d78dc87e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-04-galway-city-normalizer-gaps.md": {
+    "mtime": 1783249830.1685164,
+    "seen": 1790267180.792854,
+    "ast_hash": "3563efc93aa6ea9f70e69785d2095505",
+    "semantic_hash": "3563efc93aa6ea9f70e69785d2095505"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-05-chat-search-filter-bugs.md": {
+    "mtime": 1783269674.2205007,
+    "seen": 1790267180.792855,
+    "ast_hash": "7262311d03152e08f5a3ffca51c7b70e",
+    "semantic_hash": "7262311d03152e08f5a3ffca51c7b70e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-05-city-normalizer-hardening.md": {
+    "mtime": 1783250958.5650654,
+    "seen": 1790267180.792855,
+    "ast_hash": "b449eaccff51f7bc5c5946bd022375f1",
+    "semantic_hash": "b449eaccff51f7bc5c5946bd022375f1"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-08-weekly-scheduler-and-city-staging.md": {
+    "mtime": 1783474333.8938603,
+    "seen": 1790267180.792856,
+    "ast_hash": "0bb4bf4a99203edac55456115832055e",
+    "semantic_hash": "0bb4bf4a99203edac55456115832055e"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-19-dhlgh-identity-matching-ladder.md": {
+    "mtime": 1784461260.58585,
+    "seen": 1790267180.792856,
+    "ast_hash": "191c7c996407d6c57653364c3c62a016",
+    "semantic_hash": "191c7c996407d6c57653364c3c62a016"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/plans/2026-07-28-dhlgh-enrichment-backfill.md": {
+    "mtime": 1785343190.2266052,
+    "seen": 1790267180.7928572,
+    "ast_hash": "a194bf75c350b3e6591e46f6d2c855dc",
+    "semantic_hash": "a194bf75c350b3e6591e46f6d2c855dc"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/specs/2026-06-26-foundation-design.md": {
+    "mtime": 1782497713.3043785,
+    "seen": 1790267180.7928572,
+    "ast_hash": "b3dc41d333b67162c34b1c3f588f7040",
+    "semantic_hash": "b3dc41d333b67162c34b1c3f588f7040"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/specs/2026-06-30-ingestion-cli-design.md": {
+    "mtime": 1782920910.3012114,
+    "seen": 1790267180.7928581,
+    "ast_hash": "c031ac8e8153903ea8c959169f39ba7a",
+    "semantic_hash": "c031ac8e8153903ea8c959169f39ba7a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/specs/2026-07-01-web-dashboard-design.md": {
+    "mtime": 1782931649.2880373,
+    "seen": 1790267180.7928581,
+    "ast_hash": "d59ba46c080b3e890b0e15c4d8aeaf99",
+    "semantic_hash": "d59ba46c080b3e890b0e15c4d8aeaf99"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/specs/2026-07-08-weekly-scheduler-and-staging-design.md": {
+    "mtime": 1783467128.144689,
+    "seen": 1790267180.7928588,
+    "ast_hash": "77708626e24b0f997ae04f23794df6fa",
+    "semantic_hash": "77708626e24b0f997ae04f23794df6fa"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/specs/2026-07-10-dhlgh-national-source-design.md": {
+    "mtime": 1784921467.9727497,
+    "seen": 1790267180.7928598,
+    "ast_hash": "29dd23ba54028f0b2a604177a1f5f56f",
+    "semantic_hash": "29dd23ba54028f0b2a604177a1f5f56f"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/docs/superpowers/specs/2026-07-28-dhlgh-enrichment-backfill-design.md": {
+    "mtime": 1785253437.152566,
+    "seen": 1790267180.7928598,
+    "ast_hash": "a676ca39dfa7a7402765f03e0a5155b0",
+    "semantic_hash": "a676ca39dfa7a7402765f03e0a5155b0"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/web/templates/application_detail.html": {
+    "mtime": 1783250140.334952,
+    "seen": 1790267180.792861,
+    "ast_hash": "2772f31de1d572cd1cba6a9a2e51d84a",
+    "semantic_hash": "2772f31de1d572cd1cba6a9a2e51d84a"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/web/templates/chat.html": {
+    "mtime": 1783619393.521477,
+    "seen": 1790267180.792861,
+    "ast_hash": "2d29bdf18cc05cd03764676ba0b03889",
+    "semantic_hash": "2d29bdf18cc05cd03764676ba0b03889"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/web/templates/dashboard.html": {
+    "mtime": 1783250140.335345,
+    "seen": 1790267180.792862,
+    "ast_hash": "07f39d97ccf5d7196365b9f3857a42aa",
+    "semantic_hash": "07f39d97ccf5d7196365b9f3857a42aa"
+  },
+  "/Users/akshitharsola/Documents/AiAgentic/planning-intelligence/src/web/templates/partials/application_table.html": {
+    "mtime": 1783250140.335659,
+    "seen": 1790267180.792862,
+    "ast_hash": "473f03b764e78685829068f9e9827004",
+    "semantic_hash": "473f03b764e78685829068f9e9827004"
+  }
 }

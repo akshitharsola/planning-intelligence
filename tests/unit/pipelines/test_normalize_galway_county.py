@@ -26,6 +26,27 @@ def test_normalize_county_row_received():
     assert app.planning_status_current == "Received"
     assert app.status_event_type == "APPLICATION_RECEIVED"
     assert app.site_county == "Galway"
+    assert app.application_type == "PERMISSION"
+
+
+def test_normalize_county_row_uppercases_mixed_case_application_type():
+    # ArcGIS occasionally sends a mixed-case ApplicationType; normalize
+    # must uppercase it so it doesn't split from the canonical uppercase
+    # category ("Permission" vs "PERMISSION" would double-count in any
+    # group-by application_type).
+    raw_row = {
+        "OBJECTID": 174000,
+        "ApplicationNumber": "26/10000",
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "Permission",
+        "ApplicationStatus": "Application Pending",
+        "ReceivedDate": "03/03/2026",
+        "Decision": "n\\a",
+        "Location": "Oranmore",
+        "Description": "test",
+    }
+    app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:174000")
+    assert app.application_type == "PERMISSION"
 
 
 def test_normalize_county_row_granted():
