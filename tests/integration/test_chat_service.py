@@ -442,3 +442,26 @@ def test_answer_question_drops_malformed_eircode_like_token():
     finally:
         _cleanup()
 
+
+def test_answer_question_drops_non_string_eircode_without_crashing():
+    _cleanup()
+    _seed_with_eircode()
+    try:
+        session = SessionLocal()
+        try:
+            # A small model may return an unquoted number instead of a string
+            # for eircode (it looks numeric-ish) -- this must be dropped like
+            # any other invalid eircode, NOT crash and fall through to the
+            # generic "AI unavailable" message, which would also discard the
+            # perfectly valid "q" filter alongside it.
+            client = FakeLLMClient(replies=['{"eircode": 91234567, "q": "Jane Example"}'])
+            result = answer_question(session, "Anything at 91234567?", client=client)
+        finally:
+            session.close()
+
+        assert "eircode" not in result["filters"]
+        assert result["total"] == 1
+        assert result["applications"][0].application_ref == f"{PREFIX}/0002"
+    finally:
+        _cleanup()
+

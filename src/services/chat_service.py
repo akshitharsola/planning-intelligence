@@ -180,6 +180,8 @@ _EIRCODE_VALIDATION_RE = re.compile(r"^[A-Z]\d[A-Z0-9]\s?[A-Z0-9]{4}$")
 
 
 def _is_valid_eircode(value: str) -> bool:
+    if not isinstance(value, str):
+        return False
     return bool(_EIRCODE_VALIDATION_RE.match(value.strip().upper()))
 
 
