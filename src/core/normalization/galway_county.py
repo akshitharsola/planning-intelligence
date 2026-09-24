@@ -17,8 +17,9 @@ pass-through of Location for this pass.
 
 from datetime import date, datetime
 
-from src.pipelines.normalize import _parse_date
+from src.core.normalization.location import extract_eircode
 from src.core.schemas.application import ApplicationCreate, OtherRegulatoryFlags
+from src.pipelines.normalize import _parse_date
 
 _NULL_SENTINELS = {"n/a", "n\\a", "na", "none", "null", "", "-"}
 
@@ -35,6 +36,8 @@ def normalize_county_row(raw_row: dict, region_config: dict, source_file: str) -
         raw_row.get("ApplicationStatus"), raw_row.get("Decision"), raw_row.get("AppealDecision")
     )
     description = _clean_str(raw_row.get("Description")) or ""
+    location_text = _clean_str(raw_row.get("Location")) or ""
+    eircode = extract_eircode(location_text) or extract_eircode(description) or None
     date_received = _parse_date(_arcgis_date(raw_row.get("ReceivedDate"))) or date.today()
     decision_date = _parse_date(_arcgis_date(raw_row.get("DecisionDate")))
     decision_due_date = _parse_date(_arcgis_date(raw_row.get("DecisionDueDate")))
@@ -45,6 +48,7 @@ def normalize_county_row(raw_row: dict, region_config: dict, source_file: str) -
         application_ref=application_ref,
         applicant_name=_clean_str(raw_row.get("ApplicantName")) or "",
         site_address=_clean_str(raw_row.get("Location")),
+        eircode=eircode,
         site_locality=None,
         site_county="Galway",
         development_description=description,

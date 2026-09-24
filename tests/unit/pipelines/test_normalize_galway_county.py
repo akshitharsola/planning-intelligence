@@ -172,3 +172,36 @@ def test_normalize_county_row_rejects_blank_application_number():
     }
     with pytest.raises(ValueError, match="ApplicationNumber"):
         normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:6")
+
+
+def test_normalize_county_row_extracts_eircode_when_present():
+    raw_row = {
+        "OBJECTID": 999001,
+        "ApplicationNumber": "26/9998",
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "PERMISSION",
+        "ApplicationStatus": "Application Pending",
+        "ReceivedDate": "03/03/2026",
+        "Decision": "n\\a",
+        "Location": "Shanbally, Craughwell, H91X3PN",
+        "Description": "New dwelling at Craughwell",
+    }
+    app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:999001")
+    assert app.eircode == "H91X3PN"
+
+
+def test_normalize_county_row_eircode_is_none_when_absent():
+    raw_row = {
+        "OBJECTID": 999002,
+        "ApplicationNumber": "26/9997",
+        "ApplicantName": "Test Applicant",
+        "ApplicationType": "PERMISSION",
+        "ApplicationStatus": "Application Pending",
+        "ReceivedDate": "03/03/2026",
+        "Decision": "n\\a",
+        "Location": "Oranmore",
+        "Description": "New dwelling",
+    }
+    app = normalize_county_row(raw_row, region_config=REGION_CONFIG, source_file="arcgis:999002")
+    assert app.eircode is None
+

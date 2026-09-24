@@ -148,3 +148,28 @@ def test_normalize_row_received_source_type_still_maps_correctly():
                         source_file="test.pdf")
     assert app.planning_status_current == "Received"
     assert app.status_event_type == "APPLICATION_RECEIVED"
+
+
+def test_normalize_row_extracts_eircode_from_description():
+    raw_row = {
+        "file_number": "24/0001",
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "New dwelling at 12 Lioscarraig Threadneedle Road Galway H91WE0R",
+    }
+    app = normalize_row(raw_row, source_type="received", region_config=REGION_CONFIG,
+                        source_file="test.pdf")
+    assert app.eircode == "H91WE0R"
+
+
+def test_normalize_row_eircode_is_none_when_absent():
+    raw_row = {
+        "file_number": "24/0002",
+        "applicant": "Test Applicant",
+        "app_type": "P",
+        "description": "New dwelling with no postcode mentioned",
+    }
+    app = normalize_row(raw_row, source_type="received", region_config=REGION_CONFIG,
+                        source_file="test.pdf")
+    assert app.eircode is None
+
