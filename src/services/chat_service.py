@@ -36,6 +36,7 @@ _FILTER_KEYS = (
     "application_type",
     "date_received_from",
     "date_received_to",
+    "eircode",
     "q",
 )
 
@@ -59,6 +60,11 @@ def _extraction_prompt(db: Session) -> str:
         '  "q": one or more space-separated keywords to search applicant/address/description '
         '(e.g. a place name); every keyword must match, so only include words that should ALL '
         "be present\n\n"
+        '  "eircode": an Irish Eircode if the question mentions one (e.g. "H91 WE0R" '
+        'or "H91WE0R") -- a 7-character routing key + unique identifier pair, always '
+        "starting with a letter followed by 2 alphanumerics, then 4 more alphanumerics, "
+        "optionally separated by a space. Extract it exactly as written; do not guess one "
+        "from a place name.\n\n"
         "If the question mentions a place name (e.g. a town or area), put it ONLY in \"q\" "
         "-- do not also guess \"planning_authority\" from the place name, even if you know "
         "which council the place falls under. Only set \"planning_authority\" if the "
@@ -98,6 +104,8 @@ def _extraction_prompt(db: Session) -> str:
         + _last_day_last_month(_today()).isoformat() + '"}\n'
         '  Question: "Which applications were approved in Oranmore?"\n'
         '  Reply: {"planning_status_current": "Granted", "q": "Oranmore"}\n'
+        '  Question: "What\'s at H91 WE0R?"\n'
+        '  Reply: {"eircode": "H91 WE0R"}\n'
     )
 
 
@@ -125,6 +133,12 @@ def _extract_filters(client: LLMClient, db: Session, question: str) -> dict:
     for key in ("date_received_from", "date_received_to"):
         if key in filters and not _is_valid_iso_date(filters[key]):
             del filters[key]
+
+    if "eircode" in filters and not _is_valid_eircode(filters["eircode"]):
+        del filters["eircode"]
+
+    if "eircode" in filters:
+        filters["eircode"] = filters["eircode"].strip().upper().replace(" ", "")
 
     # A question naming a specific application ref (e.g. "26/20") is already
     # precisely scoped by that ref -- small models tend to guess an unrelated
@@ -160,6 +174,13 @@ _APPLICATION_REF_PATTERN = re.compile(r"\d+/\d+")
 
 def _contains_application_ref(q: str) -> bool:
     return bool(_APPLICATION_REF_PATTERN.search(q))
+
+
+_EIRCODE_VALIDATION_RE = re.compile(r"^[A-Z]\d[A-Z0-9]\s?[A-Z0-9]{4}$")
+
+
+def _is_valid_eircode(value: str) -> bool:
+    return bool(_EIRCODE_VALIDATION_RE.match(value.strip().upper()))
 
 
 def _is_valid_iso_date(value: str) -> bool:

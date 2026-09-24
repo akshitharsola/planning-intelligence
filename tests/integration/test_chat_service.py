@@ -345,3 +345,100 @@ def test_answer_question_drops_hallucinated_planning_status():
         assert result["applications"][0].application_ref == f"{PREFIX}/0001"
     finally:
         _cleanup()
+
+
+def _seed_with_eircode(eircode="H91TEST"):
+    session = SessionLocal()
+    try:
+        session.execute(
+            text(
+                """
+                INSERT INTO applications (
+                    id, planning_authority, source_entity, application_ref,
+                    applicant_name, site_address, development_description,
+                    application_type, planning_status_current, date_received,
+                    source_system, source_file, source_ingested_at,
+                    further_information_flag, protected_structure_flag,
+                    eia_eis_flag, other_regulatory_flags, commuter_belt_flag,
+                    raw_payload_json, eircode
+                ) VALUES (
+                    gen_random_uuid(), 'Galway City Council', 'GALWAY_CITY_COUNCIL',
+                    :ref, 'Jane Example', 'Threadneedle Road, Chattestville', 'New extension',
+                    'Permission', 'Granted', :received,
+                    'TEST', 'test.pdf', :ingested_at,
+                    false, false, false, '{}', false, '{}', :eircode
+                )
+                """
+            ),
+            {
+                "ref": f"{PREFIX}/0002",
+                "received": date(2026, 3, 1),
+                "ingested_at": datetime(2026, 3, 2, 9, 0),
+                "eircode": eircode,
+            },
+        )
+        session.commit()
+    finally:
+        session.close()
+
+
+def test_answer_question_finds_application_by_eircode():
+    _cleanup()
+    _seed_with_eircode()
+    try:
+        session = SessionLocal()
+        try:
+            client = FakeLLMClient(replies=['{"eircode": "H91TEST"}'])
+            result = answer_question(session, "What's at H91 TEST?", client=client)
+        finally:
+            session.close()
+
+        assert result["total"] == 1
+        assert result["applications"][0].application_ref == f"{PREFIX}/0002"
+        assert result["filters"]["eircode"] == "H91TEST"
+    finally:
+        _cleanup()
+
+
+def test_answer_question_normalizes_llm_extracted_eircode_spacing():
+    _cleanup()
+    _seed_with_eircode()
+    try:
+        session = SessionLocal()
+        try:
+            # The LLM may echo the eircode back with the same spacing the
+            # user typed it with -- the filter itself must normalize this,
+            # not rely on the LLM to have done so.
+            client = FakeLLMClient(replies=['{"eircode": "H91 TEST"}'])
+            result = answer_question(session, "What's at H91 TEST?", client=client)
+        finally:
+            session.close()
+
+        assert result["total"] == 1
+    finally:
+        _cleanup()
+
+
+def test_answer_question_drops_malformed_eircode_like_token():
+    _cleanup()
+    _seed_with_eircode()
+    try:
+        session = SessionLocal()
+        try:
+            # "H91" alone is not a complete eircode (routing key only, no
+            # unique identifier half) -- if the LLM hallucinates this into
+            # the eircode field, applying it as an exact-match filter would
+            # match nothing even though the real row (with a full eircode)
+            # exists, silently hiding a true match. Must be dropped so the
+            # question falls through to an unfiltered/q-based search instead.
+            client = FakeLLMClient(replies=['{"eircode": "H91", "q": "chattestville"}'])
+            result = answer_question(session, "Anything near H91 in Chattestville?", client=client)
+        finally:
+            session.close()
+
+        assert "eircode" not in result["filters"]
+        assert result["total"] == 1
+        assert result["applications"][0].application_ref == f"{PREFIX}/0002"
+    finally:
+        _cleanup()
+
