@@ -38,6 +38,11 @@ def search(db: Session, filters: dict, page: int, page_size: int) -> tuple[list[
     if date_received_to:
         query = query.filter(Application.date_received <= date_received_to)
 
+    eircode = filters.get("eircode")
+    if eircode:
+        normalized = eircode.strip().upper().replace(" ", "")
+        query = query.filter(Application.eircode == normalized)
+
     q = filters.get("q")
     if q:
         for keyword in q.split():

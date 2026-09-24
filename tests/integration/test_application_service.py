@@ -24,7 +24,7 @@ def _cleanup():
         session.close()
 
 
-def _insert(session, ref, authority, status, app_type, received, applicant, address, description):
+def _insert(session, ref, authority, status, app_type, received, applicant, address, description, eircode=None):
     session.execute(
         text(
             """
@@ -35,12 +35,12 @@ def _insert(session, ref, authority, status, app_type, received, applicant, addr
                 source_system, source_file, source_ingested_at,
                 further_information_flag, protected_structure_flag,
                 eia_eis_flag, other_regulatory_flags, commuter_belt_flag,
-                raw_payload_json
+                raw_payload_json, eircode
             ) VALUES (
                 gen_random_uuid(), :authority, :authority, :ref,
                 :applicant, :address, :description, :app_type, :status,
                 :received, 'TEST', 'test.pdf', now(),
-                false, false, false, '{}', false, '{}'
+                false, false, false, '{}', false, '{}', :eircode
             )
             """
         ),
@@ -53,6 +53,7 @@ def _insert(session, ref, authority, status, app_type, received, applicant, addr
             "app_type": app_type,
             "status": status,
             "received": received,
+            "eircode": eircode,
         },
     )
 
@@ -221,3 +222,55 @@ def test_search_q_matches_application_ref_case_insensitive_partial():
         assert f"{PREFIX}/0002" not in refs
     finally:
         _cleanup()
+
+
+def test_search_filters_by_eircode():
+    _cleanup()
+    session = SessionLocal()
+    try:
+        _insert(
+            session, f"{PREFIX}/0003", "Galway City Council", "Received", "Permission",
+            date(2026, 3, 1), "Carol Example", "5 High Street, Galway",
+            "New extension (APPSVCTEST)", eircode="H91TEST",
+        )
+        session.commit()
+    finally:
+        session.close()
+
+    try:
+        session = SessionLocal()
+        try:
+            rows, total = search(session, {"eircode": "H91TEST"}, page=1, page_size=25)
+        finally:
+            session.close()
+        refs = {r.application_ref for r in rows}
+        assert f"{PREFIX}/0003" in refs
+        assert total == 1
+    finally:
+        _cleanup()
+
+
+def test_search_filters_by_eircode_case_and_space_insensitive():
+    _cleanup()
+    session = SessionLocal()
+    try:
+        _insert(
+            session, f"{PREFIX}/0004", "Galway City Council", "Received", "Permission",
+            date(2026, 3, 1), "Dave Example", "6 High Street, Galway",
+            "New extension (APPSVCTEST)", eircode="H91WE0R",
+        )
+        session.commit()
+    finally:
+        session.close()
+
+    try:
+        session = SessionLocal()
+        try:
+            rows, total = search(session, {"eircode": "h91 we0r"}, page=1, page_size=25)
+        finally:
+            session.close()
+        refs = {r.application_ref for r in rows}
+        assert f"{PREFIX}/0004" in refs
+    finally:
+        _cleanup()
+
