@@ -1,0 +1,9 @@
+{
+  "status": "no_schedule",
+  "item_count": 0,
+  "stated_count": null,
+  "target_count": 2,
+  "kind": null,
+  "failure_reason": "No schedule header found (e.g. consultation letter or non-schedule notice)"
+}
+

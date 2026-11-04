@@ -6,7 +6,13 @@ from sqlalchemy import engine_from_config, pool
 import geoalchemy2  # noqa: F401 — registers Geometry type with Alembic's autogenerate renderer
 from config.settings import get_database_url
 from src.core.db.base import Base
-from src.core.models import application, application_event, dhlgh_application  # noqa: F401 — registers models on Base.metadata
+from src.core.models import (  # noqa: F401 — registers models on Base.metadata
+    application,
+    application_event,
+    decision_document,
+    decision_item,
+    dhlgh_application,
+)
 
 config = context.config
 if config.config_file_name is not None:

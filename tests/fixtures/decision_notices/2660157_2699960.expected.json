@@ -1,0 +1,9 @@
+{
+  "status": "count_mismatch",
+  "item_count": 3,
+  "stated_count": 2,
+  "target_count": 2,
+  "kind": "refusal_reason",
+  "failure_reason": "Parsed 3 items vs target 2"
+}
+
