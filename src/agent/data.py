@@ -71,13 +71,19 @@ def document_statuses(conn: Connection, authority: str, ref: str) -> list[str]:
     )]
 
 
-def _filters(authority, year, decision, place, alias="a") -> tuple[str, dict]:
+def _filters(authority, year, decision, place, alias="a", month=None) -> tuple[str, dict]:
     where, params = [], {}
     if authority:
         where.append(f"{alias}.planning_authority = :auth"); params["auth"] = authority
-    if year:
+    if year and month:
+        end_y, end_m = (year + 1, 1) if month == 12 else (year, month + 1)
+        where.append(f"{alias}.decision_date >= :y0 AND {alias}.decision_date < :y1")
+        params["y0"], params["y1"] = f"{year}-{month:02d}-01", f"{end_y}-{end_m:02d}-01"
+    elif year:
         where.append(f"{alias}.decision_date >= :y0 AND {alias}.decision_date < :y1")
         params["y0"], params["y1"] = f"{year}-01-01", f"{year + 1}-01-01"
+    elif month:
+        where.append(f"extract(month from {alias}.decision_date) = :mon"); params["mon"] = month
     if decision:
         where.append(f"{alias}.decision = :dec"); params["dec"] = decision
     if place:
@@ -103,13 +109,13 @@ def _tsquery(groups: list[list[str]]) -> str:
 
 
 def search_items(conn: Connection, groups: list[list[str]], authority=None, year=None, decision=None, place=None,
-                 kind: Optional[str] = None, limit: int = 8) -> tuple[int, list[dict]]:
+                 kind: Optional[str] = None, limit: int = 8, month: Optional[int] = None) -> tuple[int, list[dict]]:
     """Full-text search over validated reasons/conditions; one best match per application,
     taken from that application's latest validated document."""
     tsq = _tsquery(groups)
     if not tsq:
         return 0, []
-    where, params = _filters(authority, year, decision, place)
+    where, params = _filters(authority, year, decision, place, month=month)
     params.update({"tsq": tsq, "limit": limit})
     kind_sql = ""
     if kind:
@@ -153,8 +159,9 @@ def search_items(conn: Connection, groups: list[list[str]], authority=None, year
     return total, out
 
 
-def list_applications(conn: Connection, authority=None, year=None, decision=None, place=None, limit: int = 10):
-    where, params = _filters(authority, year, decision, place)
+def list_applications(conn: Connection, authority=None, year=None, decision=None, place=None, limit: int = 10,
+                      month: Optional[int] = None):
+    where, params = _filters(authority, year, decision, place, month=month)
     params["limit"] = limit
     total = conn.execute(sa.text(f"SELECT count(*) FROM dhlgh_applications a WHERE {where}"), params).scalar()
     rows = conn.execute(sa.text(f"""
@@ -167,8 +174,8 @@ def list_applications(conn: Connection, authority=None, year=None, decision=None
     return total, [{k: _iso(v) for k, v in r._mapping.items()} for r in rows]
 
 
-def count_by_decision(conn: Connection, authority=None, year=None, place=None) -> dict:
-    where, params = _filters(authority, year, None, place)
+def count_by_decision(conn: Connection, authority=None, year=None, place=None, month: Optional[int] = None) -> dict:
+    where, params = _filters(authority, year, None, place, month=month)
     rows = conn.execute(sa.text(f"""
         SELECT coalesce(a.decision, 'NO DECISION YET') AS decision, count(*) FROM dhlgh_applications a
          WHERE {where} GROUP BY 1 ORDER BY 2 DESC"""), params)
@@ -184,3 +191,40 @@ def coverage(conn: Connection) -> dict:
     total = conn.execute(sa.text("SELECT count(*) FROM dhlgh_applications")).scalar()
     return {"applications_total": total, "applications_with_reasons": row.apps,
             "reasons_from": _iso(row.first), "reasons_to": _iso(row.last)}
+
+
+def latest_year_for_month(conn: Connection, month: int, authority=None, decision=None, place=None) -> Optional[int]:
+    """Most recent year that has decisions in this month (for "refused in March" with no year)."""
+    where, params = _filters(authority, None, decision, place, month=month)
+    return conn.execute(sa.text(f"SELECT max(extract(year from a.decision_date))::int FROM dhlgh_applications a WHERE {where}"), params).scalar()
+
+
+def items_for_scope(conn: Connection, authority=None, year=None, decision=None, place=None, month=None,
+                    limit: int = 10) -> tuple[int, int, list[dict]]:
+    """Applications in scope with their checked reasons/conditions (latest validated document).
+
+    Returns (applications in scope, of which with checked text, rows for up to `limit` applications)."""
+    where, params = _filters(authority, year, decision, place, month=month)
+    params["limit"] = limit
+    totals = conn.execute(sa.text(f"""
+        SELECT count(*) AS total,
+               count(*) FILTER (WHERE EXISTS (SELECT 1 FROM decision_documents d WHERE d.planning_authority=a.planning_authority
+                                 AND d.application_ref=a.application_ref AND d.status='validated')) AS with_text
+          FROM dhlgh_applications a WHERE {where}"""), params).first()
+    apps = conn.execute(sa.text(f"""
+        SELECT a.planning_authority, a.application_ref, a.site_address, a.decision, a.decision_date,
+               a.application_type, a.development_description, v.id AS doc_id, v.council_doc_id, v.doc_type, v.source_url
+          FROM dhlgh_applications a
+          JOIN ({LATEST_VALIDATED_DOC}) v ON v.planning_authority = a.planning_authority AND v.application_ref = a.application_ref
+         WHERE {where}
+         ORDER BY a.decision_date DESC NULLS LAST, a.application_ref LIMIT :limit"""), params).fetchall()
+    out = []
+    for r in apps:
+        items = conn.execute(sa.text(
+            "SELECT item_no, kind, text, reason_text FROM decision_items WHERE document_id=:d ORDER BY item_no"),
+            {"d": r.doc_id}).fetchall()
+        row = {k: _iso(v) for k, v in r._mapping.items() if k != "doc_id"}
+        row["doc_type"] = DOC_TYPE_LABEL.get(row["doc_type"], row["doc_type"])
+        row["items"] = [dict(i._mapping) for i in items]
+        out.append(row)
+    return totals.total, totals.with_text, out

@@ -78,3 +78,19 @@ def test_ollama_interpreter_uses_json_response():
     assert calls["url"] == "http://ollama.test/api/generate"
     assert calls["body"]["format"] == "json"
     assert q.decision == "REFUSED" and q.place == "Clifden"
+
+
+def test_month_is_not_a_place():
+    q = parse_question("Tell me reasons for the applications refused in March in Galway county")
+    assert q.month == 3 and q.place is None
+    assert q.authority == COUNTY and q.decision == "REFUSED" and q.asks_item_text
+
+
+@pytest.mark.parametrize("text,month", [("refusals in sept", 9), ("granted in May 2026", 5), ("refused in dec", 12)])
+def test_month_forms(text, month):
+    assert parse_question(text).month == month
+
+
+def test_may_as_a_verb_is_not_a_month():
+    q = parse_question("what may be refused in Tuam")
+    assert q.month is None and q.place == "Tuam"

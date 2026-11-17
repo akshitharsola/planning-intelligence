@@ -8,6 +8,9 @@ from sqlalchemy.engine import Connection
 from src.agent import data
 from src.agent.question import COUNTY, CITY, ParsedQuestion, parse_question
 
+MONTH_NAMES = [None, "January", "February", "March", "April", "May", "June", "July", "August",
+               "September", "October", "November", "December"]
+
 NOT_IN_RECORDS = "The reasons for this decision are not in our records."
 
 EXAMPLES = [
@@ -18,6 +21,7 @@ EXAMPLES = [
     "Conditions about flooding in Oughterard",
     "How many applications were refused in 2025?",
     "Refused applications in Clifden in 2026",
+    "Reasons for applications refused in March in Galway County",
 ]
 
 
@@ -129,6 +133,12 @@ def _answer(conn: Connection, q: ParsedQuestion) -> dict:
             }
         return _application_answer(conn, q, apps[0])
 
+    period_note = None
+    if q.month and not q.year:
+        q.year = data.latest_year_for_month(conn, q.month, q.authority, q.decision, q.place)
+        if q.year:
+            period_note = f"No year was given, so this shows {MONTH_NAMES[q.month]} {q.year}, the most recent {MONTH_NAMES[q.month]} in the data."
+
     kind = None
     if q.decision == "REFUSED":
         kind = "refusal_reason"
@@ -137,11 +147,11 @@ def _answer(conn: Connection, q: ParsedQuestion) -> dict:
 
     if q.wants_count:
         if q.topic_terms:
-            total, _ = data.search_items(conn, q.topic_groups, q.authority, q.year, q.decision, q.place, kind, limit=1)
+            total, _ = data.search_items(conn, q.topic_groups, q.authority, q.year, q.decision, q.place, kind, limit=1, month=q.month)
             what = {"refusal_reason": "refused applications", "condition": "granted applications"}.get(kind, "applications")
             return {"type": "count", "message": f"{total} {what} have a {'reason' if kind == 'refusal_reason' else 'reason or condition'} mentioning \"{' '.join(q.topic_terms)}\"{_scope(q)}.",
                     "note": "Counted from checked reasons and conditions (Galway County, 2025–2026).", "counts": {"matching applications": total}}
-        counts = data.count_by_decision(conn, q.authority, q.year, q.place)
+        counts = data.count_by_decision(conn, q.authority, q.year, q.place, month=q.month)
         where = "" if q.authority else " across Galway County and City councils"
         if q.decision:
             n = counts.get(q.decision, 0)
@@ -150,7 +160,7 @@ def _answer(conn: Connection, q: ParsedQuestion) -> dict:
         return {"type": "count", "message": f"{sum(counts.values()):,} applications{_scope(q)}{where}.", "counts": counts}
 
     if q.topic_terms:
-        total, results = data.search_items(conn, q.topic_groups, q.authority, q.year, q.decision, q.place, kind)
+        total, results = data.search_items(conn, q.topic_groups, q.authority, q.year, q.decision, q.place, kind, month=q.month)
         if not total:
             return {"type": "search", "message": f"No checked reasons or conditions mention \"{' '.join(q.topic_terms)}\"{_scope(q)}.",
                     "note": "Reasons and conditions cover Galway County decisions from 2025 and 2026.", "results": [], "total": 0}
@@ -158,9 +168,23 @@ def _answer(conn: Connection, q: ParsedQuestion) -> dict:
         return {"type": "search", "message": f"{total} application{'s' if total != 1 else ''} with a matching {'refusal reason' if kind == 'refusal_reason' else 'condition' if kind == 'condition' else 'reason or condition'}{_scope(q)}. Showing the {shown} best matches.",
                 "results": results, "total": total}
 
-    if q.decision or q.year or q.place or q.authority:
-        total, rows = data.list_applications(conn, q.authority, q.year, q.decision, q.place)
-        return {"type": "list", "message": f"{total:,} applications{_scope(q)}{'' if q.authority else ' (Galway County and City)'}. The most recent are listed below.", "results": rows, "total": total}
+    if q.asks_item_text and (q.decision or q.year or q.month or q.place):
+        total, with_text, rows = data.items_for_scope(conn, q.authority, q.year, q.decision, q.place, q.month)
+        what = {"REFUSED": "reasons for refusal", "CONDITIONAL": "conditions"}.get(q.decision, "reasons and conditions")
+        if not total:
+            return {"type": "not_found", "message": f"No applications were decided{_scope(q)}.", "note": period_note, "suggestions": EXAMPLES[:4]}
+        msg = f"{total:,} application{'s' if total != 1 else ''}{_scope(q)}{'' if q.authority else ' (Galway County and City)'}. "
+        if with_text:
+            msg += (f"The council's {what} are available for {with_text:,} of them; "
+                    f"the {len(rows)} most recent are shown below, quoted from the council's notices.")
+        else:
+            msg += f"None of them has checked {what} in our records."
+        note = " ".join(n for n in [period_note, "Reasons and conditions cover Galway County decisions from 2025 and 2026." if with_text < total else None] if n)
+        return {"type": "reasons_list", "message": msg, "note": note or None, "results": rows, "total": total}
+
+    if q.decision or q.year or q.month or q.place or q.authority:
+        total, rows = data.list_applications(conn, q.authority, q.year, q.decision, q.place, month=q.month)
+        return {"type": "list", "message": f"{total:,} application{'s' if total != 1 else ''}{_scope(q)}{'' if q.authority else ' (Galway County and City)'}. The most recent are listed below.", "note": period_note, "results": rows, "total": total}
 
     return {"type": "help", "message": "I couldn't tell what you're looking for. Try an application number, or a topic with a place or year.", "suggestions": EXAMPLES}
 
@@ -171,8 +195,12 @@ def _scope(q: ParsedQuestion) -> str:
         parts.append({"REFUSED": "refused", "CONDITIONAL": "granted with conditions"}[q.decision])
     if q.place:
         parts.append(f"in {q.place}")
+    if q.month and q.year:
+        parts.append(f"in {MONTH_NAMES[q.month]} {q.year}")
+    elif q.month:
+        parts.append(f"in {MONTH_NAMES[q.month]}")
+    elif q.year:
+        parts.append(f"in {q.year}")
     if q.authority:
         parts.append(f"({q.authority})")
-    if q.year:
-        parts.append(f"in {q.year}")
     return (" " + " ".join(parts)) if parts else ""

@@ -168,6 +168,20 @@ function renderSearch(r) {
   return html;
 }
 
+function renderReasonsList(r) {
+  let html = `<p class="msg">${esc(r.message)}</p>`;
+  if (r.note) html += `<p class="note">${esc(r.note)}</p>`;
+  html += `<div class="results">${r.results.map(x => `
+    <div class="result">
+      <div class="top"><button type="button" class="ref" data-q="${council(x.planning_authority)} application ${esc(x.application_ref)}">${esc(x.application_ref)}</button>
+        ${pill(x.decision)} <span class="addr">${esc(x.site_address || "")} · ${fmtDate(x.decision_date)}</span></div>
+      ${x.development_description ? `<p class="snippet"><strong>Development:</strong> ${esc(describe(x.application_type, x.development_description))}</p>` : ""}
+      <ol class="items">${x.items.map(it => `<li><span class="n">${it.item_no}.</span><div>${esc(it.text)}${it.reason_text ? `<div class="reason">Reason: ${esc(it.reason_text)}</div>` : ""}</div></li>`).join("")}</ol>
+      <div class="source"><span>${esc(x.doc_type)} (document ${esc(x.council_doc_id)})</span><a href="${esc(x.source_url)}" target="_blank" rel="noopener">open PDF</a></div>
+    </div>`).join("")}</div>`;
+  return html;
+}
+
 function renderList(r) {
   let html = `<p class="msg">${esc(r.message)}</p>`;
   html += `<div class="table-wrap"><table><thead><tr><th>Ref</th><th>Decision</th><th>Decided</th><th>Address</th><th>Reasons</th></tr></thead><tbody>${
@@ -190,7 +204,8 @@ function renderCount(r) {
 function render(r) {
   if (r.type === "application") return renderApplication(r);
   if (r.type === "search") return renderSearch(r);
-  if (r.type === "list") return renderList(r);
+  if (r.type === "list") return renderList(r) + (r.note ? `<p class="note">${esc(r.note)}</p>` : "");
+  if (r.type === "reasons_list") return renderReasonsList(r);
   if (r.type === "count") return renderCount(r);
   let html = `<p class="msg">${esc(r.message)}</p>`;
   if (r.note) html += `<p class="note">${esc(r.note)}</p>`;

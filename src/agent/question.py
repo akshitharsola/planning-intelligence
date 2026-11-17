@@ -19,6 +19,8 @@ STOPWORDS = set(
     near around within get got have has had give given also only just like such
     mention mentions mentioning apply applies applied relating related regarding concerning involving
     contain contains containing say says said mentioned recent latest
+    january february march april may june july august september october november december
+    jan feb mar apr jun jul aug sep sept oct nov dec month months last tell
     s t""".split()
 )
 
@@ -52,12 +54,14 @@ class ParsedQuestion:
     wants_count: bool = False
     wants_reasons: bool = False
     wants_conditions: bool = False
+    month: Optional[int] = None
+    asks_item_text: bool = False  # "why", "reasons", "conditions": show the wording, not just a list
     is_help: bool = False
 
     def as_dict(self) -> dict:
         return {
             "refs": self.refs, "authority": self.authority, "year": self.year, "decision": self.decision,
-            "place": self.place, "topic_terms": self.topic_terms, "wants_count": self.wants_count,
+            "month": self.month, "place": self.place, "topic_terms": self.topic_terms, "wants_count": self.wants_count,
             "wants_reasons": self.wants_reasons, "wants_conditions": self.wants_conditions,
         }
 
@@ -65,6 +69,11 @@ class ParsedQuestion:
 REF_CONTEXT_RE = re.compile(r"\b(?:ref(?:erence)?|application|app|file|no\.?|number|#)\s*[:#]?\s*(\d{3,8})\b", re.I)
 NUMBER_RE = re.compile(r"(?<![\d/])(\d{3,8})(?![\d/])")
 YEAR_RE = re.compile(r"\b(20[0-3]\d)\b")
+MONTHS = {name: i for i, names in enumerate([
+    ("january", "jan"), ("february", "feb"), ("march", "mar"), ("april", "apr"), ("may",),
+    ("june", "jun"), ("july", "jul"), ("august", "aug"), ("september", "sep", "sept"),
+    ("october", "oct"), ("november", "nov"), ("december", "dec")], start=1) for name in names}
+MONTH_RE = re.compile(r"\b(" + "|".join(sorted(MONTHS, key=len, reverse=True)) + r")\b", re.I)
 PLACE_RE = re.compile(r"\b(?:in|at|near|around)\s+([A-Za-zÁÉÍÓÚáéíóú'’\-]+(?:\s+[A-Z][A-Za-zÁÉÍÓÚáéíóú'’\-]+)?)")
 
 
@@ -105,11 +114,26 @@ def parse_question(text: str) -> ParsedQuestion:
     q.wants_conditions = bool(re.search(r"\bconditions?\b", low))
     q.wants_count = bool(re.search(r"\bhow many\b|\bnumber of\b|\bcount\b|\btotal\b", low))
 
-    m = PLACE_RE.search(t)
-    if m:
+    q.asks_item_text = bool(re.search(r"\bwhy\b|\breasons?\b|\bconditions?\b", low))
+
+    for m in MONTH_RE.finditer(t):
+        word = m.group(1)
+        if word.lower() == "may":
+            # "may" is usually a verb: accept "May" capitalised, "in/of/during may", or "may 2026"
+            before, after = t[:m.start()].lower().rstrip(), t[m.end():]
+            if not (word == "May" or re.search(r"\b(in|of|during|since)$", before) or re.match(r"\s+20\d\d", after)):
+                continue
+        q.month = MONTHS[word.lower()]
+        break
+
+    for m in PLACE_RE.finditer(t):
         place = m.group(1).strip(" '’-")
-        if place.lower() not in STOPWORDS and not YEAR_RE.fullmatch(place) and not place.isdigit():
-            q.place = place
+        first = place.split()[0].lower() if place else ""
+        if (place.lower() in STOPWORDS or first in MONTHS or first in STOPWORDS
+                or YEAR_RE.fullmatch(place) or place.isdigit()):
+            continue
+        q.place = place
+        break
 
     words = re.findall(r"[a-zA-Z][a-zA-Z\-]+", low)
     place_words = set((q.place or "").lower().split())

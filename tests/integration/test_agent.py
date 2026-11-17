@@ -135,3 +135,21 @@ def test_unknown_reference_and_unknown_place():
     with engine.connect() as c:
         assert answer_question(c, "why was 99999909 refused")["type"] == "not_found"
         assert answer_question(c, "refusals in Zzyzxville")["type"] == "not_found"
+
+
+def test_reasons_for_a_month_lists_applications_with_their_items():
+    s = SessionLocal()
+    try:
+        a = _app(s, REFS[0], "REFUSED", when=date(2031, 3, 15))
+        _doc(s, a, "800040", "validated", [("Synthetic March reason.", None)], "refusal_reason")
+        _app(s, REFS[1], "REFUSED", when=date(2031, 3, 20))  # no checked text
+        s.commit()
+    finally:
+        s.close()
+    with engine.connect() as c:
+        r = answer_question(c, "Tell me reasons for applications refused in March 2031 in Galway county")
+    assert r["type"] == "reasons_list"
+    assert r["total"] == 2
+    assert [x["application_ref"] for x in r["results"]] == [REFS[0]]
+    assert r["results"][0]["items"][0]["text"] == "Synthetic March reason."
+    assert "available for 1 of them" in r["message"]
