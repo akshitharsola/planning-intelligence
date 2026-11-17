@@ -11,17 +11,47 @@ Store refusal reasons and grant conditions from Galway County Council decision-n
 | 0 Extractor (`src/parsers/decision_notice/`) | done, verified |
 | 1 Schema (models, migration 0006) | done, verified |
 | 2 Fetcher, pipeline, CLI (Tasks 3-4) + live run on 100 apps (Task 5) | done, verified |
-| 3 Full County 2023+ run (Task 6) + 40-item audit (Task 7) | NOT STARTED, see below |
+| 3a Resumable runs + data hand-back (`--skip-known`/`--refresh`, `--until-year`, progress log, stall stop, export/import scripts) | done, verified (branch `feat/decision-reasons-phase3`) |
+| 3b County run 2026 + 2025 (Task 6) | done, verified from SQL (2026-11-17), see "Phase 3 results" |
+| 3c County run 2024 + 2023 | SKIPPED by the owner (2026-11-17); not run |
+| 3d 40-item audit (Task 7) | done: 0 wrong, 36 exact, 4 not-exact (page header removal only), see below |
 | 4 Chat / left-pane (Tasks 8-10) | PARKED by the owner. No front-end or chat changes. |
 
-Tests: 248 pass (`.venv/bin/python -m pytest -q`). `test_decision_notice_replay.py` skips itself unless the original 172 spike PDFs exist on the machine; that is expected.
+Tests (Windows, 2026-11-17): 260 pass, 6 skip, 1 fail. Skips: `test_decision_notice_replay.py` and 5 ingest tests that need the original spike PDFs (not committed). The failure, `test_chat_service::test_answer_question_distinguishes_narrowed_filters_from_out_of_coverage`, also fails on the base commit; chat is parked, so it was not touched.
+
+## Phase 3 results (County, local DB, numbers from SQL)
+Data stays in the local DB and in a private export file (`scripts/export_decision_data.py`, written to gitignored `data/exports/`). Load it elsewhere with `scripts/import_decision_data.py <file>` after `scripts/ingest_dhlgh.py`.
+
+Eligible counts on 2026-11-17 (DHLGH data to 2026-11-10): 2023 1534, 2024 1680, 2025 1715, 2026 **1556** (was 958 on 2026-11-04). Total 6485.
+
+| Year | Eligible apps | Docs | validated | no_schedule | count_mismatch | needs_ocr | Items | Apps with a validated doc | Wall time |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026 | 1556 | 4261 | 2609 | 1596 | 56 | 0 | 25923 | 1534 (98.6%) | 2 h 07 min |
+| 2025 | 1715 | 4945 | 3090 | 1773 | 79 | 3 | 32289 | 1680 (98.0%) | 2 h 38 min |
+
+- Fetch failures: 2026 none. 2025: 3 PDF read timeouts, all on ref 2461734; a single `--refs 2461734` retry fetched all 3 (included above).
+- First 2026 attempt (2026-11-14) stopped at app 5: apps.galwaycoco.ie refused connections from this network for a period; nothing stored. Fix added: unreachable list pages now count as failures and a run stops after 10 failed apps in a row.
+- Apps with no decision notice or final grant on their list page (nothing stored, not a failure): 2026: 2660528, 2661435. 2025: 24254, 2560548.
+- Apps with documents but none validated: 20 in 2026, 33 in 2025 (count mismatches, plus 2 scans in 2025). Nearly all no_schedule documents (1572 of 1596, 1741 of 1773) sit in an app that also has a validated notice.
+- count_mismatch is mostly under-parsing (2026: 48 under, 8 over; 2025: 62 under, 17 over). Large gaps (e.g. 5 of 31, 2 of 18) suggest numbering the parser does not handle: candidate for a later parser pass.
+
+### Task 7 audit (2026-11-17)
+40 items sampled from 57,074 validated items (Python `random.Random(42)`, 21 from 2025, 19 from 2026, 39 conditions, 1 refusal reason). Each source PDF re-fetched at 1 req/s with the project User-Agent; all 40 sha256 equal to the stored hash. Stored text (and reason text) compared word by word with two independent extractions of the fresh PDF (poppler `pdftotext -layout` and pdfplumber); both agreed on every item.
+- **wrong: 0.**
+- **exact: 36 (90%).**
+- **not-exact: 4 (10%)**: refs 2660703 #10, 2461768 #6, 2660259 #6, 2561086 #18. Each item crosses a page break; the only difference is the page number plus the running header "Schedule Referred To - Planning Reference No. …", which the parser strips by design. No word missing or changed.
+- Boundaries checked for all 40: each item starts after its own number and ends at its "Reason:" line followed by the next item number, a page number, or (for the 5 final items) the notice footnote.
+- Against the plan's target (0 wrong, ≥95% exact): 0 wrong is met; strict word-for-word exact is 90%, below 95%. Counting page-header removal as exact, it is 40/40. Owner to decide which reading applies.
+
+## Windows setup notes (2026-11-17)
+No Docker on the run machine: Postgres 16.10 (EDB portable zip) + PostGIS 3.4.2 (OSGeo bundle) outside the repo, same user/db as `docker-compose.yml`. Python 3.13 venv; SQLAlchemy pinned to the `uv.lock` version 2.0.51 because 2.1 defaults `postgresql://` to psycopg 3. Git for Windows ships Xpdf `pdftotext` 4.00, not poppler: put a poppler build (26.11 used here, via conda-forge) first on PATH. graphify was not installed, so `graphify-out/` was not updated.
 
 ## Phase 2 live-run result (100 County apps, seed 42, local DB)
 265 documents: 176 validated, 81 no_schedule (third-party cover letters, each in an app that also has a validated notice), 5 needs_ocr, 3 count_mismatch. 96 of 100 applications have at least one validated document. 4 stored validated documents were re-fetched independently: hashes equal, raw_text identical, every item found verbatim in the PDF.
 
 Known, flagged correctly, not blocking: ref 23369 doc 2490638 parsed 6 of 11 (its Final Grant is validated); ref 2460480 parsed 15 vs stated 14.
 
-## Next task: Phase 3 (needs the owner's explicit go-ahead before starting)
+## Original Phase 3 brief (kept for reference; see Status and "Phase 3 results" for what was done)
 Eligible: 5,887 County applications (2023: 1534, 2024: 1680, 2025: 1715, 2026: 958), roughly 15,600 documents, about 10 hours at 1 req/s. Writes to the LOCAL docker DB only. Data in one person's local DB is not shared with others.
 
 Steps:
