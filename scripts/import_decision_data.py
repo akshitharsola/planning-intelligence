@@ -6,7 +6,8 @@ Usage:
 Idempotent upsert on (planning_authority, council_doc_id). Each document is
 relinked to the local dhlgh_applications row by (planning_authority,
 application_ref); with no match it is imported with a null link. Items are
-replaced only when content_sha256 differs. Run scripts/ingest_dhlgh.py first so
+replaced only when content_sha256 or parser_version differs
+(so a re-parsed export updates an earlier import). Run scripts/ingest_dhlgh.py first so
 the links resolve.
 """
 

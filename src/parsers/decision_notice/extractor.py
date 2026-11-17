@@ -7,6 +7,11 @@ from dataclasses import dataclass
 import re
 from typing import Optional
 
+# Bump when parsing output changes; stored documents record the version that parsed them.
+# 2: "Signed and dated…" condition text no longer ends an item; "REASON In…" (no colon)
+#    labels split; stray "N." line above a Reason line no longer shifts items.
+PARSER_VERSION = "2"
+
 # Watermark tokens stamped across Galway City planning inspection PDFs
 WM_TOKENS = {
     "G", "al", "w", "ay", "C", "ity", "Pl", "ann", "an", "ni", "ng", "in", "g",
@@ -75,11 +80,19 @@ def get_stated_count(text: str) -> Optional[int]:
     return int(m.group(1)) if m else None
 
 
+# Signature block lines ("Signed this 1st day…", "SIGNED:", "Signed the 3rd…", "Signed 12 day…").
+# Condition wording such as "Signed and dated copies of the contract…" must NOT match.
+SIGNATURE_LINE_RE = re.compile(r"^\s*signed\s*(?::|this\b|the\b|\d|on\s+behalf\b|by\b)", re.I)
+
+# Reason label at the start of a line without a colon: "REASON In…", "Reason in…", "Reason; In…".
+REASON_LABEL_NO_COLON_RE = re.compile(r"^[ \t]*REASONS?[ \t]*;?[ \t]+(?=(?:in|to|for)\b)", re.I | re.M)
+
+
 def clean_item_lines(lines: list[str]) -> list[str]:
     """Strip running headers, footers, standalone page numbers, and form feeds."""
     cleaned = []
     for l in lines:
-        if re.match(r"^\s*(?:SIGNED|Signed)\b", l):
+        if SIGNATURE_LINE_RE.match(l):
             break
         s = l.strip().replace("\x0c", "").strip()
         if not s:
@@ -101,14 +114,28 @@ def split_condition_and_reason(lines: list[str], is_refusal: bool = False) -> tu
     if is_refusal:
         return " ".join(lines), None
     full = "\n".join(lines)
-    m = re.search(r"\bREASONS?\s*:\s*(.*)", full, re.I | re.S)
-    if m:
-        cond_text = full[:m.start()].strip()
-        reason_text = m.group(1).strip()
+    label = re.search(r"\bREASONS?\s*:\s*", full, re.I) or REASON_LABEL_NO_COLON_RE.search(full)
+    if label:
+        cond_text = full[:label.start()].strip()
+        reason_text = full[label.end():].strip()
         cond_clean = re.sub(r"\s+", " ", cond_text)
         reason_clean = re.sub(r"\s+", " ", reason_text)
         return cond_clean, reason_clean
     return re.sub(r"\s+", " ", full), None
+
+
+def _is_stray_number(lines: list[str], idx: int, num: int) -> bool:
+    """A bare "N." line is stray when the next text is a Reason line AND a real "N. text"
+    item header follows later (before item N+1). Otherwise it is the genuine item N."""
+    nxt = next((l for l in lines[idx + 1:] if l.strip()), "")
+    if not re.match(r"^\s*REASONS?\b", nxt, re.I):
+        return False
+    for later in lines[idx + 1:]:
+        if re.match(rf"^\s{{0,6}}{num}[.)]\s+\S", later):
+            return True
+        if re.match(rf"^\s{{0,6}}{num + 1}[.)](?!\d)", later):
+            return False
+    return False
 
 
 def parse_schedule_items(sec: str, expected_total: Optional[int] = None) -> list[dict]:
@@ -120,7 +147,7 @@ def parse_schedule_items(sec: str, expected_total: Optional[int] = None) -> list
     # Match top-level item numbers (allow '.', ')', or 2+ spaces / end-of-line delimiter)
     item_header_re = re.compile(r"^(\s*)(\d{1,2})(?:[.)](?!\d)|\s{2,}|\s*$)\s*(.*)")
 
-    for line in lines:
+    for idx, line in enumerate(lines):
         if "schedule referred to" in line.lower() or "planning register reference" in line.lower():
             continue
         if re.search(r"^\s*Footnote\s*:", line, re.I):
@@ -135,6 +162,10 @@ def parse_schedule_items(sec: str, expected_total: Optional[int] = None) -> list
             num = int(m.group(2))
             rest = m.group(3).strip()
             # Top-level items have shallow indent (<= 6 spaces) and strictly sequential numbering
+            if indent <= 6 and num == expected_num and not rest and current_item and _is_stray_number(lines, idx, num):
+                # A bare "N." directly above the previous item's "Reason:" line is a stray
+                # number, not the start of item N; keep the reason with the current item.
+                continue
             if indent <= 6 and num == expected_num:
                 if current_item:
                     raw_items.append(current_item)
@@ -190,7 +221,7 @@ def parse_notice(
         lines = [l.strip() for l in m_dur.group(1).splitlines() if l.strip()]
         end_lines = []
         for l in lines:
-            if re.match(r"^signed", l, re.I):
+            if SIGNATURE_LINE_RE.match(l):
                 break
             end_lines.append(l)
         c_text, r_text = split_condition_and_reason(clean_item_lines(end_lines), is_refusal=True)

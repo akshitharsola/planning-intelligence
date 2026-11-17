@@ -15,6 +15,7 @@ from src.core.models.decision_document import DecisionDocument
 from src.core.models.decision_item import DecisionItem
 from src.core.models.dhlgh_application import DHLGHApplication
 from src.parsers.decision_notice.extractor import (
+    PARSER_VERSION,
     get_stated_count,
     has_text_layer,
     parse_notice,
@@ -186,6 +187,7 @@ def ingest_application(
                 existing_doc.parsed_count = len(parsed.items)
                 existing_doc.failure_reason = parsed.failure_reason
                 existing_doc.extracted_at = now
+                existing_doc.parser_version = PARSER_VERSION
 
                 # Clear previous items and replace
                 existing_doc.items.clear()
@@ -214,7 +216,7 @@ def ingest_application(
                     page_count=page_count,
                     extraction_method="pdftotext",
                     raw_text=raw_text,
-                    parser_version="1",
+                    parser_version=PARSER_VERSION,
                     status=parsed.status,
                     stated_count=parsed.stated_count,
                     target_count=parsed.target_count,

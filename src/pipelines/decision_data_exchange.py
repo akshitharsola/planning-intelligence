@@ -136,8 +136,8 @@ def import_decision_data(session: Session, path: Path, commit_every: int = 200) 
     """Idempotent upsert of an exchange file on (planning_authority, council_doc_id).
 
     - New document: inserted with its items.
-    - Same content_sha256: left as is (only the application link is refreshed).
-    - Different content_sha256: fields updated and items replaced.
+    - Same content_sha256 and parser_version: left as is (only the application link is refreshed).
+    - Different content_sha256 or parser_version (e.g. after a re-parse): fields updated and items replaced.
     """
     stats = ImportStats()
     app_ids: dict[tuple[str, str], Optional[uuid.UUID]] = {}
@@ -172,7 +172,7 @@ def import_decision_data(session: Session, path: Path, commit_every: int = 200) 
             session.flush()
             stats.items_written += _add_items(session, doc, rec)
             stats.inserted += 1
-        elif existing.content_sha256 == rec["content_sha256"]:
+        elif existing.content_sha256 == rec["content_sha256"] and existing.parser_version == rec["parser_version"]:
             if existing.dhlgh_application_id != link_id:
                 existing.dhlgh_application_id = link_id
             stats.unchanged += 1

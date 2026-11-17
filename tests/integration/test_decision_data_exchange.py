@@ -263,3 +263,26 @@ def test_cli_scripts_round_trip(session, tmp_path, capsys):
     assert "inserted=1 updated=0 unchanged=0 items_written=2 unlinked=0" in capsys.readouterr().out
     import_main([str(out)])
     assert "inserted=0 updated=0 unchanged=1" in capsys.readouterr().out
+
+
+def test_newer_parser_version_with_same_hash_replaces_items(session, tmp_path):
+    app = _seed_app(session, "XCHG/PV")
+    _seed_doc(session, app, "PV1", n_items=2)
+    out = tmp_path / "pv.jsonl.gz"
+    export_decision_data(session, out, authority=AUTH)
+    rec = _read(out)[0]
+
+    rec["parser_version"] = "2"  # same PDF (same content_sha256), re-parsed
+    rec["items"][0]["text"] = "Synthetic condition 1, now complete."
+    newer = tmp_path / "pv2.jsonl.gz"
+    _write(newer, [rec])
+
+    res = import_decision_data(session, newer)
+    assert (res.inserted, res.updated, res.unchanged) == (0, 1, 0)
+    session.expire_all()
+    doc = session.query(DecisionDocument).filter_by(planning_authority=AUTH, council_doc_id="PV1").one()
+    assert doc.parser_version == "2"
+    assert sorted(i.text for i in doc.items)[0] == "Synthetic condition 1, now complete."
+
+    res2 = import_decision_data(session, newer)
+    assert (res2.updated, res2.unchanged) == (0, 1)

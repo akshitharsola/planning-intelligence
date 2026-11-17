@@ -151,3 +151,137 @@ def test_extension_of_duration_inline_refusal_pins_single_item():
     assert parsed_mismatch.status == "count_mismatch"
     assert len(parsed_mismatch.items) == 1
     assert parsed_mismatch.target_count == 2
+
+
+# --- parser v2 fixes (synthetic notices only; no real notice text) ---
+
+def _grant_notice(schedule_body: str, count: int, signature: str = "Signed this 01st day of January 2026") -> str:
+    return (
+        "GALWAY COUNTY COUNCIL\n"
+        "NOTIFICATION OF DECISION\n"
+        "Planning Reference: TEST/0001\n"
+        f"(CONDITION NO'S {count})\n"
+        "Decision: GRANT subject to the conditions set out in the Schedule.\n"
+        "\n"
+        "Schedule Referred To - Planning Reference No. TEST/0001\n"
+        "\n"
+        f"{schedule_body}\n"
+        "\n"
+        f"{signature}\n"
+        "for Senior Planner\n"
+    )
+
+
+def test_condition_line_starting_signed_and_dated_is_not_treated_as_signature():
+    body = (
+        "1. The development shall be carried out in accordance with the plans.\n"
+        "Reason: In the interest of clarity.\n"
+        "\n"
+        "2. (a) A maintenance contract for the test system shall be kept in place at all times.\n"
+        "Signed and dated copies of the contract shall be made available on request.\n"
+        "(b) Any fill material imported on site must be free of invasive species.\n"
+        "Reason: In the interest of public health.\n"
+        "\n"
+        "3. Services shall be laid underground.\n"
+        "Reason: In the interest of visual amenity."
+    )
+    parsed = parse_notice(_grant_notice(body, 3), authority="Galway County Council", decision="CONDITIONAL")
+    assert parsed.status == "validated"
+    item2 = parsed.items[1]
+    assert "Signed and dated copies of the contract shall be made available on request." in item2.text
+    assert item2.text.endswith("free of invasive species.")
+    assert item2.reason_text == "In the interest of public health."
+
+
+@pytest.mark.parametrize(
+    "signature",
+    [
+        "Signed this 01st day of January 2026",
+        "SIGNED: ____________________",
+        "SIGNED THIS 4th DAY OF MAY 2026",
+        "Signed the 3rd day of March 2026",
+        "Signed 12 day of June 2026",
+    ],
+)
+def test_real_signature_lines_still_end_the_last_item(signature):
+    body = (
+        "1. The development shall be carried out in accordance with the plans.\n"
+        "Reason: In the interest of clarity."
+    )
+    parsed = parse_notice(_grant_notice(body, 1, signature=signature), authority="Galway County Council", decision="CONDITIONAL")
+    assert parsed.status == "validated"
+    assert parsed.items[0].reason_text == "In the interest of clarity."
+    assert "for Senior Planner" not in parsed.items[0].reason_text
+
+
+@pytest.mark.parametrize("label", ["REASON In", "Reason In", "Reason in", "Reason; In"])
+def test_reason_label_without_colon_is_split_out(label):
+    body = (
+        "1. The roof shall be finished in dark grey slate.\n"
+        f"{label} the interest of visual amenity."
+    )
+    parsed = parse_notice(_grant_notice(body, 1), authority="Galway County Council", decision="CONDITIONAL")
+    item = parsed.items[0]
+    assert item.text == "The roof shall be finished in dark grey slate."
+    assert item.reason_text.lower() == "in the interest of visual amenity."
+
+
+def test_word_reason_inside_condition_text_is_not_a_label():
+    body = (
+        "1. The house shall not be used for any reason other than as a dwelling.\n"
+        "Reason: In the interest of orderly development."
+    )
+    parsed = parse_notice(_grant_notice(body, 1), authority="Galway County Council", decision="CONDITIONAL")
+    assert parsed.items[0].text == "The house shall not be used for any reason other than as a dwelling."
+    assert parsed.items[0].reason_text == "In the interest of orderly development."
+
+
+def test_stray_number_line_before_reason_does_not_shift_items():
+    body = (
+        "1. The development shall be carried out in accordance with the plans.\n"
+        "Reason: In the interest of clarity.\n"
+        "\n"
+        "2. The garage shall not be used for habitable or commercial purposes.\n"
+        "3.\n"
+        "Reason: In the interest of orderly development.\n"
+        "\n"
+        "3. The finishes of the garage shall match those of the house.\n"
+        "Reason: In the interest of visual amenity."
+    )
+    parsed = parse_notice(_grant_notice(body, 3), authority="Galway County Council", decision="CONDITIONAL")
+    assert parsed.status == "validated"
+    assert [i.n for i in parsed.items] == [1, 2, 3]
+    assert parsed.items[1].text == "The garage shall not be used for habitable or commercial purposes."
+    assert parsed.items[1].reason_text == "In the interest of orderly development."
+    assert parsed.items[2].text == "The finishes of the garage shall match those of the house."
+    assert parsed.items[2].reason_text == "In the interest of visual amenity."
+
+
+def test_bare_number_line_followed_by_text_is_still_an_item():
+    body = (
+        "1.\n"
+        "The development shall be carried out in accordance with the plans.\n"
+        "Reason: In the interest of clarity.\n"
+        "\n"
+        "2.\n"
+        "Services shall be laid underground.\n"
+        "Reason: In the interest of visual amenity."
+    )
+    parsed = parse_notice(_grant_notice(body, 2), authority="Galway County Council", decision="CONDITIONAL")
+    assert parsed.status == "validated"
+    assert parsed.items[1].text == "Services shall be laid underground."
+
+
+def test_bare_number_before_reason_without_later_duplicate_stays_an_item():
+    # The bare "2." is the genuine item 2 (no other "2." follows), so the count must hold.
+    body = (
+        "1. Surface water shall be disposed of on site.\n"
+        "2.\n"
+        "REASON: In the interest of proper planning.\n"
+        "\n"
+        "3. The building shall be used for agricultural purposes only.\n"
+        "Reason: In the interest of orderly development."
+    )
+    parsed = parse_notice(_grant_notice(body, 3), authority="Galway County Council", decision="CONDITIONAL")
+    assert parsed.status == "validated"
+    assert [i.n for i in parsed.items] == [1, 2, 3]
