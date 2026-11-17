@@ -76,6 +76,16 @@ a { color: var(--accent); }
                color: var(--accent); cursor: pointer; font-size: .95rem; text-decoration: underline; }
 .result .addr { color: var(--muted); font-size: .88rem; }
 .snippet { margin: 0; font-size: .92rem; }
+details.result { padding: 0; gap: 0; }
+details.result > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: baseline;
+                           gap: 6px 12px; padding: 10px 12px; border-radius: 8px; }
+details.result > summary::-webkit-details-marker { display: none; }
+details.result > summary::before { content: "▸"; color: var(--accent); width: 1em; transition: transform .15s; }
+details.result[open] > summary::before { transform: rotate(90deg); }
+details.result > summary:hover, details.result > summary:focus-visible { background: var(--accent-soft); outline: none; }
+details.result .ref-text { font-family: var(--mono); font-weight: 600; color: var(--accent); text-decoration: underline; }
+details.result .count { margin-left: auto; font-size: .82rem; color: var(--muted); }
+details.result .detail { display: flex; flex-direction: column; gap: 10px; padding: 4px 12px 12px; }
 mark { background: var(--mark); color: inherit; padding: 0 1px; border-radius: 2px; }
 .table-wrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; font-size: .88rem; }
@@ -171,14 +181,24 @@ function renderSearch(r) {
 function renderReasonsList(r) {
   let html = `<p class="msg">${esc(r.message)}</p>`;
   if (r.note) html += `<p class="note">${esc(r.note)}</p>`;
-  html += `<div class="results">${r.results.map(x => `
-    <div class="result">
-      <div class="top"><button type="button" class="ref" data-q="${council(x.planning_authority)} application ${esc(x.application_ref)}">${esc(x.application_ref)}</button>
-        ${pill(x.decision)} <span class="addr">${esc(x.site_address || "")} · ${fmtDate(x.decision_date)}</span></div>
-      ${x.development_description ? `<p class="snippet"><strong>Development:</strong> ${esc(describe(x.application_type, x.development_description))}</p>` : ""}
-      <ol class="items">${x.items.map(it => `<li><span class="n">${it.item_no}.</span><div>${esc(it.text)}${it.reason_text ? `<div class="reason">Reason: ${esc(it.reason_text)}</div>` : ""}</div></li>`).join("")}</ol>
-      <div class="source"><span>${esc(x.doc_type)} (document ${esc(x.council_doc_id)})</span><a href="${esc(x.source_url)}" target="_blank" rel="noopener">open PDF</a></div>
-    </div>`).join("")}</div>`;
+  html += `<div class="results">${r.results.map(x => {
+    const n = x.items.length, noun = x.items[0] && x.items[0].kind === "condition" ? "condition" : "reason";
+    return `
+    <details class="result">
+      <summary>
+        <span class="ref-text">${esc(x.application_ref)}</span>
+        ${pill(x.decision)}
+        <span class="addr">${esc(x.site_address || "")} · ${fmtDate(x.decision_date)}</span>
+        <span class="count">${n} ${noun}${n === 1 ? "" : "s"}</span>
+      </summary>
+      <div class="detail">
+        ${x.development_description ? `<p class="snippet"><strong>Development:</strong> ${esc(describe(x.application_type, x.development_description))}</p>` : ""}
+        <ol class="items">${x.items.map(it => `<li><span class="n">${it.item_no}.</span><div>${esc(it.text)}${it.reason_text ? `<div class="reason">Reason: ${esc(it.reason_text)}</div>` : ""}</div></li>`).join("")}</ol>
+        <div class="source"><span>${esc(x.doc_type)} (document ${esc(x.council_doc_id)})</span><a href="${esc(x.source_url)}" target="_blank" rel="noopener">open PDF</a>
+          <button type="button" class="ref" data-q="${council(x.planning_authority)} application ${esc(x.application_ref)}">full application details</button></div>
+      </div>
+    </details>`;
+  }).join("")}</div>`;
   return html;
 }
 
