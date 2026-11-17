@@ -258,6 +258,7 @@ def ingest_authority(
     dry_run: bool = False,
     skip_known: bool = True,
     progress_every: int = 25,
+    max_consecutive_failures: int = 10,
 ) -> IngestResult:
     """Run decision document ingestion across eligible applications in an authority.
 
@@ -267,6 +268,9 @@ def ingest_authority(
     re-fetches every PDF and re-checks its hash.
     Each document is committed on its own, so Ctrl-C loses at most the document
     in flight; re-running the same command resumes.
+    The run stops (RuntimeError) after max_consecutive_failures applications in a
+    row fail without any document stored or skipped, e.g. when the council site
+    stops responding.
     """
     query = session.query(DHLGHApplication).filter(DHLGHApplication.planning_authority == authority)
     query = query.filter(DHLGHApplication.decision.in_(["CONDITIONAL", "REFUSED"]))
@@ -307,9 +311,24 @@ def ingest_authority(
     )
     started = time.monotonic()
     idx = 0
+    consecutive_failures = 0
     try:
         for idx, app in enumerate(applications, start=1):
-            _ingest_one(session, fetcher, app, idx, total, total_result, action_label, dry_run, skip_known)
+            app_failed = _ingest_one(
+                session, fetcher, app, idx, total, total_result, action_label, dry_run, skip_known
+            )
+            consecutive_failures = consecutive_failures + 1 if app_failed else 0
+            if max_consecutive_failures and consecutive_failures >= max_consecutive_failures:
+                _print_summary(total_result, action_label)
+                logger.error(
+                    "Stopping: %d consecutive applications failed (last %s, %d/%d). "
+                    "Check the council site, then re-run the same command to resume.",
+                    consecutive_failures,
+                    app.application_ref,
+                    idx,
+                    total,
+                )
+                raise RuntimeError(f"{consecutive_failures} consecutive application failures: stopping run")
             if progress_every and (idx % progress_every == 0 or idx == total):
                 _log_progress(idx, total, total_result, action_label, time.monotonic() - started)
     except KeyboardInterrupt:
@@ -327,7 +346,8 @@ def ingest_authority(
     return total_result
 
 
-def _ingest_one(session, fetcher, app, idx, total, total_result, action_label, dry_run, skip_known) -> None:
+def _ingest_one(session, fetcher, app, idx, total, total_result, action_label, dry_run, skip_known) -> bool:
+    """Ingest one application; return True if it failed with nothing stored or skipped."""
     try:
         app_result = ingest_application(session, fetcher, app, dry_run=dry_run, skip_known=skip_known)
         total_result.merge(app_result)
@@ -343,6 +363,11 @@ def _ingest_one(session, fetcher, app, idx, total, total_result, action_label, d
             f"known={app_result.documents_skipped_known}, "
             f"failures={app_result.failures} [{stat_str}]"
         )
+        return app_result.failures > 0 and not (
+            app_result.documents_stored
+            or app_result.documents_skipped_unchanged
+            or app_result.documents_skipped_known
+        )
     except RuntimeError as e:
         # Re-raise server aborts (e.g. repeated 429/403) immediately
         print(f"[{idx}/{total}] {app.application_ref}: CRITICAL ERROR - {e}")
@@ -352,6 +377,7 @@ def _ingest_one(session, fetcher, app, idx, total, total_result, action_label, d
         logger.error("Unhandled error ingesting application %s: %s", app.application_ref, e)
         total_result.failures += 1
         print(f"[{idx}/{total}] {app.application_ref}: FAILED ({e})")
+        return True
 
 
 def _log_progress(done: int, total: int, r: IngestResult, action_label: str, elapsed: float) -> None:

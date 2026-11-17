@@ -549,3 +549,71 @@ def test_keyboard_interrupt_keeps_committed_documents_and_resumes():
         assert res.documents_skipped_known == 1
     finally:
         session.close()
+
+
+def test_list_page_failure_is_counted_as_failure():
+    from src.sources.galway.decision_documents import ListFetchError
+
+    session = SessionLocal()
+    try:
+        app = _seed_app(session, "Galway County Council", "INGEST_TEST/LISTFAIL")
+
+        class Failing(CountingFetcher):
+            def fetch_list(self, ref: str) -> str:
+                raise ListFetchError("timed out")
+
+        res = ingest_application(session, Failing({}), app)
+        assert res.failures == 1
+        assert res.documents_stored == 0
+    finally:
+        session.close()
+
+
+def test_run_stops_after_consecutive_application_failures():
+    from src.sources.galway.decision_documents import ListFetchError
+
+    session = SessionLocal()
+    try:
+        refs = []
+        for i in range(6):
+            ref = f"INGEST_TEST/STALL_{i}"
+            _seed_app(session, "Galway County Council", ref, decision_date=date(2024, 1, 1 + i))
+            refs.append(ref)
+
+        class Failing(CountingFetcher):
+            def fetch_list(self, ref: str) -> str:
+                self.list_calls.append(ref)
+                raise ListFetchError("timed out")
+
+        fetcher = Failing({})
+        with pytest.raises(RuntimeError, match="consecutive"):
+            ingest_authority(session=session, fetcher=fetcher, refs=refs, max_consecutive_failures=3)
+        assert len(fetcher.list_calls) == 3
+    finally:
+        session.close()
+
+
+def test_success_resets_consecutive_failure_count():
+    from src.sources.galway.decision_documents import ListFetchError
+
+    session = SessionLocal()
+    try:
+        refs = []
+        for i in range(6):
+            ref = f"INGEST_TEST/FLAKY_{i}"
+            _seed_app(session, "Galway County Council", ref, decision_date=date(2024, 1, 1 + i))
+            refs.append(ref)
+
+        class Flaky(CountingFetcher):
+            def fetch_list(self, ref: str) -> str:
+                self.list_calls.append(ref)
+                if ref.endswith(("_2", "_5")):
+                    return ""
+                raise ListFetchError("timed out")
+
+        fetcher = Flaky({})
+        res = ingest_authority(session=session, fetcher=fetcher, refs=refs, max_consecutive_failures=3)
+        assert len(fetcher.list_calls) == 6
+        assert res.failures == 4
+    finally:
+        session.close()
