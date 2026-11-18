@@ -3,6 +3,10 @@
 Usage:
     python -m scripts.ingest_decision_documents --authority "Galway County Council" --since-year 2023 --limit 100
     python -m scripts.ingest_decision_documents --authority "Galway County Council" --refs 2360654,2260277 --dry-run
+    python -m scripts.ingest_decision_documents --authority "Galway County Council" --since-year 2026 --until-year 2026
+
+Stored documents are skipped without re-downloading (safe to Ctrl-C and re-run);
+--refresh re-downloads them and re-checks hashes.
 """
 
 import argparse
@@ -46,6 +50,20 @@ def parse_args(argv=None):
         type=int,
         default=2023,
         help="Filter decision year >= YYYY (default: 2023)",
+    )
+    parser.add_argument(
+        "--until-year",
+        type=int,
+        default=None,
+        help="Filter decision year <= YYYY (e.g. --since-year 2026 --until-year 2026 for one year)",
+    )
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help=(
+            "Re-download PDFs already stored and re-check their hashes. By default "
+            "(--skip-known) stored documents are not re-downloaded; list pages are still fetched."
+        ),
     )
     parser.add_argument(
         "--limit",
@@ -100,16 +118,21 @@ def main():
             authority=args.authority,
             from_date=from_date,
             since_year=args.since_year,
+            until_year=args.until_year,
             limit=args.limit,
             refs=refs_list,
             sample=args.sample,
             seed=args.seed,
             dry_run=args.dry_run,
+            skip_known=not args.refresh,
         )
+    except KeyboardInterrupt:
+        print("Interrupted. Re-run the same command to resume (stored documents are skipped).")
+        sys.exit(130)
     finally:
         session.close()
 
-    if result.failures > 0 and result.documents_stored == 0 and result.documents_skipped_unchanged == 0:
+    if result.failures > 0 and result.documents_stored == 0 and result.documents_skipped_unchanged == 0 and result.documents_skipped_known == 0:
         sys.exit(1)
 
 

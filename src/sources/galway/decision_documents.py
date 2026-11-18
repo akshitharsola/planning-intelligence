@@ -22,6 +22,14 @@ WANTED_DOC_TYPES = {
 }
 
 
+class ListFetchError(Exception):
+    """The document list page could not be fetched (timeouts, server errors).
+
+    Deliberately not a RuntimeError: RuntimeError (429/403) aborts the whole run,
+    while this only fails the one application.
+    """
+
+
 @dataclass(frozen=True)
 class DocLink:
     council_doc_id: str
@@ -156,10 +164,16 @@ class CountyDocFetcher:
         return None
 
     def fetch_list(self, ref: str) -> str:
-        """Fetch the HTML document list page for an application ref."""
+        """Fetch the HTML document list page for an application ref.
+
+        Raises ListFetchError when the page cannot be fetched, so the failure is
+        counted instead of looking like an application with no documents.
+        """
         clean_ref = ref.replace("/", "")
         url = f"{BASE_DOCS_URL}/?RefNo={clean_ref}"
         data = self._get(url)
+        if data is None:
+            raise ListFetchError(f"could not fetch document list for {ref}")
         if not data:
             return ""
         return data.decode("utf-8", "replace")

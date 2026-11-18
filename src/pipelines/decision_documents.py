@@ -7,6 +7,7 @@ import hashlib
 import logging
 import random
 import subprocess
+import time
 from typing import Optional
 from sqlalchemy.orm import Session
 
@@ -14,6 +15,7 @@ from src.core.models.decision_document import DecisionDocument
 from src.core.models.decision_item import DecisionItem
 from src.core.models.dhlgh_application import DHLGHApplication
 from src.parsers.decision_notice.extractor import (
+    PARSER_VERSION,
     get_stated_count,
     has_text_layer,
     parse_notice,
@@ -27,12 +29,14 @@ logger = logging.getLogger(__name__)
 class IngestResult:
     documents_stored: int = 0
     documents_skipped_unchanged: int = 0
+    documents_skipped_known: int = 0
     failures: int = 0
     statuses: dict[str, int] = field(default_factory=lambda: defaultdict(int))
 
     def merge(self, other: "IngestResult") -> None:
         self.documents_stored += other.documents_stored
         self.documents_skipped_unchanged += other.documents_skipped_unchanged
+        self.documents_skipped_known += other.documents_skipped_known
         self.failures += other.failures
         for status, count in other.statuses.items():
             self.statuses[status] += count
@@ -60,10 +64,13 @@ def ingest_application(
     fetcher: CountyDocFetcher,
     application: DHLGHApplication,
     dry_run: bool = False,
+    skip_known: bool = False,
 ) -> IngestResult:
     """Fetch and ingest all decision notices for an application.
 
     Idempotent: skips documents whose content_sha256 is unchanged.
+    With skip_known=True, a document whose (authority, council_doc_id) is
+    already stored is not downloaded at all (the list page is still fetched).
     Stores items for validated, count_mismatch, and unverified documents.
     """
     result = IngestResult()
@@ -83,6 +90,20 @@ def ingest_application(
         return result
 
     for link in links:
+        if skip_known:
+            known_status = (
+                session.query(DecisionDocument.status)
+                .filter_by(
+                    planning_authority=application.planning_authority,
+                    council_doc_id=link.council_doc_id,
+                )
+                .scalar()
+            )
+            if known_status is not None:
+                result.documents_skipped_known += 1
+                result.statuses[known_status] += 1
+                continue
+
         try:
             pdf_bytes = fetcher.fetch_pdf(link)
         except Exception as e:
@@ -166,6 +187,7 @@ def ingest_application(
                 existing_doc.parsed_count = len(parsed.items)
                 existing_doc.failure_reason = parsed.failure_reason
                 existing_doc.extracted_at = now
+                existing_doc.parser_version = PARSER_VERSION
 
                 # Clear previous items and replace
                 existing_doc.items.clear()
@@ -194,7 +216,7 @@ def ingest_application(
                     page_count=page_count,
                     extraction_method="pdftotext",
                     raw_text=raw_text,
-                    parser_version="1",
+                    parser_version=PARSER_VERSION,
                     status=parsed.status,
                     stated_count=parsed.stated_count,
                     target_count=parsed.target_count,
@@ -230,22 +252,40 @@ def ingest_authority(
     authority: str = "Galway County Council",
     from_date: Optional[date] = None,
     since_year: Optional[int] = None,
+    until_year: Optional[int] = None,
     limit: Optional[int] = None,
     refs: Optional[list[str]] = None,
     sample: Optional[int] = None,
     seed: Optional[int] = None,
     dry_run: bool = False,
+    skip_known: bool = True,
+    progress_every: int = 25,
+    max_consecutive_failures: int = 10,
 ) -> IngestResult:
-    """Run decision document ingestion across eligible applications in an authority."""
+    """Run decision document ingestion across eligible applications in an authority.
+
+    skip_known (default on): documents already stored for this authority are not
+    re-downloaded, so an interrupted run resumes cheaply; list pages are still
+    fetched so new documents are found. skip_known=False (CLI --refresh)
+    re-fetches every PDF and re-checks its hash.
+    Each document is committed on its own, so Ctrl-C loses at most the document
+    in flight; re-running the same command resumes.
+    The run stops (RuntimeError) after max_consecutive_failures applications in a
+    row fail without any document stored or skipped, e.g. when the council site
+    stops responding.
+    """
     query = session.query(DHLGHApplication).filter(DHLGHApplication.planning_authority == authority)
     query = query.filter(DHLGHApplication.decision.in_(["CONDITIONAL", "REFUSED"]))
 
     if refs:
         query = query.filter(DHLGHApplication.application_ref.in_(refs))
-    elif from_date:
-        query = query.filter(DHLGHApplication.decision_date >= from_date)
-    elif since_year:
-        query = query.filter(DHLGHApplication.decision_date >= date(since_year, 1, 1))
+    else:
+        if from_date:
+            query = query.filter(DHLGHApplication.decision_date >= from_date)
+        elif since_year:
+            query = query.filter(DHLGHApplication.decision_date >= date(since_year, 1, 1))
+        if until_year:
+            query = query.filter(DHLGHApplication.decision_date < date(until_year + 1, 1, 1))
 
     query = query.order_by(
         DHLGHApplication.decision_date.asc().nulls_last(),
@@ -265,32 +305,107 @@ def ingest_authority(
 
     total_result = IngestResult()
     action_label = "parsed" if dry_run else "stored"
+    total = len(applications)
 
-    print(f"Ingesting decision documents for {len(applications)} applications (authority: {authority}, dry_run={dry_run})...")
+    print(
+        f"Ingesting decision documents for {total} applications "
+        f"(authority: {authority}, dry_run={dry_run}, skip_known={skip_known})..."
+    )
+    started = time.monotonic()
+    idx = 0
+    consecutive_failures = 0
+    try:
+        for idx, app in enumerate(applications, start=1):
+            app_failed = _ingest_one(
+                session, fetcher, app, idx, total, total_result, action_label, dry_run, skip_known
+            )
+            consecutive_failures = consecutive_failures + 1 if app_failed else 0
+            if max_consecutive_failures and consecutive_failures >= max_consecutive_failures:
+                _print_summary(total_result, action_label)
+                logger.error(
+                    "Stopping: %d consecutive applications failed (last %s, %d/%d). "
+                    "Check the council site, then re-run the same command to resume.",
+                    consecutive_failures,
+                    app.application_ref,
+                    idx,
+                    total,
+                )
+                raise RuntimeError(f"{consecutive_failures} consecutive application failures: stopping run")
+            if progress_every and (idx % progress_every == 0 or idx == total):
+                _log_progress(idx, total, total_result, action_label, time.monotonic() - started)
+    except KeyboardInterrupt:
+        session.rollback()
+        logger.warning(
+            "Interrupted during application %d/%d; committed documents are kept. "
+            "Re-run the same command to resume.",
+            idx,
+            total,
+        )
+        _print_summary(total_result, action_label)
+        raise
 
-    for idx, app in enumerate(applications, start=1):
-        try:
-            app_result = ingest_application(session, fetcher, app, dry_run=dry_run)
-            total_result.merge(app_result)
-            stored = app_result.documents_stored
-            skipped = app_result.documents_skipped_unchanged
-            stat_str = ", ".join(f"{k}={v}" for k, v in sorted(app_result.statuses.items())) if app_result.statuses else "none"
-            print(f"[{idx}/{len(applications)}] {app.application_ref} ({app.decision}): {action_label}={stored}, skipped={skipped} [{stat_str}]")
-        except RuntimeError as e:
-            # Re-raise server aborts (e.g. repeated 429/403) immediately
-            print(f"[{idx}/{len(applications)}] {app.application_ref}: CRITICAL ERROR - {e}")
-            raise
-        except Exception as e:
-            logger.error("Unhandled error ingesting application %s: %s", app.application_ref, e)
-            total_result.failures += 1
-            print(f"[{idx}/{len(applications)}] {app.application_ref}: FAILED ({e})")
+    _print_summary(total_result, action_label)
+    return total_result
 
+
+def _ingest_one(session, fetcher, app, idx, total, total_result, action_label, dry_run, skip_known) -> bool:
+    """Ingest one application; return True if it failed with nothing stored or skipped."""
+    try:
+        app_result = ingest_application(session, fetcher, app, dry_run=dry_run, skip_known=skip_known)
+        total_result.merge(app_result)
+        stat_str = (
+            ", ".join(f"{k}={v}" for k, v in sorted(app_result.statuses.items()))
+            if app_result.statuses
+            else "none"
+        )
+        print(
+            f"[{idx}/{total}] {app.application_ref} ({app.decision}): "
+            f"{action_label}={app_result.documents_stored}, "
+            f"skipped={app_result.documents_skipped_unchanged}, "
+            f"known={app_result.documents_skipped_known}, "
+            f"failures={app_result.failures} [{stat_str}]"
+        )
+        return app_result.failures > 0 and not (
+            app_result.documents_stored
+            or app_result.documents_skipped_unchanged
+            or app_result.documents_skipped_known
+        )
+    except RuntimeError as e:
+        # Re-raise server aborts (e.g. repeated 429/403) immediately
+        print(f"[{idx}/{total}] {app.application_ref}: CRITICAL ERROR - {e}")
+        raise
+    except Exception as e:
+        session.rollback()
+        logger.error("Unhandled error ingesting application %s: %s", app.application_ref, e)
+        total_result.failures += 1
+        print(f"[{idx}/{total}] {app.application_ref}: FAILED ({e})")
+        return True
+
+
+def _log_progress(done: int, total: int, r: IngestResult, action_label: str, elapsed: float) -> None:
+    rate = done / elapsed if elapsed > 0 else 0.0
+    eta_min = (total - done) / rate / 60 if rate > 0 else 0.0
+    logger.info(
+        "Progress %d/%d apps | %s=%d skipped_known=%d skipped_unchanged=%d failures=%d | "
+        "elapsed %.1f min, eta %.1f min",
+        done,
+        total,
+        action_label,
+        r.documents_stored,
+        r.documents_skipped_known,
+        r.documents_skipped_unchanged,
+        r.failures,
+        elapsed / 60,
+        eta_min,
+    )
+
+
+def _print_summary(total_result: IngestResult, action_label: str) -> None:
     print("\n--- Ingest Summary ---")
     print(f"Documents {action_label}:        {total_result.documents_stored}")
     print(f"Documents skipped unchanged: {total_result.documents_skipped_unchanged}")
-    print(f"Application fetch failures:  {total_result.failures}")
+    print(f"Documents skipped (known):   {total_result.documents_skipped_known}")
+    print(f"Fetch failures:              {total_result.failures}")
     print("Status Histogram:")
     for status, count in sorted(total_result.statuses.items()):
         print(f"  {status:16}: {count}")
-
-    return total_result

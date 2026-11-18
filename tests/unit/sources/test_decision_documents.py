@@ -194,3 +194,18 @@ def test_condition_count_regex():
     fetcher_no_count = CountyDocFetcher(opener=FakeOpenerNoCount())
     assert fetcher_no_count.fetch_eplanning_condition_count("2260277") is None
 
+
+
+def test_fetch_list_raises_when_page_cannot_be_fetched():
+    import urllib.error
+
+    from src.sources.galway.decision_documents import ListFetchError
+
+    class TimeoutOpener:
+        def open(self, req, timeout=None):
+            raise urllib.error.URLError("timed out")
+
+    fetcher = CountyDocFetcher(opener=TimeoutOpener(), sleep=lambda s: None)
+    with pytest.raises(ListFetchError):
+        fetcher.fetch_list("26136")
+    assert not issubclass(ListFetchError, RuntimeError)  # RuntimeError aborts the whole run

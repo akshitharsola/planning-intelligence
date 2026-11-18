@@ -29,3 +29,15 @@ def test_parse_args_custom():
     assert args.refs == "2360654,2260277"
     assert args.dry_run is True
 
+
+
+def test_parse_args_skip_known_default_on_and_refresh_turns_it_off():
+    assert parse_args([]).refresh is False
+    assert parse_args(["--refresh"]).refresh is True
+
+
+def test_parse_args_until_year():
+    assert parse_args([]).until_year is None
+    args = parse_args(["--since-year", "2026", "--until-year", "2026"])
+    assert args.since_year == 2026
+    assert args.until_year == 2026

@@ -37,12 +37,16 @@ def cleanup_after_test():
     _cleanup()
 
 
-def read_spike_pdf(name: str) -> bytes:
+def read_spike_pdf(name: str, need_parse: bool = True) -> bytes:
     path = SPIKE_PDFS_DIR / f"{name}.pdf"
     if path.exists():
         return path.read_bytes()
-    # Minimal fallback dummy PDF if spike dir is unavailable
-    return b"%PDF-1.4\n1 0 obj<<>>endobj\nxref\n0 1\n0000000000 65535 f \ntrailer<<>>startxref\n9\n%%EOF"
+    if not need_parse:
+        # Any PDF bytes will do for tests that do not check parsed content.
+        return DUMMY_PDF
+    # The spike PDFs are real council notices and are never committed (public repo).
+    # Without them these tests cannot check parsing, so skip instead of failing.
+    pytest.skip(f"spike PDF {name}.pdf not available on this machine")
 
 
 class FakeCountyDocFetcher:
@@ -168,7 +172,7 @@ def test_rerun_unchanged_creates_no_duplicates():
     session = SessionLocal()
     try:
         app = _seed_app(session, "Galway County Council", "INGEST_TEST/RERUN", decision="REFUSED")
-        pdf_bytes = read_spike_pdf("2360654_2469775")
+        pdf_bytes = read_spike_pdf("2360654_2469775", need_parse=False)
         link = DocLink(
             council_doc_id="DOC_RERUN_1",
             doc_type="notification_of_decision",
@@ -228,7 +232,7 @@ def test_same_ref_other_authority_not_touched():
         county_app = _seed_app(session, "Galway County Council", "INGEST_TEST/SHARED_REF")
         city_app = _seed_app(session, "Galway City Council", "INGEST_TEST/SHARED_REF")
 
-        pdf_bytes = read_spike_pdf("2360654_2469775")
+        pdf_bytes = read_spike_pdf("2360654_2469775", need_parse=False)
         link = DocLink(
             council_doc_id="DOC_CO_1",
             doc_type="notification_of_decision",
@@ -391,3 +395,225 @@ def test_sampling_reproducible_and_multi_year():
     finally:
         session.close()
 
+
+
+# --- Phase 3: --skip-known, --refresh, --until-year, progress logging ---
+
+DUMMY_PDF = b"%PDF-1.4\n1 0 obj<<>>endobj\nxref\n0 1\n0000000000 65535 f \ntrailer<<>>startxref\n9\n%%EOF"
+
+
+def _link(ref: str, doc_id: str) -> DocLink:
+    clean = ref.replace("/", "")
+    return DocLink(
+        council_doc_id=doc_id,
+        doc_type="notification_of_decision",
+        url=f"https://apps.galwaycoco.ie/ViewExternalDocuments/ViewPDF.aspx?RefNo={clean}&ViewFind=true&ref={doc_id}",
+    )
+
+
+class CountingFetcher(FakeCountyDocFetcher):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.list_calls: list[str] = []
+
+    def fetch_list(self, ref: str) -> str:
+        self.list_calls.append(ref)
+        return super().fetch_list(ref)
+
+
+def test_skip_known_second_run_makes_zero_pdf_requests():
+    session = SessionLocal()
+    try:
+        _seed_app(session, "Galway County Council", "INGEST_TEST/SKIP_1")
+        _seed_app(session, "Galway County Council", "INGEST_TEST/SKIP_2")
+        responses = {
+            "INGEST_TEST/SKIP_1": [(_link("INGEST_TEST/SKIP_1", "DOC_SKIP_1"), DUMMY_PDF)],
+            "INGEST_TEST/SKIP_2": [(_link("INGEST_TEST/SKIP_2", "DOC_SKIP_2"), DUMMY_PDF)],
+        }
+        refs = ["INGEST_TEST/SKIP_1", "INGEST_TEST/SKIP_2"]
+
+        first = CountingFetcher(responses)
+        res1 = ingest_authority(session=session, fetcher=first, refs=refs)
+        assert res1.documents_stored == 2
+        assert sum(first.pdf_fetch_counts.values()) == 2
+
+        second = CountingFetcher(responses)
+        res2 = ingest_authority(session=session, fetcher=second, refs=refs)
+        assert sum(second.pdf_fetch_counts.values()) == 0
+        assert sorted(second.list_calls) == refs  # list pages are still fetched
+        assert res2.documents_stored == 0
+        assert res2.documents_skipped_known == 2
+        assert res2.statuses["needs_ocr"] == 2
+        assert session.query(DecisionDocument).filter(
+            DecisionDocument.application_ref.in_(refs)
+        ).count() == 2
+    finally:
+        session.close()
+
+
+def test_refresh_refetches_known_pdfs_and_checks_hash():
+    session = SessionLocal()
+    try:
+        _seed_app(session, "Galway County Council", "INGEST_TEST/REFRESH")
+        responses = {"INGEST_TEST/REFRESH": [(_link("INGEST_TEST/REFRESH", "DOC_REFRESH"), DUMMY_PDF)]}
+        ingest_authority(session=session, fetcher=CountingFetcher(responses), refs=["INGEST_TEST/REFRESH"])
+
+        again = CountingFetcher(responses)
+        res = ingest_authority(
+            session=session, fetcher=again, refs=["INGEST_TEST/REFRESH"], skip_known=False
+        )
+        assert again.pdf_fetch_counts == {"DOC_REFRESH": 1}
+        assert res.documents_skipped_known == 0
+        assert res.documents_skipped_unchanged == 1
+    finally:
+        session.close()
+
+
+def test_skip_known_off_by_default_for_single_application():
+    session = SessionLocal()
+    try:
+        app = _seed_app(session, "Galway County Council", "INGEST_TEST/SINGLE")
+        responses = {"INGEST_TEST/SINGLE": [(_link("INGEST_TEST/SINGLE", "DOC_SINGLE"), DUMMY_PDF)]}
+        ingest_application(session, CountingFetcher(responses), app)
+        again = CountingFetcher(responses)
+        res = ingest_application(session, again, app)
+        assert again.pdf_fetch_counts == {"DOC_SINGLE": 1}
+        assert res.documents_skipped_unchanged == 1
+    finally:
+        session.close()
+
+
+def test_until_year_limits_selection_to_year_window():
+    session = SessionLocal()
+    try:
+        for year in (2023, 2024, 2025, 2026):
+            _seed_app(
+                session,
+                "Galway County Council",
+                f"INGEST_TEST/YEAR_{year}",
+                decision_date=date(year, 12, 31) if year == 2025 else date(year, 1, 1),
+            )
+        fetcher = CountingFetcher({})
+        ingest_authority(
+            session=session, fetcher=fetcher, since_year=2025, until_year=2025, dry_run=True
+        )
+        test_calls = [r for r in fetcher.list_calls if r.startswith("INGEST_TEST/YEAR_")]
+        assert test_calls == ["INGEST_TEST/YEAR_2025"]
+    finally:
+        session.close()
+
+
+def test_progress_logged_every_25_applications(caplog):
+    session = SessionLocal()
+    try:
+        refs = []
+        for i in range(30):
+            ref = f"INGEST_TEST/PROG_{i:02d}"
+            _seed_app(session, "Galway County Council", ref)
+            refs.append(ref)
+        with caplog.at_level("INFO", logger="src.pipelines.decision_documents"):
+            ingest_authority(session=session, fetcher=CountingFetcher({}), refs=refs, dry_run=True)
+        progress = [r.getMessage() for r in caplog.records if r.getMessage().startswith("Progress")]
+        assert len(progress) == 2  # after app 25 and at the end (30)
+        assert progress[0].startswith("Progress 25/30")
+        assert progress[1].startswith("Progress 30/30")
+    finally:
+        session.close()
+
+
+def test_keyboard_interrupt_keeps_committed_documents_and_resumes():
+    session = SessionLocal()
+    try:
+        _seed_app(session, "Galway County Council", "INGEST_TEST/INT_1", decision_date=date(2024, 1, 1))
+        _seed_app(session, "Galway County Council", "INGEST_TEST/INT_2", decision_date=date(2024, 1, 2))
+        responses = {
+            "INGEST_TEST/INT_1": [(_link("INGEST_TEST/INT_1", "DOC_INT_1"), DUMMY_PDF)],
+            "INGEST_TEST/INT_2": [(_link("INGEST_TEST/INT_2", "DOC_INT_2"), DUMMY_PDF)],
+        }
+        refs = ["INGEST_TEST/INT_1", "INGEST_TEST/INT_2"]
+
+        class InterruptingFetcher(CountingFetcher):
+            def fetch_list(self, ref: str) -> str:
+                if ref == "INGEST_TEST/INT_2":
+                    raise KeyboardInterrupt
+                return super().fetch_list(ref)
+
+        with pytest.raises(KeyboardInterrupt):
+            ingest_authority(session=session, fetcher=InterruptingFetcher(responses), refs=refs)
+        assert session.query(DecisionDocument).filter_by(council_doc_id="DOC_INT_1").count() == 1
+
+        resume = CountingFetcher(responses)
+        res = ingest_authority(session=session, fetcher=resume, refs=refs)
+        assert resume.pdf_fetch_counts == {"DOC_INT_2": 1}
+        assert res.documents_stored == 1
+        assert res.documents_skipped_known == 1
+    finally:
+        session.close()
+
+
+def test_list_page_failure_is_counted_as_failure():
+    from src.sources.galway.decision_documents import ListFetchError
+
+    session = SessionLocal()
+    try:
+        app = _seed_app(session, "Galway County Council", "INGEST_TEST/LISTFAIL")
+
+        class Failing(CountingFetcher):
+            def fetch_list(self, ref: str) -> str:
+                raise ListFetchError("timed out")
+
+        res = ingest_application(session, Failing({}), app)
+        assert res.failures == 1
+        assert res.documents_stored == 0
+    finally:
+        session.close()
+
+
+def test_run_stops_after_consecutive_application_failures():
+    from src.sources.galway.decision_documents import ListFetchError
+
+    session = SessionLocal()
+    try:
+        refs = []
+        for i in range(6):
+            ref = f"INGEST_TEST/STALL_{i}"
+            _seed_app(session, "Galway County Council", ref, decision_date=date(2024, 1, 1 + i))
+            refs.append(ref)
+
+        class Failing(CountingFetcher):
+            def fetch_list(self, ref: str) -> str:
+                self.list_calls.append(ref)
+                raise ListFetchError("timed out")
+
+        fetcher = Failing({})
+        with pytest.raises(RuntimeError, match="consecutive"):
+            ingest_authority(session=session, fetcher=fetcher, refs=refs, max_consecutive_failures=3)
+        assert len(fetcher.list_calls) == 3
+    finally:
+        session.close()
+
+
+def test_success_resets_consecutive_failure_count():
+    from src.sources.galway.decision_documents import ListFetchError
+
+    session = SessionLocal()
+    try:
+        refs = []
+        for i in range(6):
+            ref = f"INGEST_TEST/FLAKY_{i}"
+            _seed_app(session, "Galway County Council", ref, decision_date=date(2024, 1, 1 + i))
+            refs.append(ref)
+
+        class Flaky(CountingFetcher):
+            def fetch_list(self, ref: str) -> str:
+                self.list_calls.append(ref)
+                if ref.endswith(("_2", "_5")):
+                    return ""
+                raise ListFetchError("timed out")
+
+        fetcher = Flaky({})
+        res = ingest_authority(session=session, fetcher=fetcher, refs=refs, max_consecutive_failures=3)
+        assert len(fetcher.list_calls) == 6
+        assert res.failures == 4
+    finally:
+        session.close()
