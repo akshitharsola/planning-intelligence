@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galway Planning Assistant</title>
+<style>
+/* Layout: one conversation column; each answer is a structured card with its council source. */
+:root {
+  --bg: #f4f7f6;
+  --surface: #ffffff;
+  --fg: #16232a;
+  --muted: #5b6b72;
+  --line: #d7e0e2;
+  --accent: #17616b;
+  --accent-ink: #ffffff;
+  --accent-soft: #e1eff0;
+  --refused: #a33a2b;
+  --refused-soft: #f8e4e0;
+  --granted: #2c7a4b;
+  --granted-soft: #e2f2e8;
+  --neutral-soft: #eceff0;
+  --mark: #fde9a9;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --mono: Consolas, "SFMono-Regular", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1719; --surface: #162125; --fg: #e3eaec; --muted: #9aabb1; --line: #2b393d;
+    --accent: #5db4bd; --accent-ink: #0f1719; --accent-soft: #18343a;
+    --refused: #f08a7a; --refused-soft: #3b1f1b; --granted: #72c896; --granted-soft: #173326;
+    --neutral-soft: #243034; --mark: #6b5a1c;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--font); }
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 16px 140px; }
+header { padding: 28px 0 18px; display: flex; flex-direction: column; gap: 6px; }
+h1 { margin: 0; font-size: 1.6rem; letter-spacing: -0.01em; }
+.sub { color: var(--muted); margin: 0; max-width: 70ch; }
+.coverage { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .82rem; color: var(--muted); margin-top: 6px; }
+.coverage b { color: var(--fg); font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px;
+        padding: 6px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+.chip:hover, .chip:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+#thread { display: flex; flex-direction: column; gap: 22px; margin-top: 18px; }
+.q { align-self: flex-end; background: var(--accent); color: var(--accent-ink); padding: 8px 14px;
+     border-radius: 14px 14px 4px 14px; max-width: 80%; }
+.a { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
+     display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.msg { margin: 0; font-size: 1rem; }
+.note { margin: 0; color: var(--muted); font-size: .88rem; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px 18px;
+         background: var(--accent-soft); border-radius: 8px; padding: 12px 14px; }
+.facts div { display: flex; flex-direction: column; min-width: 0; }
+.facts span { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.facts strong { font-weight: 600; overflow-wrap: anywhere; }
+.desc { margin: 0; color: var(--fg); }
+.pill { display: inline-block; font-size: .75rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; }
+.pill.REFUSED { background: var(--refused-soft); color: var(--refused); }
+.pill.CONDITIONAL, .pill.UNCONDITIONAL { background: var(--granted-soft); color: var(--granted); }
+.pill.other { background: var(--neutral-soft); color: var(--muted); }
+ol.items { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+ol.items li { display: grid; grid-template-columns: 2.2em 1fr; gap: 6px; }
+ol.items .n { font-family: var(--mono); color: var(--accent); font-weight: 600; }
+ol.items .reason { color: var(--muted); font-size: .9rem; margin-top: 3px; }
+.source { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; color: var(--muted);
+          border-top: 1px solid var(--line); padding-top: 10px; }
+a { color: var(--accent); }
+.results { display: flex; flex-direction: column; gap: 10px; }
+.result { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.result .top { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
+.result .ref { font-family: var(--mono); font-weight: 600; background: none; border: 0; padding: 0;
+               color: var(--accent); cursor: pointer; font-size: .95rem; text-decoration: underline; }
+.result .addr { color: var(--muted); font-size: .88rem; }
+.snippet { margin: 0; font-size: .92rem; }
+details.result { padding: 0; gap: 0; }
+details.result > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: baseline;
+                           gap: 6px 12px; padding: 10px 12px; border-radius: 8px; }
+details.result > summary::-webkit-details-marker { display: none; }
+details.result > summary::before { content: "▸"; color: var(--accent); width: 1em; transition: transform .15s; }
+details.result[open] > summary::before { transform: rotate(90deg); }
+details.result > summary:hover, details.result > summary:focus-visible { background: var(--accent-soft); outline: none; }
+details.result .ref-text { font-family: var(--mono); font-weight: 600; color: var(--accent); text-decoration: underline; }
+details.result .count { margin-left: auto; font-size: .82rem; color: var(--muted); }
+details.result .detail { display: flex; flex-direction: column; gap: 10px; padding: 4px 12px 12px; }
+mark { background: var(--mark); color: inherit; padding: 0 1px; border-radius: 2px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+.big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: .9rem; color: var(--muted); }
+.counts b { color: var(--fg); font-variant-numeric: tabular-nums; }
+form { position: fixed; left: 0; right: 0; bottom: 0; background: linear-gradient(transparent, var(--bg) 30%);
+       padding: 24px 16px 18px; }
+.bar { max-width: 900px; margin: 0 auto; display: flex; gap: 8px; }
+input[type=text] { flex: 1; min-width: 0; font: inherit; font-size: 1rem; padding: 12px 14px; border-radius: 10px;
+                   border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
+input[type=text]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+button.send { font: inherit; font-weight: 600; border: 0; border-radius: 10px; padding: 0 20px;
+              background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+.thinking { color: var(--muted); font-style: italic; }
+@media (prefers-reduced-motion: no-preference) { .a { animation: in .18s ease-out; } @keyframes in { from { opacity: .4; transform: translateY(4px); } } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Galway Planning Assistant</h1>
+    <p class="sub">Ask about any Galway planning application. Facts come from the national planning register; reasons and conditions are quoted word for word from the council's own decision notices, with a link to the source.</p>
+    <div class="coverage" id="coverage"></div>
+  </header>
+  <div class="chips" id="examples" aria-label="Example questions"></div>
+  <div id="thread" aria-live="polite"></div>
+</div>
+<form id="ask">
+  <div class="bar">
+    <input type="text" id="question" autocomplete="off" placeholder="e.g. Why was application 2660494 refused?" aria-label="Your question">
+    <button class="send" type="submit">Ask</button>
+  </div>
+</form>
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDate = (v) => { if (!v) return "—"; const d = new Date(v.slice(0,10) + "T00:00:00"); return d.toLocaleDateString("en-IE", {day:"numeric", month:"short", year:"numeric"}); };
+const decLabel = {REFUSED: "Refused", CONDITIONAL: "Granted with conditions", UNCONDITIONAL: "Granted"};
+const pill = (d) => `<span class="pill ${decLabel[d] ? d : "other"}">${esc(decLabel[d] || (d ? d.toLowerCase() : "no decision"))}</span>`;
+const snippet = (s) => esc(s).replace(/&lt;&lt;/g, "<mark>").replace(/&gt;&gt;/g, "</mark>");
+const council = (a) => a === "Galway County Council" ? "County" : "City";
+// The register stores descriptions without their leading verb ("of revised house…"); put the type in front.
+const describe = (type, desc) => /^[a-z]/.test(desc || "") && type
+  ? type.charAt(0) + type.slice(1).toLowerCase() + " " + desc : desc;
+
+function chips(list, cls = "chip") {
+  return `<div class="chips">${list.map(q => `<button type="button" class="${cls}" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>`;
+}
+
+function renderApplication(r) {
+  const a = r.application;
+  const facts = [
+    ["Reference", `${a.application_ref} · ${council(a.planning_authority)}`],
+    ["Decision", decLabel[a.decision] || a.planning_status_current || "—"],
+    ["Decided", fmtDate(a.decision_date)],
+    ["Received", fmtDate(a.date_received)],
+    ["Type", a.application_type || "—"],
+    ["Address", a.site_address || "—"],
+  ];
+  if (a.grant_date) facts.push(["Final grant", fmtDate(a.grant_date)]);
+  if (a.appeal_status) facts.push(["Appeal", `${a.appeal_status}${a.appeal_decision ? " · " + a.appeal_decision : ""}`]);
+  let html = `<p class="msg">${esc(r.message)}</p>`;
+  html += `<div class="facts">${facts.map(([k, v]) => `<div><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join("")}</div>`;
+  if (a.development_description) html += `<p class="desc"><strong>Development:</strong> ${esc(describe(a.application_type, a.development_description))}</p>`;
+  if (r.items && r.items.length) {
+    html += `<ol class="items">${r.items.map(it => `<li><span class="n">${it.item_no}.</span><div>${esc(it.text)}${it.reason_text ? `<div class="reason">Reason: ${esc(it.reason_text)}</div>` : ""}</div></li>`).join("")}</ol>`;
+  }
+  if (r.note) html += `<p class="note">${esc(r.note)}</p>`;
+  const links = [];
+  if (r.source) links.push(`Source: ${esc(a.planning_authority)}, ${esc(r.source.doc_type)} (document ${esc(r.source.council_doc_id)}) · <a href="${esc(r.source.source_url)}" target="_blank" rel="noopener">open PDF</a>`);
+  if (r.source && r.source.stated_count) links.push(`Checked: ${r.items.length} of ${r.source.stated_count} items stated by the council`);
+  if (a.official_detail_url) links.push(`<a href="${esc(a.official_detail_url)}" target="_blank" rel="noopener">ePlanning page</a>`);
+  if (links.length) html += `<div class="source">${links.map(l => `<span>${l}</span>`).join("")}</div>`;
+  return html;
+}
+
+function renderSearch(r) {
+  let html = `<p class="msg">${esc(r.message)}</p>`;
+  if (r.note) html += `<p class="note">${esc(r.note)}</p>`;
+  html += `<div class="results">${r.results.map(x => `
+    <div class="result">
+      <div class="top"><button type="button" class="ref" data-q="Application ${esc(x.application_ref)}">${esc(x.application_ref)}</button>
+        ${pill(x.decision)} <span class="addr">${esc(x.site_address || "")} · ${fmtDate(x.decision_date)}</span></div>
+      <p class="snippet">${x.kind === "condition" ? "Condition" : "Reason"} ${x.item_no}: …${snippet(x.snippet)}…</p>
+      <div class="source"><span>${esc(x.doc_type)} (document ${esc(x.council_doc_id)})</span><a href="${esc(x.source_url)}" target="_blank" rel="noopener">open PDF</a></div>
+    </div>`).join("")}</div>`;
+  return html;
+}
+
+function renderReasonsList(r) {
+  let html = `<p class="msg">${esc(r.message)}</p>`;
+  if (r.note) html += `<p class="note">${esc(r.note)}</p>`;
+  html += `<div class="results">${r.results.map(x => {
+    const n = x.items.length, noun = x.items[0] && x.items[0].kind === "condition" ? "condition" : "reason";
+    return `
+    <details class="result">
+      <summary>
+        <span class="ref-text">${esc(x.application_ref)}</span>
+        ${pill(x.decision)}
+        <span class="addr">${esc(x.site_address || "")} · ${fmtDate(x.decision_date)}</span>
+        <span class="count">${n} ${noun}${n === 1 ? "" : "s"}</span>
+      </summary>
+      <div class="detail">
+        ${x.development_description ? `<p class="snippet"><strong>Development:</strong> ${esc(describe(x.application_type, x.development_description))}</p>` : ""}
+        <ol class="items">${x.items.map(it => `<li><span class="n">${it.item_no}.</span><div>${esc(it.text)}${it.reason_text ? `<div class="reason">Reason: ${esc(it.reason_text)}</div>` : ""}</div></li>`).join("")}</ol>
+        <div class="source"><span>${esc(x.doc_type)} (document ${esc(x.council_doc_id)})</span><a href="${esc(x.source_url)}" target="_blank" rel="noopener">open PDF</a>
+          <button type="button" class="ref" data-q="${council(x.planning_authority)} application ${esc(x.application_ref)}">full application details</button></div>
+      </div>
+    </details>`;
+  }).join("")}</div>`;
+  return html;
+}
+
+function renderList(r) {
+  let html = `<p class="msg">${esc(r.message)}</p>`;
+  html += `<div class="table-wrap"><table><thead><tr><th>Ref</th><th>Decision</th><th>Decided</th><th>Address</th><th>Reasons</th></tr></thead><tbody>${
+    r.results.map(x => `<tr><td><button type="button" class="ref chip" data-q="${council(x.planning_authority)} application ${esc(x.application_ref)}">${esc(x.application_ref)}</button></td>
+      <td>${pill(x.decision)}</td><td>${fmtDate(x.decision_date)}</td><td>${esc(x.site_address || "")}</td><td>${x.has_reasons ? "Available" : "—"}</td></tr>`).join("")
+  }</tbody></table></div>`;
+  return html;
+}
+
+function renderCount(r) {
+  const main = r.counts && (r.counts["matching applications"] ?? (r.parsed.decision ? r.counts[r.parsed.decision] : Object.values(r.counts).reduce((s, n) => s + n, 0)));
+  let html = `<div class="big">${(main ?? 0).toLocaleString("en-IE")}</div><p class="msg">${esc(r.message)}</p>`;
+  if (r.counts && !("matching applications" in r.counts)) {
+    html += `<div class="counts">${Object.entries(r.counts).map(([k, v]) => `<span>${esc(decLabel[k] || k.toLowerCase())}: <b>${v.toLocaleString("en-IE")}</b></span>`).join("")}</div>`;
+  }
+  if (r.note) html += `<p class="note">${esc(r.note)}</p>`;
+  return html;
+}
+
+function render(r) {
+  if (r.type === "application") return renderApplication(r);
+  if (r.type === "search") return renderSearch(r);
+  if (r.type === "list") return renderList(r) + (r.note ? `<p class="note">${esc(r.note)}</p>` : "");
+  if (r.type === "reasons_list") return renderReasonsList(r);
+  if (r.type === "count") return renderCount(r);
+  let html = `<p class="msg">${esc(r.message)}</p>`;
+  if (r.note) html += `<p class="note">${esc(r.note)}</p>`;
+  if (r.suggestions) html += chips(r.suggestions);
+  return html;
+}
+
+async function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  const thread = $("#thread");
+  thread.insertAdjacentHTML("beforeend", `<div class="q">${esc(question)}</div>`);
+  const box = document.createElement("div");
+  box.className = "a"; box.innerHTML = `<p class="thinking">Looking it up…</p>`;
+  thread.appendChild(box);
+  box.scrollIntoView({behavior: "smooth", block: "start"});
+  try {
+    const res = await fetch("/api/ask", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({question})});
+    if (!res.ok) throw new Error(res.status);
+    box.innerHTML = render(await res.json());
+  } catch (e) {
+    box.innerHTML = `<p class="msg">Something went wrong looking that up. Check that the database is running, then try again.</p>`;
+  }
+  box.scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-q]");
+  if (b) { ask(b.dataset.q); }
+});
+$("#ask").addEventListener("submit", (e) => { e.preventDefault(); const q = $("#question").value; $("#question").value = ""; ask(q); });
+
+fetch("/api/info").then(r => r.json()).then(info => {
+  $("#examples").innerHTML = chips(info.examples).replace(/^<div class="chips">|<\/div>$/g, "");
+  $("#coverage").innerHTML = `<span><b>${info.applications_total.toLocaleString("en-IE")}</b> Galway applications</span>
+    <span>Reasons and conditions for <b>${info.applications_with_reasons.toLocaleString("en-IE")}</b> County decisions, ${fmtDate(info.reasons_from)} – ${fmtDate(info.reasons_to)}</span>
+    <span>${info.llm ? "Question understanding: Ollama + rules" : "Question understanding: rules"}</span>`;
+}).catch(() => {});
+</script>
+</body>
+</html>
