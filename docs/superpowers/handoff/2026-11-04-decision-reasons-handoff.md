@@ -54,6 +54,9 @@ Fix in `src/parsers/decision_notice/extractor.py` (`PARSER_VERSION = "2"`), with
 
 Current export: `decision_data_20261117T205523Z.jsonl.gz` (parser v2). The earlier `…194748Z` file is parser v1 and should not be used.
 
+## How to test
+See `docs/superpowers/handoff/2026-11-18-phase3-testing-guide.md`.
+
 ## Windows setup notes (2026-11-17)
 No Docker on the run machine: Postgres 16.10 (EDB portable zip) + PostGIS 3.4.2 (OSGeo bundle) outside the repo, same user/db as `docker-compose.yml`. Python 3.13 venv; SQLAlchemy pinned to the `uv.lock` version 2.0.51 because 2.1 defaults `postgresql://` to psycopg 3. Git for Windows ships Xpdf `pdftotext` 4.00, not poppler: put a poppler build (26.11 used here, via conda-forge) first on PATH. graphify was not installed, so `graphify-out/` was not updated.
 
